@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 public class ArticleActivity extends Activity {
     /** Called when the activity is first created. */
@@ -25,8 +26,8 @@ public class ArticleActivity extends Activity {
         
         JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1208.json");
         try {
-			String titre = datas.getString("Titre");
-			String accroche = datas.getString("Accroche");
+			((TextView) findViewById(R.id.titre)).setText(datas.getString("Titre"));
+			((TextView) findViewById(R.id.titre)).setText(datas.getString("Accroche"));
 			String omnilogisme = datas.getString("Omnilogisme");
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
@@ -36,12 +37,12 @@ public class ArticleActivity extends Activity {
     
     protected JSONObject getJSONfromURL(String url){
 
-    	//initialize
+    	//Initialiser la lecture
     	InputStream is = null;
     	String result = "";
     	JSONObject jArray = null;
 
-    	//http post
+    	//Effectuer la requête POST
     	try{
     		HttpClient httpclient = new DefaultHttpClient();
     		HttpPost httppost = new HttpPost(url);
@@ -53,7 +54,7 @@ public class ArticleActivity extends Activity {
     		Log.e("log_tag", "Error in http connection "+e.toString());
     	}
 
-    	//convert response to string
+    	//Convertir la réponse sous forme de String
     	try{
     		BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
     		StringBuilder sb = new StringBuilder();
@@ -67,7 +68,7 @@ public class ArticleActivity extends Activity {
     		Log.e("log_tag", "Error converting result "+e.toString());
     	}
 
-    	//try parse the string to a JSON object
+    	//Transformer le résultat en objet JSON
     	try{
             	jArray = new JSONObject(result);
     	}catch(JSONException e){
