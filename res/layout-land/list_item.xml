@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="293px"
+            android:layout_height="71px"
+            android:layout_marginBottom="20px"
+            android:layout_marginTop="20px"
+            android:src="@drawable/petite_banniere" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:lines="1"
+        android:padding="2dp"
+        android:scrollHorizontally="true"
+        android:text="Titre"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16dp" android:layout_marginBottom="-5dp"/>
+
+    <TextView
+        android:id="@+id/item_subtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:padding="2dp"
+        android:text="Accroche"
+        android:textSize="13dp" android:layout_marginBottom="-4dp"/>
+
+    <TextView
+        android:id="@+id/item_extra"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:lines="1"
+        android:padding="2dp"
+        android:text="Auteur"
+        android:textSize="10dp" />
+
+	</LinearLayout>
+</LinearLayout>

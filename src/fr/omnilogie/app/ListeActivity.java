@@ -47,6 +47,7 @@ public class ListeActivity extends ListActivity {
 	        	map.put("titre", Html.fromHtml(e.getString("T")));
 	        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
 	        	map.put("question", Html.fromHtml(e.getString("Q")));
+	        	map.put("banniere", Html.fromHtml(e.getString("B")));
 	        	listeArticles.add(map);			
 			}		
       }catch(JSONException e)        {
