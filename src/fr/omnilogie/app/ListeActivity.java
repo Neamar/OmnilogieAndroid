@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import android.app.ListActivity;
 import android.view.View;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,7 +30,7 @@ public class ListeActivity extends ListActivity {
 	  setContentView(R.layout.listes);
 	  
 	  // Tableau qui contiendra les méta-données sur les articles
-	  ArrayList<HashMap<String, String>> listeArticles = new ArrayList<HashMap<String, String>>();
+	  ArrayList<HashMap<String, Spanned>> listeArticles = new ArrayList<HashMap<String, Spanned>>();
       
 	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
 	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
@@ -37,14 +39,14 @@ public class ListeActivity extends ListActivity {
       try{
       	     	
 	        for(int i=0;i<jsonArray.length();i++){						
-				HashMap<String, String> map = new HashMap<String, String>();	
+				HashMap<String, Spanned> map = new HashMap<String, Spanned>();	
 				JSONObject e = jsonArray.getJSONObject(i);
 				
-				map.put("mapId", String.valueOf(i));
-				map.put("id", e.getString("ID"));
-	        	map.put("titre", e.getString("T"));
-	        	map.put("auteur", "par " + e.getString("A"));
-	        	map.put("question", e.getString("Q"));
+				map.put("mapId", Html.fromHtml(String.valueOf(i)));
+				map.put("id", Html.fromHtml(e.getString("ID")));
+	        	map.put("titre", Html.fromHtml(e.getString("T")));
+	        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
+	        	map.put("question", Html.fromHtml(e.getString("Q")));
 	        	listeArticles.add(map);			
 			}		
       }catch(JSONException e)        {
@@ -64,8 +66,8 @@ public class ListeActivity extends ListActivity {
       lv.setOnItemClickListener(new OnItemClickListener() {
       	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
       		@SuppressWarnings("unchecked")
-				HashMap<String, String> o = (HashMap<String, String>) lv.getItemAtPosition(position); 
-      			String articleID = o.get("id");
+				HashMap<String, Spanned> o = (HashMap<String, Spanned>) lv.getItemAtPosition(position); 
+      			String articleID = o.get("id").toString();
       			Log.v("todo", "Load article " + articleID);
       			//TODO charger l'article
 			}
