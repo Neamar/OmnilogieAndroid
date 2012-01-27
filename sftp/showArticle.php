@@ -86,7 +86,7 @@ $bannerPath = '/images/Banner/' . $article['ID'] . '.png';
 if(is_file(PATH . $bannerPath))
 	$article['Banniere'] = 'http://omnilogie.fr' . $bannerPath;
 else
-	$article['Banniere'] = 'http://omnilogie.fr/images/Banner/Default.png';
+	$article['Banniere'] = null;
 
 //Ajouter les sources
 $sources = Sql::query('SELECT Titre, URL FROM OMNI_More WHERE Reference=' . $article['ID']);

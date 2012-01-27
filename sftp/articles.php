@@ -40,7 +40,7 @@ while($article = mysql_fetch_assoc($articles))
 	if(is_file(PATH . $bannerPath))
 		$article['B'] = 'http://omnilogie.fr' . $bannerPath;
 	else
-		$article['B'] = 'http://omnilogie.fr/images/Banner/Thumbs/Default.png';
+		$article['B'] = null;
 
 	Typo::setTexte(utf8_decode($article['T']));
 	$article['T'] = utf8_encode(Typo::parseLinear());
