@@ -54,10 +54,28 @@ public class ArticleActivity extends Activity {
 
 			//Rendre le contenu de l'article.
 			//Il faut spécifier une URL de base afin que les images soient disponibles.
-			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL("http://omnilogie.fr", datas.getString("Omnilogisme"), "text/html", "UTF-8", null);
+			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL("http://omnilogie.fr", preparerArticle(datas.getString("Omnilogisme")), "text/html", "UTF-8", null);
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
+	}
+	
+	protected String preparerArticle(String article)
+	{
+		article = "<html>\n" + 
+				"	<head>\n" + 
+				"		<link rel=\"stylesheet\" media=\"all\" href=\"/CSS/omni.min.css\" />\n" + 
+				"	</head>\n" + 
+				"	<body>\n" + 
+				"		<section id=\"content\">\n" + 
+				"			<div class=\"omnilogisme\">\n" + 
+				article +
+				"			</div>\n" + 
+				"		</section>\n" + 
+				"	</body>\n" + 
+				"</html>";
+		
+		return article;
 	}
 }
