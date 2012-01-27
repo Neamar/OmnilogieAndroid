@@ -6,26 +6,26 @@
 <LinearLayout 
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:orientation="vertical">
-		<LinearLayout android:id="@+id/banniere_conteneur"
+		<LinearLayout android:id="@+id/banniereConteneurArticle"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center">
 
-			<ImageView android:id="@+id/banniere" android:layout_width="wrap_content"
+			<ImageView android:id="@+id/banniereArticle" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:contentDescription="Bannière de l&apos;article"
 				android:scaleType="centerInside" android:src="@drawable/banniere" />
 
 		</LinearLayout>
 
-		<TextView android:id="@+id/titre" android:layout_width="wrap_content"
+		<TextView android:id="@+id/titreArticle" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="Titre de l'article"
 			android:textAppearance="?android:attr/textAppearanceLarge" />
 
-		<TextView android:id="@+id/accroche" android:layout_width="wrap_content"
+		<TextView android:id="@+id/accrocheArticle" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="Accroche de l'article"
 			android:textAppearance="?android:attr/textAppearanceMedium" />
 
 		<WebView
-		    android:id="@+id/contenu"
+		    android:id="@+id/contenuArticle"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content" />
 
