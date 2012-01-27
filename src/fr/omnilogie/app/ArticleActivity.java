@@ -17,6 +17,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -30,7 +32,7 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 		
-		JSONObject datas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1209.json");
+		JSONObject datas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1205.json");
 		try {
 			//Commencer par charger la bannière si nécessaire
 			if(!datas.isNull("Banniere"))
@@ -61,6 +63,14 @@ public class ArticleActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.article, menu);
+		return true;
+	}
+	
 	
 	protected String preparerArticle(String article)
 	{
