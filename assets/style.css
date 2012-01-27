@@ -49,7 +49,7 @@ p {margin:.75em 0}
 em {font-style:italic}
 strong {font-weight:bold}
 h4 {margin:0;padding:0}
-.nonflottant,.omnilogisme img {max-width:675px}
+.nonflottant,.omnilogisme img {max-width:90%}
 aside + section#content h3 + * {margin-top:37px}
 .omnilogisme img {display:block;margin:auto}
 span.email {direction:rtl;unicode-bidi:bidi-override}
