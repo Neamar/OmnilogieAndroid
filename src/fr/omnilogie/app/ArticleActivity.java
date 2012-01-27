@@ -16,65 +16,68 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.webkit.WebView;;
 
 public class ArticleActivity extends Activity {
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.article);
-        
-        JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1208.json");
-        try {
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.article);
+		
+		JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1208.json");
+		try {
+			
 			((TextView) findViewById(R.id.titre)).setText(datas.getString("Titre"));
-			((TextView) findViewById(R.id.titre)).setText(datas.getString("Accroche"));
-			String omnilogisme = datas.getString("Omnilogisme");
+			((TextView) findViewById(R.id.accroche)).setText(datas.getString("Accroche"));
+			Log.e("lol", datas.getString("Omnilogisme"));
+			((WebView) findViewById(R.id.contenu)).loadData("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+datas.getString("Omnilogisme"), "text/html", "utf-8");
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
-    }
-    
-    protected JSONObject getJSONfromURL(String url){
+	}
+	
+	protected JSONObject getJSONfromURL(String url){
 
-    	//Initialiser la lecture
-    	InputStream is = null;
-    	String result = "";
-    	JSONObject jArray = null;
+		//Initialiser la lecture
+		InputStream is = null;
+		String result = "";
+		JSONObject jArray = null;
 
-    	//Effectuer la requête POST
-    	try{
-    		HttpClient httpclient = new DefaultHttpClient();
-    		HttpPost httppost = new HttpPost(url);
-    		HttpResponse response = httpclient.execute(httppost);
-    		HttpEntity entity = response.getEntity();
-    		is = entity.getContent();
+		//Effectuer la requête POST
+		try{
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(url);
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
 
-    	}catch(Exception e){
-    		Log.e("log_tag", "Error in http connection "+e.toString());
-    	}
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
 
-    	//Convertir la réponse sous forme de String
-    	try{
-    		BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
-    		StringBuilder sb = new StringBuilder();
-    		String line = null;
-    		while ((line = reader.readLine()) != null) {
-    			sb.append(line + "\n");
-    		}
-    		is.close();
-    		result=sb.toString();
-    	}catch(Exception e){
-    		Log.e("log_tag", "Error converting result "+e.toString());
-    	}
+		//Convertir la réponse sous forme de String
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result=sb.toString();
+		}catch(Exception e){
+			Log.e("log_tag", "Error converting result "+e.toString());
+		}
 
-    	//Transformer le résultat en objet JSON
-    	try{
-            	jArray = new JSONObject(result);
-    	}catch(JSONException e){
-    		Log.e("log_tag", "Error parsing data "+e.toString());
-    	}
+		//Transformer le résultat en objet JSON
+		try{
+				jArray = new JSONObject(result);
+		}catch(JSONException e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
 
-    	return jArray;
-    }
+		return jArray;
+	}
 }

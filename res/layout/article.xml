@@ -25,10 +25,9 @@
         android:text="Accroche de l'article"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
+    <WebView
         android:id="@+id/contenu"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contenu de l'article" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
