@@ -69,6 +69,15 @@ SQL::update('OMNI_Omnilogismes', $article['ID'],array('_NbVues'=>'NbVues+1'));
  */
 
 // Mettre en forme
+Typo::setTexte(utf8_decode($article['Titre']));
+$article['Titre'] = utf8_encode(Typo::parseLinear());
+
+if(isset($article['Accroche']))
+{
+	Typo::setTexte(utf8_decode($article['Accroche']));
+	$article['Accroche'] = utf8_encode(Typo::parseLinear());
+}
+
 Typo::setTexte(utf8_decode($article['Omnilogisme']));
 $article['Omnilogisme'] = utf8_encode(Typo::parse());
 
