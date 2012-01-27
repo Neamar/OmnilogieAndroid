@@ -1,6 +1,7 @@
 ﻿package fr.omnilogie.app;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -63,19 +64,19 @@ public class ArticleActivity extends Activity {
 	
 	protected String preparerArticle(String article)
 	{
-		article = "<html>\n" + 
-				"	<head>\n" + 
-				"		<link rel=\"stylesheet\" media=\"all\" href=\"/CSS/omni.min.css\" />\n" + 
-				"	</head>\n" + 
-				"	<body>\n" + 
-				"		<section id=\"content\">\n" + 
-				"			<div class=\"omnilogisme\">\n" + 
-				article +
-				"			</div>\n" + 
-				"		</section>\n" + 
-				"	</body>\n" + 
-				"</html>";
-		
-		return article;
+		String baseHtml = "";
+		try
+		{
+			InputStream fin = getAssets().open("article.html");
+			byte[] buffer = new byte[fin.available()];
+			fin.read(buffer);
+			fin.close();
+			
+			baseHtml = new String(buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return baseHtml.replace("{{article}}", article);
 	}
 }
