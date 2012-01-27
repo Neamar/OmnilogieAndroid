@@ -6,9 +6,10 @@
 
     <ImageView
         android:id="@+id/banniere"
-        android:contentDescription="Bannière de l'article"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Bannière de l&apos;article"
+        android:scaleType="fitCenter"
         android:src="@drawable/banniere" />
 
     <TextView

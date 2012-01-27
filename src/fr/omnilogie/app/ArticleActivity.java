@@ -14,9 +14,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.webkit.WebSettings;
 import android.webkit.WebView;;
 
 public class ArticleActivity extends Activity {
@@ -28,12 +30,27 @@ public class ArticleActivity extends Activity {
 		
 		JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1209.json");
 		try {
+			//Commencer par charger la bannière si nécessaire
+			ImageDownloader downloader = new ImageDownloader((ImageView) findViewById(R.id.banniere));
+			downloader.execute(datas.getString("Banniere"));
 			
-			((TextView) findViewById(R.id.titre)).setText(datas.getString("Titre"));
-			((TextView) findViewById(R.id.accroche)).setText(datas.getString("Accroche"));
-			Log.e("lol", datas.getString("Omnilogisme"));
+			//Gérer l'affichage du titre.
+			//CElui-ci peut contenir des entités HTML : il faut donc le convertir en texte Spanned
+			((TextView) findViewById(R.id.titre)).setText(Html.fromHtml(datas.getString("Titre")));
+			
+			//Afficher l'accroche. Si elle n'existe pas, masquer le composant afin de gagner de la place.
+			if(datas.isNull("Accroche"))
+			{
+				((TextView) findViewById(R.id.accroche)).setVisibility(View.GONE);
+			}
+			else
+			{
+				((TextView) findViewById(R.id.accroche)).setText(Html.fromHtml(datas.getString("Accroche")));
+			}
 
-			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL(null, datas.getString("Omnilogisme"), "text/html", "UTF-8", null);
+			//Rendre le contenu de l'article.
+			//Il faut spécifier une URL de base afin que les images soient disponibles.
+			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL("http://omnilogie.fr", datas.getString("Omnilogisme"), "text/html", "UTF-8", null);
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
 			e.printStackTrace();
