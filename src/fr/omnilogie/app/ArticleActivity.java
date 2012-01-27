@@ -1,4 +1,4 @@
-package fr.omnilogie.app;
+﻿package fr.omnilogie.app;
 
 import android.app.Activity;
 import android.os.Bundle;

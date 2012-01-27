@@ -1,4 +1,4 @@
-package fr.omnilogie.app;
+ï»¿package fr.omnilogie.app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +25,13 @@ public class ListeActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  
-	  // Tableau qui contiendra les méta-données sur les articles
+	  // Tableau qui contiendra les mÃ©ta-donnÃ©es sur les articles
 	  ArrayList<HashMap<String, String>> listeArticles = new ArrayList<HashMap<String, String>>();
       
 	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
 	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
 	  
-	  // Insert les éléments JSON dans listeArticles
+	  // Insert les Ã©lÃ©ments JSON dans listeArticles
       try{
       	     	
 	        for(int i=0;i<jsonArray.length();i++){						
@@ -56,7 +56,7 @@ public class ListeActivity extends ListActivity {
       setListAdapter(adapter);
       
       final ListView lv = getListView();
-      lv.setTextFilterEnabled(true);	
+      lv.setTextFilterEnabled(true);
       /*lv.setOnItemClickListener(new OnItemClickListener() {
       	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
       		@SuppressWarnings("unchecked")
