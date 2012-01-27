@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.webkit.WebSettings;
 import android.webkit.WebView;;
 
 public class ArticleActivity extends Activity {
@@ -25,13 +26,14 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 		
-		JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1208.json");
+		JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1209.json");
 		try {
 			
 			((TextView) findViewById(R.id.titre)).setText(datas.getString("Titre"));
 			((TextView) findViewById(R.id.accroche)).setText(datas.getString("Accroche"));
 			Log.e("lol", datas.getString("Omnilogisme"));
-			((WebView) findViewById(R.id.contenu)).loadData("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+datas.getString("Omnilogisme"), "text/html", "utf-8");
+
+			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL(null, datas.getString("Omnilogisme"), "text/html", "UTF-8", null);
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
 			e.printStackTrace();

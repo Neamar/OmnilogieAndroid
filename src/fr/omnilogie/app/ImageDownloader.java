@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 /**
  * @author Sergi Juanola
+ * @see http://www.flexjockey.com/2011/02/load-images-and-data-asynchronously-on-your-android-applications/
  **/
 
 public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
