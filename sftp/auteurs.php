@@ -9,7 +9,7 @@ $params = array(
 include('common.php');
 
 
-$auteurs = Sql::query('SELECT A.ID AS id, A.Auteur AS a, COUNT(*) AS n
+$auteurs = Sql::query('SELECT A.ID AS ID, A.Auteur AS A, COUNT(*) AS N
 FROM OMNI_Auteurs A
 LEFT JOIN OMNI_Omnilogismes O ON O.Auteur = A.ID
 WHERE !ISNULL(O.Sortie)
