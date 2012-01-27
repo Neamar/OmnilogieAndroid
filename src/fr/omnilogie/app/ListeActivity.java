@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -24,38 +25,33 @@ public class ListeActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  
-	  //setContentView(R.layout.list_item);
-
-	  /*
-	  setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, COUNTRIES));
-
-	  ListView lv = getListView();
-	  lv.setTextFilterEnabled(true);*/
-
-	  ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-      
+	  // Tableau qui contiendra les méta-données sur les articles
+	  ArrayList<HashMap<String, String>> listeArticles = new ArrayList<HashMap<String, String>>();
       
 	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
 	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
 	  
+	  // Insert les éléments JSON dans listeArticles
       try{
       	     	
 	        for(int i=0;i<jsonArray.length();i++){						
 				HashMap<String, String> map = new HashMap<String, String>();	
 				JSONObject e = jsonArray.getJSONObject(i);
 				
-				map.put("id_map", String.valueOf(i));
+				map.put("mapId", String.valueOf(i));
 				map.put("id", e.getString("ID"));
-	        	map.put("title", e.getString("T"));
-	        	mylist.add(map);			
+	        	map.put("titre", e.getString("T"));
+	        	map.put("auteur", e.getString("A"));
+	        	map.put("question", e.getString("Q"));
+	        	listeArticles.add(map);			
 			}		
       }catch(JSONException e)        {
       	 Log.e("log_tag", "Error parsing data "+e.toString());
       }
       
-      ListAdapter adapter = new SimpleAdapter(this, mylist , R.layout.main, 
-                      new String[] { "id", "title" }, 
-                      new int[] { R.id.item_title, R.id.item_subtitle });
+      ListAdapter adapter = new SimpleAdapter(this, listeArticles , R.layout.list_item, 
+                      new String[] { "titre", "question", "auteur" }, 
+                      new int[] { R.id.item_title, R.id.item_subtitle, R.id.item_extra });
       
       setListAdapter(adapter);
       
