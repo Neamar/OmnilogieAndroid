@@ -37,7 +37,7 @@ public class ArticleActivity extends Activity {
 		
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		
-		((TextView) findViewById(R.id.titreActivite)).setText("Essao?");
+		((TextView) findViewById(R.id.titreActivite)).setText("Affichage d'un article d'Omnilogie");
 		
 		
 		JSONObject datas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1205.json");
@@ -49,10 +49,11 @@ public class ArticleActivity extends Activity {
 				downloader.execute(datas.getString("Banniere"));
 			}
 			
-			//Gérer l'affichage du titre.
+			//Gérer l'affichage du titre (et mettre à jour la barre de titre de l'activité aussi)
 			//Celui-ci peut contenir des entités HTML : il faut donc le convertir en texte Spanned
 			((TextView) findViewById(R.id.titreArticle)).setText(Html.fromHtml(datas.getString("Titre")));
-			
+			((TextView) findViewById(R.id.titreActivite)).setText(Html.fromHtml(datas.getString("Titre")));
+					
 			//Afficher l'accroche. Si elle n'existe pas, masquer le composant afin de gagner de la place.
 			if(datas.isNull("Accroche"))
 			{

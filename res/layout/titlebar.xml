@@ -18,6 +18,8 @@
         android:id="@+id/titreActivite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="TextView"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
