@@ -20,6 +20,11 @@ import android.util.Log;
 
 public class JSONfunctions {
 
+	/**
+	 * TODO : WTF static ?!
+	 * @param url
+	 * @return
+	 */
 	public static JSONObject getJSONfromURL(String url){
 		InputStream is = null;
 		String result = "";

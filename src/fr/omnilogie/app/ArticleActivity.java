@@ -29,7 +29,7 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 		
-		JSONObject datas = getJSONfromURL("http://omnilogie.fr/raw/articles/1209.json");
+		JSONObject datas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1209.json");
 		try {
 			//Commencer par charger la bannière si nécessaire
 			if(!datas.isNull("Banniere"))
@@ -59,48 +59,5 @@ public class ArticleActivity extends Activity {
 			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
-	}
-	
-	protected JSONObject getJSONfromURL(String url){
-
-		//Initialiser la lecture
-		InputStream is = null;
-		String result = "";
-		JSONObject jArray = null;
-
-		//Effectuer la requête POST
-		try{
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(url);
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-
-		}catch(Exception e){
-			Log.e("log_tag", "Error in http connection "+e.toString());
-		}
-
-		//Convertir la réponse sous forme de String
-		try{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result=sb.toString();
-		}catch(Exception e){
-			Log.e("log_tag", "Error converting result "+e.toString());
-		}
-
-		//Transformer le résultat en objet JSON
-		try{
-				jArray = new JSONObject(result);
-		}catch(JSONException e){
-			Log.e("log_tag", "Error parsing data "+e.toString());
-		}
-
-		return jArray;
 	}
 }
