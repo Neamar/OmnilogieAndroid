@@ -1,9 +1,21 @@
 package fr.omnilogie.app;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 
 public class ListeActivity extends ListActivity {
@@ -11,14 +23,54 @@ public class ListeActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
+	  
+	  //setContentView(R.layout.list_item);
 
+	  /*
 	  setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, COUNTRIES));
 
 	  ListView lv = getListView();
-	  lv.setTextFilterEnabled(true);
+	  lv.setTextFilterEnabled(true);*/
 
+	  ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
+      
+      
+	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
+	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
+	  
+      try{
+      	     	
+	        for(int i=0;i<jsonArray.length();i++){						
+				HashMap<String, String> map = new HashMap<String, String>();	
+				JSONObject e = jsonArray.getJSONObject(i);
+				
+				map.put("id_map", String.valueOf(i));
+				map.put("id", e.getString("ID"));
+	        	map.put("title", e.getString("T"));
+	        	mylist.add(map);			
+			}		
+      }catch(JSONException e)        {
+      	 Log.e("log_tag", "Error parsing data "+e.toString());
+      }
+      
+      ListAdapter adapter = new SimpleAdapter(this, mylist , R.layout.main, 
+                      new String[] { "id", "title" }, 
+                      new int[] { R.id.item_title, R.id.item_subtitle });
+      
+      setListAdapter(adapter);
+      
+      final ListView lv = getListView();
+      lv.setTextFilterEnabled(true);	
+      /*lv.setOnItemClickListener(new OnItemClickListener() {
+      	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
+      		@SuppressWarnings("unchecked")
+				HashMap<String, String> o = (HashMap<String, String>) lv.getItemAtPosition(position);	        		
+      		Toast.makeText(Main.this, "ID '" + o.get("id") + "' was clicked.", Toast.LENGTH_SHORT).show(); 
+
+			}
+		});*/
 	}
-    
+	   
     static final String[] COUNTRIES = new String[] {
         "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra",
         "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina",
