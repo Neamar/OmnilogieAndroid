@@ -20,6 +20,11 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 	private String url;
 	private final WeakReference<ImageView> imageViewReference;
 
+	/**
+	 * Download a picture in the background
+	 * @param imageView l'imageView dans lequel l'image devra ensuite être insérée
+	 * @param defaultImage
+	 */
 	public ImageDownloader(ImageView imageView) {
 		imageViewReference = new WeakReference<ImageView>(imageView);
 	}
@@ -48,16 +53,6 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 			ImageView imageView = imageViewReference.get();
 			if (imageView != null) {
 				imageView.setImageBitmap(result);
-			}
-		}
-	}
-
-	@Override
-	protected void onPreExecute() {
-		if (imageViewReference != null) {
-			ImageView imageView = imageViewReference.get();
-			if (imageView != null) {
-				imageView.setImageResource(R.drawable.petite_banniere);
 			}
 		}
 	}
