@@ -22,6 +22,13 @@ import android.widget.SimpleAdapter;
 
 
 public class ListeActivity extends ListActivity {
+	
+	static final int ARTICLES_A_CHARGER = 20;
+	int dernierArticle = 0; // id du dernier article chargé
+	
+	// Tableau qui contiendra les méta-données sur les articles
+	ArrayList<HashMap<String, Spanned>> listeArticles = new ArrayList<HashMap<String, Spanned>>();
+	
     /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,39 +36,15 @@ public class ListeActivity extends ListActivity {
 	  
 	  setContentView(R.layout.listes);
 	  
-	  // Tableau qui contiendra les méta-données sur les articles
-	  ArrayList<HashMap<String, Spanned>> listeArticles = new ArrayList<HashMap<String, Spanned>>();
-      
-	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
-	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
+      chargerLesArticlesSuivants();
 	  
-	  // Insert les éléments JSON dans listeArticles
-      try{
-      	     	
-	        for(int i=0;i<jsonArray.length();i++){						
-				HashMap<String, Spanned> map = new HashMap<String, Spanned>();	
-				JSONObject e = jsonArray.getJSONObject(i);
-				
-				map.put("mapId", Html.fromHtml(String.valueOf(i)));
-				map.put("id", Html.fromHtml(e.getString("ID")));
-	        	map.put("titre", Html.fromHtml(e.getString("T")));
-	        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
-	        	map.put("question", Html.fromHtml(e.getString("Q")));
-	        	map.put("banniere", Html.fromHtml(e.getString("B")));
-	        	listeArticles.add(map);			
-			}		
-      }catch(JSONException e)        {
-      	 Log.e("log_tag", "Error parsing data "+e.toString());
-      }
-      
-      ListAdapter adapter = new SimpleAdapter(this, listeArticles , R.layout.list_item, 
-                      new String[] { "titre", "question", "auteur" }, 
-                      new int[] { R.id.item_title, R.id.item_subtitle, R.id.item_extra });
-      
-      setListAdapter(adapter);
-      
-      
-      
+      //TODO Renommer les 'items'
+	  ListAdapter adapter = new SimpleAdapter(this, listeArticles , R.layout.list_item, 
+              new String[] { "titre", "question", "auteur" }, 
+              new int[] { R.id.item_title, R.id.item_subtitle, R.id.item_extra });
+
+      setListAdapter(adapter);     
+	  
       final ListView lv = getListView();
       lv.setTextFilterEnabled(true);
       lv.setOnItemClickListener(new OnItemClickListener() {
@@ -71,7 +54,37 @@ public class ListeActivity extends ListActivity {
       			String articleID = o.get("id").toString();
       			Log.v("todo", "Load article " + articleID);
       			//TODO charger l'article
+      			chargerLesArticlesSuivants();
 			}
 		});
+	}
+	
+	//TODO corriger ça
+	protected void chargerLesArticlesSuivants()
+	{
+		String url = "http://omnilogie.fr/raw/articles.json?start="+dernierArticle
+					+"&limit="+ARTICLES_A_CHARGER;
+		JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);	  
+		  
+		  // Insert les éléments JSON dans listeArticles
+	      try{
+	      	     	
+		        for(int i=0;i<jsonArray.length();i++){						
+					HashMap<String, Spanned> map = new HashMap<String, Spanned>();	
+					JSONObject e = jsonArray.getJSONObject(i);
+					
+					map.put("mapId", Html.fromHtml(String.valueOf(i+dernierArticle)));
+					map.put("id", Html.fromHtml(e.getString("ID")));
+		        	map.put("titre", Html.fromHtml(e.getString("T")));
+		        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
+		        	map.put("question", Html.fromHtml(e.getString("Q")));
+		        	map.put("banniere", Html.fromHtml(e.getString("B")));
+		        	listeArticles.add(map);
+				}
+		        dernierArticle += ARTICLES_A_CHARGER;
+	      }catch(JSONException e)        {
+	      	 Log.e("log_tag", "Error parsing data "+e.toString());
+	      }
+	      	      
 	}
 }
