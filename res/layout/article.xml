@@ -24,7 +24,10 @@
 			android:layout_height="wrap_content" android:text="Accroche de l'article"
 			android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		<WebView android:id="@+id/contenu" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+		<WebView
+		    android:id="@+id/contenu"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" />
+
 		</LinearLayout>
 </ScrollView>
