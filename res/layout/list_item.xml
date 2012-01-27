@@ -3,28 +3,44 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="bottom"
+            android:lines="2"
+            android:padding="2dp"
+            android:text="Titre"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/item_subtitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_title"
+            android:lines="2"
+            android:padding="2dp"
+            android:text="Accroche"
+            android:textSize="13dp" />
 
-    <TextView  
-	android:id="@+id/item_title"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:padding="2dp"
-    android:textSize="20dp" />
-    
-    <TextView  
-	android:id="@+id/item_subtitle"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:padding="2dp"
-    android:textSize="13dp" />
-    
-    
-    <TextView  
-	android:id="@+id/item_extra"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:padding="2dp"
-    android:textSize="10dp" />
-    
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_extra"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:lines="1"
+        android:padding="2dp"
+        android:text="Auteur"
+        android:textSize="10dp" />
+
 </LinearLayout>

@@ -43,7 +43,7 @@ public class ListeActivity extends ListActivity {
 				map.put("mapId", String.valueOf(i));
 				map.put("id", e.getString("ID"));
 	        	map.put("titre", e.getString("T"));
-	        	map.put("auteur", e.getString("A"));
+	        	map.put("auteur", "par " + e.getString("A"));
 	        	map.put("question", e.getString("Q"));
 	        	listeArticles.add(map);			
 			}		
