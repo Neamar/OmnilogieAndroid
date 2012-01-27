@@ -1,4 +1,4 @@
-package fr.omnilogie.app;
+﻿package fr.omnilogie.app;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
