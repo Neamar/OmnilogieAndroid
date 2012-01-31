@@ -7,7 +7,9 @@
 /**
  * Style pour le titre et l'accroche
  */
-
+h1 {font-size:90%;}
+h2 {font-size:75%; padding:0 0 5px 20px; border-left:2px solid #66bbe0}
+h2:empty {display:none}
 /**
  * Style de base pour le contenu de l'omnilogisme
  */
@@ -27,7 +29,7 @@ span.roman{text-transform:lowercase;font-variant:small-caps}
 p.displaymath{text-align:center}
 hr.court{width:40%}
 hr.footnote{margin-left:0;margin-bottom:0}
-hr.footnote + ol{font-size:85%;margin-top:1px;list-style-type:none}
+hr.footnote + ol{font-size:75%;margin-top:1px;list-style-type:none}
 hr.footnote + ol li{line-height:1em}
 .ss{font-family:sans-serif}
 .ms{font-family:monospace}
