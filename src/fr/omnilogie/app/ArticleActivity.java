@@ -43,7 +43,7 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 		
-		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1215.json");
+		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/500.json");
 
 		//Remplir notre article avec les données fournies
 		article.remplirDepuisJSON(jsonDatas);
