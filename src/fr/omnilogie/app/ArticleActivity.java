@@ -29,48 +29,53 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;;
 
 public class ArticleActivity extends Activity {
-	/** Called when the activity is first created. */
+	/**
+	 * L'article qui est affiché sur cette activité
+	 */
+	protected ArticleObject article = new ArticleObject();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 		
-		JSONObject datas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1215.json");
-		try {
-			//Commencer par charger la bannière si nécessaire
-			if(!datas.isNull("Banniere"))
-			{
-				ImageDownloader downloader = new ImageDownloader((ImageView) findViewById(R.id.banniere));
-				downloader.execute(datas.getString("Banniere"));
-			}
-			
-			//Gérer l'affichage du titre.
-			//Celui-ci peut contenir des entités HTML : il faut donc le convertir en texte Spanned
-			((TextView) findViewById(R.id.titre)).setText(Html.fromHtml(datas.getString("Titre")));
-			
-			//Afficher l'accroche. Si elle n'existe pas, masquer le composant afin de gagner de la place.
-			if(datas.isNull("Accroche"))
-			{
-				((TextView) findViewById(R.id.accroche)).setVisibility(View.GONE);
-			}
-			else
-			{
-				((TextView) findViewById(R.id.accroche)).setText(Html.fromHtml(datas.getString("Accroche")));
-			}
+		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1215.json");
 
-			//Rendre le contenu de l'article.
-			//Il faut spécifier une URL de base afin que les images soient disponibles.
-			((WebView) findViewById(R.id.contenu)).loadDataWithBaseURL("http://omnilogie.fr", preparerArticle(datas.getString("Omnilogisme")), "text/html", "UTF-8", null);
+		//Remplir notre article avec les données fournies
+		article.remplirDepuisJSON(jsonDatas);
+
+		//Créer le HTML
+		String html = "";
+		try
+		{
+			InputStream fin = getAssets().open("article.html");
+			byte[] buffer = new byte[fin.available()];
+			fin.read(buffer);
+			fin.close();
 			
-			//Traiter les sources
-			renderSources(datas.getJSONArray("Sources"));
-		} catch (JSONException e) {
-			// TODO : gérer les erreurs
+			html = new String(buffer);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//Remplacer les templates :
+		
+		html = html.replace("{{banniere}}", article.banniere);
+		html = html.replace("{{titre}}", article.titre);
+		html = html.replace("{{accroche}}", article.accroche);
+		html = html.replace("{{omnilogisme}}", article.omnilogisme);
+		
+		//Afficher le contenu de l'article
+		//Il faut spécifier une URL de base afin que les images soient disponibles.
+		WebView webView = ((WebView) findViewById(R.id.article));
+		
+		webView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+
+		webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
 	}
 	
 	@Override
@@ -80,59 +85,6 @@ public class ArticleActivity extends Activity {
 		return true;
 	}
 	
-	protected void renderSources(JSONArray sources)
-	{
-		ArrayList<HashMap<String, String>> listeSources = new ArrayList<HashMap<String, String>>();
 
-		// Insert les éléments JSON dans listeArticles
-		try {
-			
-			for(int i = 0;i < sources.length();i++)
-			{
-				HashMap<String, String> map = new HashMap<String, String>();	
-				JSONObject e;
-				
-				e = sources.getJSONObject(i);
-				
-				map.put("url", e.getString("URL"));
-				if(e.isNull("Titre"))
-				{
-					map.put("titre", e.getString("URL"));
-				}
-				else
-				{
-					map.put("titre", e.getString("Titre"));
-				}
-				
-				listeSources.add(map);
-			}		
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		ListAdapter adapter = new SimpleAdapter(this, listeSources , R.layout.sources_item, 
-			new String[] { "titre" }, 
-			new int[] { R.id.sourceItemId });
-		
-		((ListView) findViewById(R.id.sourcesArticle)).setAdapter(adapter);
-	}
-	
-	protected String preparerArticle(String article)
-	{
-		String baseHtml = "";
-		try
-		{
-			InputStream fin = getAssets().open("article.html");
-			byte[] buffer = new byte[fin.available()];
-			fin.read(buffer);
-			fin.close();
-			
-			baseHtml = new String(buffer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return baseHtml.replace("{{article}}", article);
-	}
 }
+
