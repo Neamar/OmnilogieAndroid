@@ -2,25 +2,22 @@
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 
 public class ArticleActivity extends Activity {
+	
 	/**
-	 * L'article qui est affiché sur cette activité
+	 * L'article qui est affiché sur cette activité.
+	 * Cet objet contient toutes les données nécessaires, traitées depuis le JSON récupéré et facilement accessibles.
 	 */
 	protected ArticleObject article = new ArticleObject();
 	
@@ -49,7 +46,6 @@ public class ArticleActivity extends Activity {
 		}
 		
 		//Remplacer les templates :
-		
 		html = html.replace("{{banniere}}", article.banniere);
 		html = html.replace("{{titre}}", article.titre);
 		html = html.replace("{{accroche}}", article.accroche);
@@ -66,6 +62,7 @@ public class ArticleActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		//Récupérer le menu de base
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.article, menu);
 
