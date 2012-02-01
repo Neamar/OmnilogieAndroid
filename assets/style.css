@@ -1,0 +1,74 @@
+/**
+ * Style pour la bannière : ne doit pas déborder
+ */
+.banniere_holder { text-align:center; }
+.banniere_holder img { max-width:100%;}
+
+/**
+ * Style pour le titre et l'accroche
+ */
+h1 {font-size:90%;}
+h2 {font-size:75%; padding:0 0 5px 20px; border-left:2px solid #66bbe0}
+h2:empty {display:none}
+/**
+ * Style de base pour le contenu de l'omnilogisme
+ */
+em em{font-style:normal}
+em em em,em.italique{font-style:italic}
+em.emph1 {color:blue}
+em.emph2 {color:red}
+em.emph3 {color:green}
+em.emph4 {color:maroon}
+em.emph5 {color:purple}
+em.emph6 {color:navy}
+abbr,acronym{border-bottom:1px dotted #333;cursor:help}
+sup a{text-decoration:none;color:black}
+table{margin:auto}
+.verse p{text-align:center;font-style:italic;text-indent:0}
+span.roman{text-transform:lowercase;font-variant:small-caps}
+p.displaymath{text-align:center}
+hr.court{width:40%}
+hr.footnote{margin-left:0;margin-bottom:0}
+hr.footnote + ol{font-size:75%;margin-top:1px;list-style-type:none}
+hr.footnote + ol li{line-height:1em}
+.ss{font-family:sans-serif}
+.ms{font-family:monospace}
+.century{text-transform:lowercase;font-variant:small-caps}
+ul,ol {margin:.75em 0 .75em 10px;padding:0;list-style-type:none}
+li {padding-left:10px;margin-bottom:5px}
+tt {font-size:12px}
+a {text-decoration:none}
+a:link {color:#3c3c3c}
+a:visited {color:#000}
+a:hover,a:focus,a:active {text-decoration:underline}
+a:focus,a:active {outline:none}
+a img,hr {border:none}
+p {margin:.75em 0}
+.omnilogisme img {display:block;margin:auto}
+blockquote{color:#4f81bd;border-bottom:1px solid;background:url('img/gui.PNG') no-repeat;padding-left:25px}
+blockquote p{text-indent:0}
+blockquote p:first-letter{color:black!important}
+blockquote p:after{color:black;content:"»"}
+.TexTexte{white-space:nowrap;font-style:italic;font-size:90%;color:#1e1e1e}
+caption {color:#243f60;border:1px solid black}
+.labelimage{float:right;clear:right;display:block;border:1px solid black;margin:5px;background-color:#F2F2F2;width:305px;font-size:.95em}
+.labelimage span{text-indent:0;text-align:center;color:#4F81BD;margin:2px;display:block}
+.labelimage img{float:none;padding:3px;max-width:300px}
+.TexTexte sub{font-size:.75em}
+img.TexPic{display:inline;vertical-align:middle;float:none;padding:0;margin:3px 0}
+p.displaymath:first-letter{color:black !important;font-weight:normal!important}
+ul {list-style-type:square;padding-left:10px}
+ul ul{list-style-type:circle}
+li {padding-left:0;margin-left:10px}
+ol {padding-left:18px;list-style:decimal}
+ol ul{margin-left:20px;list-style:inside circle}
+hr.footnote {background-image:none;margin:5px 0 10px 25px;border-bottom:1px dashed #333;padding-bottom:10px;height:13px}
+.omnilogisme {font:16px/1.5em 'Georgia','Palatino Linotype','Book Antiqua','Palatino','Times',serif}
+.omnilogisme p:first-letter,article.presentation p:first-letter {font-weight:bold;color:red;margin-left:15px}
+
+/**
+ * Android specific code
+ */
+ hr.footnote + ol li a {background:transparent; -webkit-transition:background 1s}
+hr.footnote + ol li a:target {background:#DDEEFF}
+.omnilogisme img {max-width:90%}
