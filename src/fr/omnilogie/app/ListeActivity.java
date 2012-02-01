@@ -8,106 +8,169 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
+import android.view.View;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AbsListView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.AbsListView.OnScrollListener;
 
 
 public class ListeActivity extends ListActivity {
+	
+	static final int ARTICLES_A_CHARGER = 20;
+	int dernierArticle = 0; // id du dernier article chargé
+	Boolean updateEnCours = false;
+	SimpleAdapter adapter;
+	ListeActivity listeActivity = this;
+	
+	// Tableau qui contiendra les méta-données sur les articles
+	ArrayList<HashMap<String, Spanned>> listeArticles = new ArrayList<HashMap<String, Spanned>>();
+	ArrayList<HashMap<String, Spanned>> nouveauxArticles;
+	
     /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  
-	  // Tableau qui contiendra les méta-données sur les articles
-	  ArrayList<HashMap<String, String>> listeArticles = new ArrayList<HashMap<String, String>>();
-      
-	  JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/articles.json?limit=20");
-	  //JSONObject json = JSONfunctions.getJSONfromURL("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo");
+	  setContentView(R.layout.activity_listes);
 	  
-	  // Insert les éléments JSON dans listeArticles
-      try{
-      	     	
-	        for(int i=0;i<jsonArray.length();i++){						
-				HashMap<String, String> map = new HashMap<String, String>();	
-				JSONObject e = jsonArray.getJSONObject(i);
-				
-				map.put("mapId", String.valueOf(i));
-				map.put("id", e.getString("ID"));
-	        	map.put("titre", e.getString("T"));
-	        	map.put("auteur", e.getString("A"));
-	        	map.put("question", e.getString("Q"));
-	        	listeArticles.add(map);			
-			}		
-      }catch(JSONException e)        {
-      	 Log.e("log_tag", "Error parsing data "+e.toString());
-      }
-      
-      ListAdapter adapter = new SimpleAdapter(this, listeArticles , R.layout.list_item, 
-                      new String[] { "titre", "question", "auteur" }, 
-                      new int[] { R.id.item_title, R.id.item_subtitle, R.id.item_extra });
-      
-      setListAdapter(adapter);
-      
+      tryExpandListView();
+	  
       final ListView lv = getListView();
       lv.setTextFilterEnabled(true);
-      /*lv.setOnItemClickListener(new OnItemClickListener() {
+      
+      // Initialisation du listener sur un clic
+      lv.setOnItemClickListener(new OnItemClickListener() {
       	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
       		@SuppressWarnings("unchecked")
-				HashMap<String, String> o = (HashMap<String, String>) lv.getItemAtPosition(position);	        		
-      		Toast.makeText(Main.this, "ID '" + o.get("id") + "' was clicked.", Toast.LENGTH_SHORT).show(); 
-
+				HashMap<String, Spanned> o = (HashMap<String, Spanned>) lv.getItemAtPosition(position); 
+      			String articleID = o.get("id").toString();
+      			Log.v("todo", "Load article " + articleID);
+      			//TODO charger l'article
 			}
-		});*/
+		});
+      
+      // Initialisation du listener de scroll pour catcher la fin de liste atteinte
+      lv.setOnScrollListener(new OnScrollListener() {
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// pas d'utilité ici
+			
+		}
+		
+		// à chaque mouvement, on regarde si le dernier est rendu visible
+		public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				
+				//what is the bottom iten that is visible
+			    int lastInScreen = firstVisibleItem + visibleItemCount;  
+			
+				if (lastInScreen == totalItemCount)
+				{
+					tryExpandListView();
+				}
+		}
+      });
 	}
-	   
-    static final String[] COUNTRIES = new String[] {
-        "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra",
-        "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina",
-        "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
-        "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
-        "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
-        "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory",
-        "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
-        "Cote d'Ivoire", "Cambodia", "Cameroon", "Canada", "Cape Verde",
-        "Cayman Islands", "Central African Republic", "Chad", "Chile", "China",
-        "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo",
-        "Cook Islands", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic",
-        "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic",
-        "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea",
-        "Estonia", "Ethiopia", "Faeroe Islands", "Falkland Islands", "Fiji", "Finland",
-        "Former Yugoslav Republic of Macedonia", "France", "French Guiana", "French Polynesia",
-        "French Southern Territories", "Gabon", "Georgia", "Germany", "Ghana", "Gibraltar",
-        "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau",
-        "Guyana", "Haiti", "Heard Island and McDonald Islands", "Honduras", "Hong Kong", "Hungary",
-        "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica",
-        "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos",
-        "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
-        "Macau", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
-        "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia", "Moldova",
-        "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia",
-        "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand",
-        "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "North Korea", "Northern Marianas",
-        "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru",
-        "Philippines", "Pitcairn Islands", "Poland", "Portugal", "Puerto Rico", "Qatar",
-        "Reunion", "Romania", "Russia", "Rwanda", "Sqo Tome and Principe", "Saint Helena",
-        "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon",
-        "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Saudi Arabia", "Senegal",
-        "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands",
-        "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "South Korea",
-        "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Swaziland", "Sweden",
-        "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "The Bahamas",
-        "The Gambia", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
-        "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Virgin Islands", "Uganda",
-        "Ukraine", "United Arab Emirates", "United Kingdom",
-        "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan",
-        "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Wallis and Futuna", "Western Sahara",
-        "Yemen", "Yugoslavia", "Zambia", "Zimbabwe"
-      };
+	
+	// essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread)
+	protected void tryExpandListView()
+	{
+		if (updateEnCours)
+		{
+			Log.w("log_tag", "Attention : les articles suivants sont déjà en train d'être chargés.");
+		}
+		else
+		{
+			Log.v("log_tag", "Chargement de nouveaux articles...");
+			updateEnCours = true;
+			Thread thread = new Thread(null, loadMoreItems);
+			thread.start();
+		}
+	}
+	
+	// télécharge les nouveaux items
+	protected Runnable loadMoreItems = new Runnable() {
+		
+		public void run() {		
+			String url = "http://omnilogie.fr/raw/articles.json?start="+dernierArticle
+						+"&limit="+ARTICLES_A_CHARGER;
+			
+			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
+
+			// reset la liste des nouveaux articles
+			nouveauxArticles = new ArrayList<HashMap<String, Spanned>>();
+			  
+			  // Insert les éléments JSON dans listeArticles
+		      try{
+		      	     	
+			        for(int i=0;i<jsonArray.length();i++){						
+						HashMap<String, Spanned> map = new HashMap<String, Spanned>();	
+						JSONObject e = jsonArray.getJSONObject(i);
+						
+						map.put("mapId", Html.fromHtml(String.valueOf(i+dernierArticle)));
+						map.put("id", Html.fromHtml(e.getString("ID")));
+			        	map.put("titre", Html.fromHtml(e.getString("T")));
+			        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
+			        	
+			        	String accroche = e.getString("Q");
+			        	if ( accroche.equals("null") ) 
+			        	{
+			        		accroche = "";
+			        	}
+			        	map.put("question", Html.fromHtml(accroche));
+			        	map.put("banniere", Html.fromHtml(e.getString("B")));
+			        	nouveauxArticles.add(map);
+					}
+			        dernierArticle += jsonArray.length();
+		      }catch(JSONException e)        {
+		      	 Log.e("log_tag", "Error parsing data "+e.toString());
+		      }
+		      
+		      // met à jour l'UI
+		      runOnUiThread(majListView);
+		};
+	};
+	
+	// met à jour la listView dans l'UI
+	protected Runnable majListView = new Runnable() {
+		
+		public void run() {
+			
+			try {
+				
+				for ( HashMap<String, Spanned> article : nouveauxArticles )
+				{
+					listeArticles.add(article);
+				}
+				
+				if(adapter != null)
+				{
+					//Tell to the adapter that changes have been made, this will cause the list to refresh
+					adapter.notifyDataSetChanged();
+				}
+				else
+				{
+				  adapter = new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
+			              new String[] { "titre", "question", "auteur" }, 
+			              new int[] { R.id.list_item_title, R.id.list_item_subtitle, R.id.list_item_extra });
+
+			      setListAdapter(adapter);
+				}
+	       		
+			} catch (Exception e) {
+				 Log.e("log_tag", "Erreur pendant l'update UI de la ListView "+e.toString());
+			}
+	
+			// Fin de l'opération
+			updateEnCours = false;
+		}
+	};
+	
 }

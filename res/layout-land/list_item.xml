@@ -2,12 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="293px"
+            android:layout_height="71px"
+            android:layout_marginBottom="20px"
+            android:layout_marginTop="20px"
+            android:src="@drawable/petite_banniere" android:contentDescription="Bannière de l'article"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
     <TextView
         android:id="@+id/list_item_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-5dp"
         android:ellipsize="marquee"
         android:lines="1"
         android:padding="2dp"
@@ -20,6 +34,7 @@
         android:id="@+id/list_item_subtitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-4dp"
         android:lines="2"
         android:padding="2dp"
         android:text="Accroche"
@@ -35,4 +50,5 @@
         android:text="Auteur"
         android:textSize="10dp" />
 
+	</LinearLayout>
 </LinearLayout>
