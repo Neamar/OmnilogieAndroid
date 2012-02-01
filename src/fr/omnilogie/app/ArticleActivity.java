@@ -30,7 +30,15 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article);
 		
-		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1215.json");
+		//Quel article doit-on afficher ? Si rien n'est spécifié, c'est l'article du jour ; sinon une ID spécifique.
+		String articleToDisplay = "last";
+		Bundle bundle = this.getIntent().getExtras();
+		if(bundle != null)
+			articleToDisplay = Integer.toString(bundle.getInt("id"));
+		else
+			articleToDisplay = "last";
+		
+		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
 
 		//Remplir notre article avec les données fournies
 		article.remplirDepuisJSON(jsonDatas);

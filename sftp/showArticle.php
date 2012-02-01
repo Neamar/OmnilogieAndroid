@@ -12,6 +12,11 @@ $params = array(
 
 include('common.php');
 
+//Charger l'article du jour
+if($_GET['id'] == -1)
+{
+	$_GET['id'] = '(SELECT ID FROM OMNI_Omnilogismes ORDER BY Sortie DESC LIMIT 1)';
+}
 
 $article = mysql_fetch_assoc(Sql::query('
 SELECT
