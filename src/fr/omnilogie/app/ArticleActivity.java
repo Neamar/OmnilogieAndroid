@@ -2,13 +2,19 @@
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 
@@ -62,9 +68,13 @@ public class ArticleActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.article, menu);
+
+		SubMenu sources = menu.addSubMenu("Sources");
+		for(int i = 0; i < article.sourcesTitre.size(); i++)
+		{
+			sources.add(article.sourcesTitre.get(i));
+		}
 		return true;
 	}
-	
-
 }
 

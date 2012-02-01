@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/sources" android:title="Sources"></item>
-    <item android:id="@+id/similaires" android:title="Articles similaires" android:titleCondensed="Similaires"></item>
-    <item android:id="@+id/partager" android:title="Partager"></item>
-    <item android:id="@+id/autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur"></item>
-        
-    <!--  Composants génériques TODO : passer dans un fichier XML et hériter si possible ? -->
-    <item android:id="@+id/rediger"
+    <!-- Composants génériques TODO : passer dans un fichier XML et hériter si possible ? -->
+    <item android:id="@+id/menu_rediger"
           android:title="Devenir rédacteur" android:titleCondensed="Rédiger" android:icon="@drawable/redacteur"/>
-    <item android:id="@+id/parametres"
+    <item android:id="@+id/menu_parametres"
           android:title="Paramètres" android:icon="@drawable/parametres"/>
+    
+    <!-- Composants spécifiques à l'activité -->
+    <item android:id="@+id/menu_partager" android:title="Partager"></item>
+    <item android:id="@+id/menu_autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur"></item>
+
+
 </menu>

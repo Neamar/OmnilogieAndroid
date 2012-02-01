@@ -1,5 +1,8 @@
 package fr.omnilogie.app;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +20,9 @@ public class ArticleObject
 	String omnilogisme;
 	
 	String banniere = "file:///android_asset/banniere.png";
-	String[] sources = null;
+	
+	ArrayList<String> sourcesTitre = new ArrayList<String>();
+	ArrayList<String> sourcesUrl = new ArrayList<String>();
 	
 	/**
 	 * Construit l'objet depuis des paramètres fournis en JSON
@@ -46,7 +51,17 @@ public class ArticleObject
 				banniere = jsonDatas.getString("Banniere");
 			
 			//Traiter les sources
-			//TODO
+			JSONArray sources = jsonDatas.getJSONArray("Sources");
+			for(int i = 0;i < sources.length();i++)
+			{
+				sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
+				
+				if(sources.getJSONObject(i).isNull("Titre"))
+					sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
+				else
+					sourcesTitre.add(sources.getJSONObject(i).getString("Titre"));
+				
+			}
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
 			e.printStackTrace();
