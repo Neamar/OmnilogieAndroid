@@ -10,15 +10,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * Cette classe permet d'adapter une Liste d'ArticleObject dans un ListView.
+ * 
+ * @author Benoit
+ *
+ */
 public class ArticleObjectAdapter extends BaseAdapter {
-	
-	/**
-	 * Cette classe permet d'adapter une Liste d'ArticleObject dans un ListView.
-	 */
 	
 	private Context context;
     private List<ArticleObject> articleList;
  
+    /**
+     * Adapte une liste d'ArticleObject dans un ListView
+     * @param context
+     * @param articleList
+     */
     public ArticleObjectAdapter(Context context, List<ArticleObject> articleList ) {
         this.context = context;
         this.articleList = articleList;
