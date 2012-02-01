@@ -11,25 +11,25 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        
+
         <!-- ACTIVITY : Accueil -->
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <!-- ACTIVITY : Article
+
+        <!--
+        ACTIVITY : Article
         Accessible par intention implicite content://fr.omnilogie.app/article/last
         Accessible par intention implicite content://fr.omnilogie.app/article/<ID-numérique>
         -->
         <activity
             android:name=".ArticleActivity"
-            android:label="Affichage d'un omnilogisme" >
+            android:label="Affichage d&apos;un omnilogisme" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -42,12 +42,15 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
-        
-        <!-- ACTIVITY : Liste d'articles
+
+        <!--
+        ACTIVITY : Liste d'articles
         Accessible par intention implicite content://fr.omnilogie.app/liste
         Accessible par intention implicite content://fr.omnilogie.app/auteur/<ID-numérique>
         -->
-        <activity android:name=".ListeActivity" android:label="Affichage d'une liste d'omnilogismes">
+        <activity
+            android:name=".ListeActivity"
+            android:label="Affichage d&apos;une liste d&apos;omnilogismes" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -64,9 +67,11 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
-        
+
         <!-- ACTIVITY : Liste d'auteurs -->
-        <activity android:name=".AuteursActivity" android:label="Affichage de la liste des omnilogistes"/>
+        <activity
+            android:name=".AuteursActivity"
+            android:label="Affichage de la liste des omnilogistes" />
     </application>
 
 </manifest>
