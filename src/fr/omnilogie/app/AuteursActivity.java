@@ -9,13 +9,20 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class AuteursActivity extends ListActivity {
+	private ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,7 +30,7 @@ public class AuteursActivity extends ListActivity {
 		
 		JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json");
 		
-		ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
+		
 		
 		for(int i = 0; i < jsonArray.length(); i++)
 		{
@@ -34,7 +41,7 @@ public class AuteursActivity extends ListActivity {
 			
 				auteur.put("ID", data.getString("ID"));
 				auteur.put("Auteur", data.getString("A"));
-				auteur.put("NombreArticle", data.getString("N"));
+				auteur.put("NombreArticle", data.getString("N") + " articles publiés");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,6 +58,19 @@ public class AuteursActivity extends ListActivity {
 
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
+
+			
+		  lv.setOnItemClickListener(new OnItemClickListener() {
+			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			    	String auteur = auteurs.get(position).get("ID");
+	                Intent myIntent = new Intent(view.getContext(), ListeActivity.class);
+	  				Bundle bundle = new Bundle();
+	  				bundle.putString("type", "auteur");
+	  				bundle.putString("auteur", auteur);
+	  				myIntent.putExtras(bundle);
+	                startActivity(myIntent);
+			    }
+			  });
 
 	}
 }

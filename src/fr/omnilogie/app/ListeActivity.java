@@ -25,6 +25,9 @@ import android.widget.AbsListView.OnScrollListener;
 public class ListeActivity extends ListActivity {
 	
 	static final int ARTICLES_A_CHARGER = 20;
+	
+	String baseUrl;
+	
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	ArticleObjectAdapter adapter;
@@ -38,9 +41,19 @@ public class ListeActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
-	  
 	  setContentView(R.layout.activity_listes);
 	  
+	  //Quelle liste afficher ?
+	  //TODO : normaliser pour être plus cohérent. Il doit y avoir moyen d'indiquer qu'une acitvité nécessite forcément un certain paramètre.
+	  Bundle bundle = this.getIntent().getExtras();
+	  if(bundle.getString("type").equals("auteur"))
+		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + bundle.getString("auteur") + ".json";
+	  else if(bundle.getString("type").equals("liste"))
+		  baseUrl = "http://omnilogie.fr/raw/articles.json";
+	  else
+		  Log.e("arg", "Demande d'affichage de liste avec un type inconnu");
+	  
+	  Log.e("todo", baseUrl);
       tryExpandListView();
 	  
       final ListView lv = getListView();
@@ -104,8 +117,7 @@ public class ListeActivity extends ListActivity {
 	protected Runnable loadMoreItems = new Runnable() {
 		
 		public void run() {		
-			String url = "http://omnilogie.fr/raw/articles.json?start="+dernierArticle
-						+"&limit="+ARTICLES_A_CHARGER;
+			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
 			
 			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
 

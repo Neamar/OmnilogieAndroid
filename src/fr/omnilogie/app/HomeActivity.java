@@ -39,6 +39,9 @@ public class HomeActivity extends Activity {
 			
 			public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), ListeActivity.class);
+  				Bundle bundle = new Bundle();
+  				bundle.putString("type", "liste");
+  				myIntent.putExtras(bundle);
                 startActivity(myIntent);
 			}
 		});
