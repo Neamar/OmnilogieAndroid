@@ -63,6 +63,8 @@ public class ArticleActivity extends Activity {
 		html = html.replace("{{titre}}", article.titre);
 		html = html.replace("{{accroche}}", article.accroche);
 		html = html.replace("{{omnilogisme}}", article.omnilogisme);
+		html = html.replace("{{auteur}}", article.auteur);
+		html = html.replace("{{dateParution}}", article.dateParution);
 		
 		//Afficher le contenu de l'article
 		//Il faut spécifier une URL de base afin que les images soient disponibles.

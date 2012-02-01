@@ -21,7 +21,8 @@ public class ArticleObject
 	String accroche = "";
 	String omnilogisme = "";
 	String auteur;
-	int auteurId;
+	String dateParution = "";
+	int auteurId = 0;
 	
 	String banniere = "file:///android_asset/banniere.png";
 	
@@ -49,13 +50,15 @@ public class ArticleObject
 			 * 
 			 * Ces composants nécessitent de vérifier qu'ils ne sont pas nuls ou vides.
 			 */
-			if(!jsonDatas.isNull("Q"))
+			if(!jsonDatas.isNull("Q")) // Accroche
 				accroche = jsonDatas.getString("Q");
-			if(!jsonDatas.isNull("B"))
+			if(!jsonDatas.isNull("B")) // Bannière
 				banniere = jsonDatas.getString("B");
-			if(!jsonDatas.isNull("O"))
+			if(!jsonDatas.isNull("S")) // Date de parution
+				dateParution = jsonDatas.getString("S");			
+			if(!jsonDatas.isNull("O")) // Omnilogisme
 				omnilogisme = jsonDatas.getString("O");
-			if(!jsonDatas.isNull("AID"))
+			if(!jsonDatas.isNull("AID")) // Identifiant de l'utilisateur
 				auteurId = jsonDatas.getInt("AID");
 			
 			//Traiter les sources
