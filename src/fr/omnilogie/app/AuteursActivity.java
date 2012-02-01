@@ -40,7 +40,7 @@ public class AuteursActivity extends ListActivity {
 			
 				auteur.put("ID", data.getString("ID"));
 				auteur.put("Auteur", data.getString("A"));
-				auteur.put("NombreArticle", data.getString("N") + " articles publiés");
+				auteur.put("NombreArticle", data.getString("N") + (data.getString("N").equals("1")?" article publié":" articles publiés"));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
