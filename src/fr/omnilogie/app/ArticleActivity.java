@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class ArticleActivity extends Activity {
 	
@@ -71,12 +73,12 @@ public class ArticleActivity extends Activity {
 		//Ajouter le menu pour les sources
 		if(article.hasSources())
 		{
-			SubMenu sources = menu.addSubMenu("Sources");
+			SubMenu sources = menu.addSubMenu(0, -1, 0, "Sources");
 			sources.getItem().setIcon(R.drawable.sources);
 			
 			for(int i = 0; i < article.sourcesTitre.size(); i++)
 			{
-				sources.add(article.sourcesTitre.get(i));
+				sources.add(0, i, i, article.sourcesTitre.get(i));
 			}
 		}
 		return true;
@@ -85,7 +87,17 @@ public class ArticleActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		switch(item.getItemId()) {
+		int id = item.getItemId();
+		
+		//A-t-on cliqué sur une source ?
+		if(id >= 0 && id < article.sourcesTitre.size())
+		{
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.sourcesUrl.get(id)));
+			startActivity(browserIntent);
+		}
+		
+		//Sinon, traiter les boutons standards :
+		switch(id) {
 		case R.id.menu_partager:
 			onShareButtonClick();
 		default:
