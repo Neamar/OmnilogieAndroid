@@ -16,7 +16,6 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AbsListView.OnScrollListener;
@@ -27,12 +26,12 @@ public class ListeActivity extends ListActivity {
 	static final int ARTICLES_A_CHARGER = 20;
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
-	SimpleAdapter adapter;
+	ArticleObjectAdapter adapter;
 	ListeActivity listeActivity = this;
 	
 	// Tableau qui contiendra les méta-données sur les articles
-	ArrayList<HashMap<String, Spanned>> listeArticles = new ArrayList<HashMap<String, Spanned>>();
-	ArrayList<HashMap<String, Spanned>> nouveauxArticles;
+	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
+	ArrayList<ArticleObject> nouveauxArticles;
 	
     /** Called when the activity is first created. */
 	@Override
@@ -49,13 +48,14 @@ public class ListeActivity extends ListActivity {
       // Initialisation du listener sur un clic
       lv.setOnItemClickListener(new OnItemClickListener() {
       	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
-      		@SuppressWarnings("unchecked")
-				HashMap<String, Spanned> o = (HashMap<String, Spanned>) lv.getItemAtPosition(position); 
-      			String articleID = o.get("id").toString();
-      			Log.v("todo", "Load article " + articleID);
-      			//TODO charger l'article
-			}
-		});
+			ArticleObject article = listeArticles.get(position);
+  			if(article != null)
+  			{
+  				Log.v("todo", "Load article " + article.id);
+  				//TODO charger l'article
+  			}
+      	}
+      });
       
       // Initialisation du listener de scroll pour catcher la fin de liste atteinte
       lv.setOnScrollListener(new OnScrollListener() {
@@ -105,28 +105,17 @@ public class ListeActivity extends ListActivity {
 			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
 
 			// reset la liste des nouveaux articles
-			nouveauxArticles = new ArrayList<HashMap<String, Spanned>>();
+			nouveauxArticles = new ArrayList<ArticleObject>();
 			  
 			  // Insert les éléments JSON dans listeArticles
 		      try{
 		      	     	
 			        for(int i=0;i<jsonArray.length();i++){						
-						HashMap<String, Spanned> map = new HashMap<String, Spanned>();	
-						JSONObject e = jsonArray.getJSONObject(i);
+
+						ArticleObject nouvelArticle = new ArticleObject();
+						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
 						
-						map.put("mapId", Html.fromHtml(String.valueOf(i+dernierArticle)));
-						map.put("id", Html.fromHtml(e.getString("ID")));
-			        	map.put("titre", Html.fromHtml(e.getString("T")));
-			        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
-			        	
-			        	String accroche = e.getString("Q");
-			        	if ( accroche.equals("null") ) 
-			        	{
-			        		accroche = "";
-			        	}
-			        	map.put("question", Html.fromHtml(accroche));
-			        	map.put("banniere", Html.fromHtml(e.getString("B")));
-			        	nouveauxArticles.add(map);
+						nouveauxArticles.add(nouvelArticle);
 					}
 			        dernierArticle += jsonArray.length();
 		      }catch(JSONException e)        {
@@ -145,7 +134,7 @@ public class ListeActivity extends ListActivity {
 			
 			try {
 				
-				for ( HashMap<String, Spanned> article : nouveauxArticles )
+				for ( ArticleObject article : nouveauxArticles )
 				{
 					listeArticles.add(article);
 				}
@@ -157,9 +146,11 @@ public class ListeActivity extends ListActivity {
 				}
 				else
 				{
-				  adapter = new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
-			              new String[] { "titre", "question", "auteur" }, 
-			              new int[] { R.id.list_item_title, R.id.list_item_subtitle, R.id.list_item_extra });
+				  adapter = new ArticleObjectAdapter(listeActivity,listeArticles);
+					  
+		//			  new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
+		//	              new String[] { "titre", "question", "auteur" }, 
+		//	              new int[] { R.id.list_item_title, R.id.list_item_subtitle, R.id.list_item_extra });
 
 			      setListAdapter(adapter);
 				}
