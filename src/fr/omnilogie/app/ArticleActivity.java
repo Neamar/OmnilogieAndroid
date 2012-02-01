@@ -34,12 +34,8 @@ public class ArticleActivity extends Activity {
 		setContentView(R.layout.activity_article);
 		
 		//Quel article doit-on afficher ? Si rien n'est spécifié, c'est l'article du jour ; sinon une ID spécifique.
-		String articleToDisplay = "last";
-		Bundle bundle = this.getIntent().getExtras();
-		if(bundle != null)
-			articleToDisplay = Integer.toString(bundle.getInt("id"));
-		else
-			articleToDisplay = "last";
+		Uri uri = getIntent().getData();
+		String articleToDisplay = uri.getLastPathSegment();
 		
 		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
 

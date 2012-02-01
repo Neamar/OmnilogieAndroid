@@ -11,6 +11,8 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+        
+        <!-- ACTIVITY : Accueil -->
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name" >
@@ -20,10 +22,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- ACTIVITY : Article
+        Accessible par intention implicite content://app.omnilogie.fr/article/last
+        Accessible par intention implicite content://app.omnilogie.fr/article/<ID-numérique>
+        -->
         <activity
             android:name=".ArticleActivity"
-            android:label="@string/app_name" />
-        <activity android:name=".ListeActivity" >
+            android:label="Affichage d'un omnilogisme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.omnilogie.fr"
+                    android:pathPrefix="/article"
+                    android:scheme="content" />
+            </intent-filter>
+        </activity>
+        
+        <!-- ACTIVITY : Liste d'articles
+        Accessible par intention implicite content://app.omnilogie.fr/liste
+        Accessible par intention implicite content://app.omnilogie.fr/auteur/<ID-numérique>
+        -->
+        <activity android:name=".ListeActivity" android:label="Affichage d'une liste d'omnilogismes">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -34,14 +58,15 @@
                     android:host="app.omnilogie.fr"
                     android:pathPrefix="/auteur"
                     android:scheme="content" />
-                
                 <data
                     android:host="app.omnilogie.fr"
                     android:path="/liste"
                     android:scheme="content" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuteursActivity" />
+        
+        <!-- ACTIVITY : Liste d'auteurs -->
+        <activity android:name=".AuteursActivity" android:label="Affichage de la liste des omnilogistes"/>
     </application>
 
 </manifest>

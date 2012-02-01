@@ -64,12 +64,9 @@ public class ListeActivity extends ListActivity {
 			ArticleObject article = listeArticles.get(position);
   			if(article != null)
   			{
-  				Bundle bundle = new Bundle();
-  				bundle.putInt("id", article.id);
-
-  				Intent newIntent = new Intent(getApplicationContext(), ArticleActivity.class);
-  				newIntent.putExtras(bundle);
-  				startActivityForResult(newIntent, 0);
+		    	Uri uri = Uri.parse("content://app.omnilogie.fr/article/" + article.id);
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
   			}
       	}
       });

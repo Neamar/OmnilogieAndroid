@@ -29,8 +29,9 @@ public class HomeActivity extends Activity {
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), ArticleActivity.class);
-                startActivity(myIntent);
+		    	Uri uri = Uri.parse("content://app.omnilogie.fr/article/last");
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
 			}
 		});
 		
