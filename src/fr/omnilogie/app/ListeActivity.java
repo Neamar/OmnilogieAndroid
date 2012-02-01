@@ -48,9 +48,15 @@ public class ListeActivity extends ListActivity {
 	  //Choisir en fonction de l'URI.
 	  Uri uri = getIntent().getData();
 	  if(uri.getPath().startsWith("/auteur/"))
+	  {
 		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+		  setTitle("Articles de l'auteur");
+	  }
 	  else
+	  {
 		  baseUrl = "http://omnilogie.fr/raw/articles.json";
+		  setTitle("Derniers articles parus");
+	  }
 	  
       tryExpandListView();
 	  

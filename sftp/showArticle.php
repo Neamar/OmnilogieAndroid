@@ -28,7 +28,8 @@ SELECT
 
 	O.Omnilogisme AS O,
 
-	A.Auteur AS A
+	A.Auteur AS A,
+	A.ID AS AID
 
 FROM OMNI_Omnilogismes O
 LEFT JOIN OMNI_Auteurs A ON (A.ID = O.Auteur)
