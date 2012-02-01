@@ -104,8 +104,14 @@ public class ArticleActivity extends Activity {
 		//A-t-on cliqué sur une source ?
 		if(id >= 0 && id < article.sourcesTitre.size())
 		{
+			try {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.sourcesUrl.get(id)));
 			startActivity(browserIntent);
+			} catch (Exception e)
+			{
+				//Aucun Handler enregistré pour traiter l'URL.
+				e.printStackTrace();
+			}
 		}
 		
 		//Sinon, traiter les boutons standards :
