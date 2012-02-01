@@ -33,8 +33,8 @@ table{margin:auto}
 .verse p{text-align:center;font-style:italic;text-indent:0}
 span.roman{text-transform:lowercase;font-variant:small-caps}
 p.displaymath{text-align:center}
-hr.court{width:40%}
-hr.footnote{margin-left:0;margin-bottom:0}
+hr.court{width:40%; border:none;}
+hr.footnote{margin-left:0;margin-bottom:0; border:none;}
 hr.footnote + ol{font-size:75%;margin-top:1px;list-style-type:none}
 hr.footnote + ol li{line-height:1em}
 .ss{font-family:sans-serif}
