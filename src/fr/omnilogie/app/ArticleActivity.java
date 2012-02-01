@@ -27,7 +27,7 @@ public class ArticleActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.article);
+		setContentView(R.layout.activity_article);
 		
 		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/1215.json");
 
@@ -69,7 +69,10 @@ public class ArticleActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.article, menu);
 
+		//Ajouter le menu pour les sources
 		SubMenu sources = menu.addSubMenu("Sources");
+		sources.getItem().setIcon(R.drawable.sources);
+		
 		for(int i = 0; i < article.sourcesTitre.size(); i++)
 		{
 			sources.add(article.sourcesTitre.get(i));

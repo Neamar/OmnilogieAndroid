@@ -7,8 +7,8 @@
           android:title="Paramètres" android:icon="@drawable/parametres"/>
     
     <!-- Composants spécifiques à l'activité -->
-    <item android:id="@+id/menu_partager" android:title="Partager"></item>
-    <item android:id="@+id/menu_autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur"></item>
+    <item android:id="@+id/menu_partager" android:title="Partager" android:icon="@drawable/partager"></item>
+    <item android:id="@+id/menu_autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur" android:icon="@drawable/articles_auteur"></item>
 
 
 </menu>
