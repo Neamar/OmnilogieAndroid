@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/item_auteurs_auteur_nomAuteur"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:lines="1"
+        android:padding="2dp"
+        android:scrollHorizontally="true"
+        android:text="Auteur"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/item_auteurs_auteur_nbArticles"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:lines="1"
+        android:padding="2dp"
+        android:text="Nb Articles"
+        android:textSize="10dp" />
+
+</LinearLayout>

@@ -42,6 +42,15 @@ public class HomeActivity extends Activity {
                 startActivity(myIntent);
 			}
 		});
+		
+		Button buttonAuteurs = ((Button) findViewById(R.id.home_auteurs));
+		buttonAuteurs.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+                Intent myIntent = new Intent(v.getContext(), AuteursActivity.class);
+                startActivity(myIntent);
+			}
+		});
 	}
 }
 
