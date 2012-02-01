@@ -19,7 +19,8 @@ public class ArticleObject
 	
 	String titre;
 	String accroche = "";
-	String omnilogisme;
+	String omnilogisme = "";
+	String auteur;
 	
 	String banniere = "file:///android_asset/banniere.png";
 	
@@ -40,7 +41,7 @@ public class ArticleObject
 			 */
 			id = jsonDatas.getInt("ID");
 			titre = jsonDatas.getString("T");
-			omnilogisme = jsonDatas.getString("O");
+			auteur = jsonDatas.getString("A");
 			
 			/**
 			 * COMPOSANTS OPTIONNELS
@@ -51,18 +52,22 @@ public class ArticleObject
 				accroche = jsonDatas.getString("Q");
 			if(!jsonDatas.isNull("B"))
 				banniere = jsonDatas.getString("B");
+			if(!jsonDatas.isNull("O"))
+				omnilogisme = jsonDatas.getString("O");
 			
 			//Traiter les sources
-			JSONArray sources = jsonDatas.getJSONArray("U");
-			for(int i = 0;i < sources.length();i++)
+			if(!jsonDatas.isNull("U"))
 			{
-				sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
-				
-				if(sources.getJSONObject(i).isNull("Titre"))
-					sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
-				else
-					sourcesTitre.add(sources.getJSONObject(i).getString("Titre"));
-				
+				JSONArray sources = jsonDatas.getJSONArray("U");
+				for(int i = 0;i < sources.length();i++)
+				{
+					sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
+					
+					if(sources.getJSONObject(i).isNull("Titre"))
+						sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
+					else
+						sourcesTitre.add(sources.getJSONObject(i).getString("Titre"));
+				}
 			}
 		} catch (JSONException e) {
 			// TODO : gérer les erreurs
