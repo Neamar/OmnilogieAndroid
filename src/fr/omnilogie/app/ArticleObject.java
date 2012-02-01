@@ -15,6 +15,8 @@ import org.json.JSONObject;
  */
 public class ArticleObject
 {
+	int id;
+	
 	String titre;
 	String accroche = "";
 	String omnilogisme;
@@ -36,22 +38,22 @@ public class ArticleObject
 			 * 
 			 * Ces paramètres sont forcément définis et non nuls.
 			 */
-			
-			titre = jsonDatas.getString("Titre");
-			omnilogisme = jsonDatas.getString("Omnilogisme");
+			id = jsonDatas.getInt("ID");
+			titre = jsonDatas.getString("T");
+			omnilogisme = jsonDatas.getString("O");
 			
 			/**
 			 * COMPOSANTS OPTIONNELS
 			 * 
 			 * Ces composants nécessitent de vérifier qu'ils ne sont pas nuls ou vides.
 			 */
-			if(!jsonDatas.isNull("Accroche"))
-				accroche = jsonDatas.getString("Accroche");
-			if(!jsonDatas.isNull("Banniere"))
-				banniere = jsonDatas.getString("Banniere");
+			if(!jsonDatas.isNull("Q"))
+				accroche = jsonDatas.getString("Q");
+			if(!jsonDatas.isNull("B"))
+				banniere = jsonDatas.getString("B");
 			
 			//Traiter les sources
-			JSONArray sources = jsonDatas.getJSONArray("Sources");
+			JSONArray sources = jsonDatas.getJSONArray("U");
 			for(int i = 0;i < sources.length();i++)
 			{
 				sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
@@ -66,5 +68,32 @@ public class ArticleObject
 			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Indique si l'article contient des sources
+	 * @return true si des sources sont présentes
+	 */
+	public boolean hasSources()
+	{
+		return (sourcesUrl.size() > 0);
+	}
+	
+	/**
+	 * Indique l'URL pour accéder à l'article depuis la version Web.
+	 * @return une url compressée
+	 */
+	public String getShortUrl()
+	{
+		return "http://omnilogie.fr/" + Integer.toString(id, 35).toUpperCase();
+	}
+	
+	/**
+	 * Permet de récupérer l'accroche si elle est définie, sinon le titre
+	 * @return
+	 */
+	public String accrocheOuTitre()
+	{
+		return (accroche==""?titre:accroche);
 	}
 }

@@ -16,13 +16,12 @@ include('common.php');
 $article = mysql_fetch_assoc(Sql::query('
 SELECT
 	O.ID,
-	O.Titre,
-	O.Statut,
-	O.Sortie,
-	O.Statut,
-	O.Accroche,
+	O.Titre AS T,
+	O.Statut AS S,
+	O.Sortie AS D,
+	O.Accroche AS Q,
 
-	O.Omnilogisme,
+	O.Omnilogisme AS O,
 
 	A.Auteur
 
@@ -69,29 +68,32 @@ SQL::update('OMNI_Omnilogismes', $article['ID'],array('_NbVues'=>'NbVues+1'));
  */
 
 // Mettre en forme
-Typo::setTexte(utf8_decode($article['Titre']));
-$article['Titre'] = utf8_encode(Typo::parseLinear());
+Typo::setTexte(utf8_decode($article['T']));
+$article['T'] = utf8_encode(Typo::parseLinear());
 
-Typo::setTexte(utf8_decode($article['Accroche']));
-$article['Accroche'] = utf8_encode(Typo::parseLinear());
+if(isset($article['Q']))
+{
+	Typo::setTexte(utf8_decode($article['Q']));
+	$article['Q'] = utf8_encode(Typo::parseLinear());
+}
 
-Typo::setTexte(utf8_decode($article['Omnilogisme']));
-$article['Omnilogisme'] = utf8_encode(Typo::parse());
+Typo::setTexte(utf8_decode($article['O']));
+$article['O'] = ParseMath(utf8_encode(Typo::parse()));
 
 // Ajouter la bannière si nécessaire
 $bannerPath = '/images/Banner/' . $article['ID'] . '.png';
 if(is_file(PATH . $bannerPath))
-	$article['Banniere'] = 'http://omnilogie.fr' . $bannerPath;
+	$article['B'] = 'http://omnilogie.fr' . $bannerPath;
 else
-	$article['Banniere'] = 'http://omnilogie.fr/images/Banner/Default.png';
+	$article['B'] = null;
 
 //Ajouter les sources
 $sources = Sql::query('SELECT Titre, URL FROM OMNI_More WHERE Reference=' . $article['ID']);
-$article['Sources'] = array();
+$article['U'] = array();
 
 while($source = mysql_fetch_assoc($sources))
 {
-	$article['Sources'][] = $source;
+	$article['U'][] = $source;
 }
 
 
