@@ -7,7 +7,7 @@
 /**
  * Style pour le titre et l'accroche
  */
-h1 {font-size:90%;}
+h1 {font-size:130%;}
 h2 {font-size:75%; padding:0 0 5px 20px; border-left:2px solid #66bbe0}
 h2:empty {display:none}
 /**

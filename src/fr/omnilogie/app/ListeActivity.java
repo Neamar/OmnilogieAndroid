@@ -52,7 +52,6 @@ public class ListeActivity extends ListActivity {
 	  else
 		  baseUrl = "http://omnilogie.fr/raw/articles.json";
 	  
-	  Log.e("todo", baseUrl);
       tryExpandListView();
 	  
       final ListView lv = getListView();
