@@ -38,11 +38,9 @@ public class HomeActivity extends Activity {
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), ListeActivity.class);
-  				Bundle bundle = new Bundle();
-  				bundle.putString("type", "liste");
-  				myIntent.putExtras(bundle);
-                startActivity(myIntent);
+		    	Uri uri = Uri.parse("content://app.omnilogie.fr/liste");
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
 			}
 		});
 		

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.view.View;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -44,14 +45,12 @@ public class ListeActivity extends ListActivity {
 	  setContentView(R.layout.activity_listes);
 	  
 	  //Quelle liste afficher ?
-	  //TODO : normaliser pour être plus cohérent. Il doit y avoir moyen d'indiquer qu'une acitvité nécessite forcément un certain paramètre.
-	  Bundle bundle = this.getIntent().getExtras();
-	  if(bundle.getString("type").equals("auteur"))
-		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + bundle.getString("auteur") + ".json";
-	  else if(bundle.getString("type").equals("liste"))
-		  baseUrl = "http://omnilogie.fr/raw/articles.json";
+	  //Choisir en fonction de l'URI.
+	  Uri uri = getIntent().getData();
+	  if(uri.getPath().startsWith("auteur/"))
+		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
 	  else
-		  Log.e("arg", "Demande d'affichage de liste avec un type inconnu");
+		  baseUrl = "http://omnilogie.fr/raw/articles.json";
 	  
 	  Log.e("todo", baseUrl);
       tryExpandListView();

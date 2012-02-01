@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,8 +30,6 @@ public class AuteursActivity extends ListActivity {
 		setTitle("Liste des auteurs sur Omnilogie");
 		
 		JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json");
-		
-		
 		
 		for(int i = 0; i < jsonArray.length(); i++)
 		{
@@ -60,15 +59,13 @@ public class AuteursActivity extends ListActivity {
 		lv.setTextFilterEnabled(true);
 
 			
-		  lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String auteur = auteurs.get(position).get("ID");
-	                Intent myIntent = new Intent(view.getContext(), ListeActivity.class);
-	  				Bundle bundle = new Bundle();
-	  				bundle.putString("type", "auteur");
-	  				bundle.putString("auteur", auteur);
-	  				myIntent.putExtras(bundle);
-	                startActivity(myIntent);
+		 lv.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		    	String auteur = auteurs.get(position).get("ID");
+		    	
+		    	Uri uri = Uri.parse("content://app.omnilogie.fr/auteur/" + auteur);
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
 			    }
 			  });
 
