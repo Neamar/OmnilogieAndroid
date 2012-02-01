@@ -27,7 +27,6 @@ public class ListeActivity extends ListActivity {
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	ArticleObjectAdapter adapter;
-	ListeActivity listeActivity = this;
 	
 	// Liste avec les méta-données des articles chargés
 	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
@@ -40,16 +39,19 @@ public class ListeActivity extends ListActivity {
 	  super.onCreate(savedInstanceState);
 	  
 	  setContentView(R.layout.activity_listes);
-	  
-	  // charge des articles (autre thread)
-      tryExpandListView();
-      
-	  
+	         
       final ListView lv = getListView();
 
       // ajout du footer
       View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
       lv.addFooterView(footer);
+      
+      // ajout de l'adapter
+      adapter = new ArticleObjectAdapter(this ,listeArticles);
+      setListAdapter(adapter);
+      
+	  // chargement des articles (autre thread)
+      tryExpandListView();
       
       // initialisation du listener sur un clic
       lv.setOnItemClickListener(new OnItemClickListener() {
@@ -156,16 +158,8 @@ public class ListeActivity extends ListActivity {
 				listeArticles.addAll(nouveauxArticles);
 				nouveauxArticles.clear();
 				
-				if(adapter != null)
-				{
-					// indique à l'adapter qu'il faut faire un resfresh UI du contenu de la liste
-					adapter.notifyDataSetChanged();
-				}
-				else
-				{
-					adapter = new ArticleObjectAdapter(listeActivity,listeArticles);
-					setListAdapter(adapter);
-				}
+				// indique à l'adapter qu'il faut faire un resfresh UI du contenu de la liste
+				adapter.notifyDataSetChanged();
 	       		
 			} catch (Exception e) {
 				 Log.e("log_tag", "Erreur pendant l'update UI de la ListView "+e.toString());
