@@ -39,21 +39,21 @@ public class ArticleObject
 			 * Ces paramètres sont forcément définis et non nuls.
 			 */
 			id = jsonDatas.getInt("ID");
-			titre = jsonDatas.getString("Titre");
-			omnilogisme = jsonDatas.getString("Omnilogisme");
+			titre = jsonDatas.getString("T");
+			omnilogisme = jsonDatas.getString("O");
 			
 			/**
 			 * COMPOSANTS OPTIONNELS
 			 * 
 			 * Ces composants nécessitent de vérifier qu'ils ne sont pas nuls ou vides.
 			 */
-			if(!jsonDatas.isNull("Accroche"))
-				accroche = jsonDatas.getString("Accroche");
-			if(!jsonDatas.isNull("Banniere"))
-				banniere = jsonDatas.getString("Banniere");
+			if(!jsonDatas.isNull("Q"))
+				accroche = jsonDatas.getString("Q");
+			if(!jsonDatas.isNull("B"))
+				banniere = jsonDatas.getString("B");
 			
 			//Traiter les sources
-			JSONArray sources = jsonDatas.getJSONArray("Sources");
+			JSONArray sources = jsonDatas.getJSONArray("U");
 			for(int i = 0;i < sources.length();i++)
 			{
 				sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
