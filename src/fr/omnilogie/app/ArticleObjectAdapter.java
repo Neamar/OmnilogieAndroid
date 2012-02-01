@@ -4,21 +4,29 @@ import java.util.List;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * Cette classe permet d'adapter une Liste d'ArticleObject dans un ListView.
+ * 
+ * @author Benoit
+ *
+ */
 public class ArticleObjectAdapter extends BaseAdapter {
-	
-	/**
-	 * Cette classe permet d'adapter une Liste d'ArticleObject dans un ListView.
-	 */
 	
 	private Context context;
     private List<ArticleObject> articleList;
  
+    /**
+     * Adapte une liste d'ArticleObject dans un ListView
+     * @param context
+     * @param articleList
+     */
     public ArticleObjectAdapter(Context context, List<ArticleObject> articleList ) {
         this.context = context;
         this.articleList = articleList;
@@ -44,8 +52,12 @@ public class ArticleObjectAdapter extends BaseAdapter {
 		
 		View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.list_item, null);
+        	try {
+        		LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(R.layout.item_liste_article, null);
+        	} catch (Exception e) {
+        		Log.e("log_tag", "Erreur la création de la vue d'un article "+e.toString());
+			}
         }
         
         ArticleObject article = articleList.get(position);

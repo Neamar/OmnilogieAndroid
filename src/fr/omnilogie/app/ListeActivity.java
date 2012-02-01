@@ -1,28 +1,28 @@
 ﻿package fr.omnilogie.app;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.view.View;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.AbsListView.OnScrollListener;
 
-
+/**
+ * Récupère et affiche les articles récents dans un ListView.
+ * 
+ * @author Benoit
+ *
+ */
 public class ListeActivity extends ListActivity {
 	
 	static final int ARTICLES_A_CHARGER = 20;
@@ -32,11 +32,11 @@ public class ListeActivity extends ListActivity {
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	ArticleObjectAdapter adapter;
-	ListeActivity listeActivity = this;
 	
-	// Tableau qui contiendra les méta-données sur les articles
+	// Liste avec les méta-données des articles chargés
 	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
-	ArrayList<ArticleObject> nouveauxArticles;
+	// Liste avec les méta-données des articles à ajouter
+	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
     /** Called when the activity is first created. */
 	@Override
@@ -61,9 +61,19 @@ public class ListeActivity extends ListActivity {
       tryExpandListView();
 	  
       final ListView lv = getListView();
-      lv.setTextFilterEnabled(true);
+
+      // ajout du footer
+      View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
+      lv.addFooterView(footer);
       
-      // Initialisation du listener sur un clic
+      // ajout de l'adapter
+      adapter = new ArticleObjectAdapter(this ,listeArticles);
+      setListAdapter(adapter);
+      
+	  // chargement des articles (autre thread)
+      tryExpandListView();
+      
+      // initialisation du listener sur un clic
       lv.setOnItemClickListener(new OnItemClickListener() {
       	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
 			ArticleObject article = listeArticles.get(position);
@@ -76,102 +86,100 @@ public class ListeActivity extends ListActivity {
       	}
       });
       
-      // Initialisation du listener de scroll pour catcher la fin de liste atteinte
+      // initialisation du listener de scroll pour catcher la fin de liste atteinte
       lv.setOnScrollListener(new OnScrollListener() {
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			// pas d'utilité ici
-			
+		
+    	// pas besoin de cette méthode
+    	public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// vide
 		}
 		
 		// à chaque mouvement, on regarde si le dernier est rendu visible
 		public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
 				
-				//what is the bottom iten that is visible
+				// calcul de l'index du dernier item affiché
 			    int lastInScreen = firstVisibleItem + visibleItemCount;  
 			
-				if (lastInScreen == totalItemCount)
-				{
+			    // si le dernier item affiché est le dernier de la liste
+			    // on en charge de nouveaux
+				if (lastInScreen == totalItemCount && totalItemCount > 0)
 					tryExpandListView();
-				}
 		}
       });
 	}
 	
-	// essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread)
-	protected void tryExpandListView()
+	/**
+	 * Essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread).
+	 * @return échec, de nouveaux articles sont déjà en train d'être chargés
+	 */
+	protected boolean tryExpandListView()
 	{
-		if (updateEnCours)
+		Boolean echec = updateEnCours; 
+		
+		if(echec)
 		{
 			Log.w("log_tag", "Attention : les articles suivants sont déjà en train d'être chargés.");
 		}
 		else
 		{
-			Log.v("log_tag", "Chargement de nouveaux articles...");
+			Log.v("log_tag", "Ajout des articles "+dernierArticle
+					+" à "+(dernierArticle+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
 			Thread thread = new Thread(null, loadMoreItems);
 			thread.start();
 		}
+		
+		return echec;
 	}
 	
-	// télécharge les nouveaux items
+	/**
+	 * Routine qui télécharge de nouevaux articles puis demande au thread de l'UI d'updater l'UI.
+	 * 
+	 * Les nouveaux articles
+	 */
 	protected Runnable loadMoreItems = new Runnable() {
 		
 		public void run() {		
 			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
 			
+			// 
 			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
-
-			// reset la liste des nouveaux articles
-			nouveauxArticles = new ArrayList<ArticleObject>();
+			
+			// Insert les éléments JSON dans listeArticles
+		    try{		    	
+		    	for(int i=0;i<jsonArray.length();i++){						
+			
+					ArticleObject nouvelArticle = new ArticleObject();
+					nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
+					
+					nouveauxArticles.add(nouvelArticle);
+					dernierArticle++;
+		    	}
+		    }catch(JSONException e)        {
+			  	 Log.e("log_tag", "Error parsing data "+e.toString());
+			}
 			  
-			  // Insert les éléments JSON dans listeArticles
-		      try{
-		      	     	
-			        for(int i=0;i<jsonArray.length();i++){						
-
-						ArticleObject nouvelArticle = new ArticleObject();
-						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
-						
-						nouveauxArticles.add(nouvelArticle);
-					}
-			        dernierArticle += jsonArray.length();
-		      }catch(JSONException e)        {
-		      	 Log.e("log_tag", "Error parsing data "+e.toString());
-		      }
-		      
-		      // met à jour l'UI
-		      runOnUiThread(majListView);
+		    // met à jour l'UI sur le thread dédié
+			runOnUiThread(majListView);
 		};
 	};
 	
-	// met à jour la listView dans l'UI
+	/**
+	 * Ajoute les nouveaux articles dans la liste des articles.
+	 * Puis crée/notifie l'adapter de la liste. 
+	 */
 	protected Runnable majListView = new Runnable() {
 		
 		public void run() {
 			
 			try {
 				
-				for ( ArticleObject article : nouveauxArticles )
-				{
-					listeArticles.add(article);
-				}
+				listeArticles.addAll(nouveauxArticles);
+				nouveauxArticles.clear();
 				
-				if(adapter != null)
-				{
-					//Tell to the adapter that changes have been made, this will cause the list to refresh
-					adapter.notifyDataSetChanged();
-				}
-				else
-				{
-				  adapter = new ArticleObjectAdapter(listeActivity,listeArticles);
-					  
-		//			  new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
-		//	              new String[] { "titre", "question", "auteur" }, 
-		//	              new int[] { R.id.list_item_title, R.id.list_item_subtitle, R.id.list_item_extra });
-
-			      setListAdapter(adapter);
-				}
+				// indique à l'adapter qu'il faut faire un resfresh UI du contenu de la liste
+				adapter.notifyDataSetChanged();
 	       		
 			} catch (Exception e) {
 				 Log.e("log_tag", "Erreur pendant l'update UI de la ListView "+e.toString());
