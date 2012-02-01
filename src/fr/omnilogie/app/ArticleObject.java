@@ -16,8 +16,14 @@ import org.json.JSONObject;
  */
 public class ArticleObject implements Serializable
 {
+	/**
+	 * Variable pour la sérialisation
+	 */
 	private static final long serialVersionUID = 4314797233584545914L;
 
+	/**
+	 * Identifiant unique de l'article.
+	 */
 	int id;
 	
 	String titre;
@@ -29,7 +35,16 @@ public class ArticleObject implements Serializable
 	
 	String banniere = "file:///android_asset/banniere.png";
 	
+	/**
+	 * Liste des sources.
+	 * Une correspondance d'index est effectuée avec sourcesUrl
+	 */
 	ArrayList<String> sourcesTitre = new ArrayList<String>();
+	
+	/**
+	 * Liste des sources
+	 * Une correspondance d'index est effectuée avec sourcesTitre
+	 */
 	ArrayList<String> sourcesUrl = new ArrayList<String>();
 	
 	/**
@@ -72,6 +87,9 @@ public class ArticleObject implements Serializable
 				{
 					sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
 					
+					//Attention, si la source n'a pas été téléchargée depuis le serveur, son titre est
+					//vide.
+					//Dans ce cas, on reprend directement l'URL.
 					if(sources.getJSONObject(i).isNull("Titre"))
 						sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
 					else
@@ -79,7 +97,6 @@ public class ArticleObject implements Serializable
 				}
 			}
 		} catch (JSONException e) {
-			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
 	}
@@ -95,7 +112,7 @@ public class ArticleObject implements Serializable
 	
 	/**
 	 * Indique l'URL pour accéder à l'article depuis la version Web.
-	 * @return une url compressée
+	 * @return une url compressée sous la forme http://omnilogie.fr/AA
 	 */
 	public String getShortUrl()
 	{
@@ -104,7 +121,7 @@ public class ArticleObject implements Serializable
 	
 	/**
 	 * Permet de récupérer l'accroche si elle est définie, sinon le titre
-	 * @return
+	 * @return accroche ou titre
 	 */
 	public String accrocheOuTitre()
 	{

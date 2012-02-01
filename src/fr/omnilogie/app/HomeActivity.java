@@ -13,6 +13,9 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		
+		/*
+		 * BOUTON : Article du jour 
+		 */
 		Button buttonArticle = ((Button) findViewById(R.id.home_article));
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
@@ -23,6 +26,9 @@ public class HomeActivity extends Activity {
 			}
 		});
 		
+		/*
+		 * BOUTON : Liste des articles
+		 */
 		Button buttonListe = ((Button) findViewById(R.id.home_liste));
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
@@ -33,6 +39,9 @@ public class HomeActivity extends Activity {
 			}
 		});
 		
+		/*
+		 * BOUTON : Liste des auteurs
+		 */
 		Button buttonAuteurs = ((Button) findViewById(R.id.home_auteurs));
 		buttonAuteurs.setOnClickListener(new View.OnClickListener() {
 			
