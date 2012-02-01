@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.view.View;
 import android.os.Bundle;
 import android.text.Html;
@@ -51,8 +52,12 @@ public class ListeActivity extends ListActivity {
 			ArticleObject article = listeArticles.get(position);
   			if(article != null)
   			{
-  				Log.v("todo", "Load article " + article.id);
-  				//TODO charger l'article
+  				Bundle bundle = new Bundle();
+  				bundle.putInt("id", article.id);
+
+  				Intent newIntent = new Intent(getApplicationContext(), ArticleActivity.class);
+  				newIntent.putExtras(bundle);
+  				startActivityForResult(newIntent, 0);
   			}
       	}
       });
