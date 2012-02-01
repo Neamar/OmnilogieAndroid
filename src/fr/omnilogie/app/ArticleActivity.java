@@ -43,6 +43,8 @@ public class ArticleActivity extends Activity {
 		//Remplir notre article avec les données fournies
 		article.remplirDepuisJSON(jsonDatas);
 
+		//Définir le titre de l'activité
+		setTitle(article.titre);
 		//Créer le HTML
 		String html = "";
 		try
