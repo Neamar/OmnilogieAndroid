@@ -21,6 +21,7 @@ public class ArticleObject
 	String accroche = "";
 	String omnilogisme = "";
 	String auteur;
+	int auteurId;
 	
 	String banniere = "file:///android_asset/banniere.png";
 	
@@ -54,6 +55,8 @@ public class ArticleObject
 				banniere = jsonDatas.getString("B");
 			if(!jsonDatas.isNull("O"))
 				omnilogisme = jsonDatas.getString("O");
+			if(!jsonDatas.isNull("AID"))
+				auteurId = jsonDatas.getInt("AID");
 			
 			//Traiter les sources
 			if(!jsonDatas.isNull("U"))

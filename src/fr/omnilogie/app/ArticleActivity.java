@@ -115,12 +115,17 @@ public class ArticleActivity extends Activity {
 		switch(id) {
 		case R.id.menu_partager:
 			onShareButtonClick();
+		case R.id.menu_autres_auteur:
+			onOtherBySameAuthor();
 		default:
 			return super.onContextItemSelected(item);
 		}
 	}
 	
-	public void onShareButtonClick()
+	/**
+	 * Appelé lors de l'appui sur le bouton partagers
+	 */
+	protected void onShareButtonClick()
 	{
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);  
 	    shareIntent.setType("text/plain");  
@@ -128,6 +133,16 @@ public class ArticleActivity extends Activity {
 	    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, article.accrocheOuTitre());  
 	    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + article.titre);  
 	    startActivity(Intent.createChooser(shareIntent, "Partager cet article via..."));  
+	}
+	
+	/**
+	 * Appui sur le menu "autres articles du même auteur".
+	 */
+	protected void onOtherBySameAuthor()
+	{
+    	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
+        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+			startActivity(i);
 	}
 }
 
