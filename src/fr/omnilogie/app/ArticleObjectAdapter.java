@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -65,6 +66,8 @@ public class ArticleObjectAdapter extends BaseAdapter {
         	TextView titreTextView = (TextView) v.findViewById(R.id.list_item_title);
         	TextView accrocheTextView = (TextView) v.findViewById(R.id.list_item_subtitle);
         	TextView auteurTextView = (TextView) v.findViewById(R.id.list_item_extra);
+        	ImageView banniereImageView = (ImageView) v.findViewById(R.id.list_item_image);
+        	
         	
         	// met le titre
         	if(titreTextView != null)
@@ -77,6 +80,13 @@ public class ArticleObjectAdapter extends BaseAdapter {
         	// met l'auteur
         	if(auteurTextView != null)
         		auteurTextView.setText( Html.fromHtml("par "+article.auteur));
+        	
+        	// met l'image
+        	if(banniereImageView != null && article.banniere != ArticleObject.DEFAULT_IMAGE)
+        	{
+        		ImageDownloader downloader = new ImageDownloader(banniereImageView);
+				downloader.execute(article.banniere);
+        	}
         }
 		
 		return v;

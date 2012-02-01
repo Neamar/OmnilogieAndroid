@@ -22,7 +22,10 @@ public class ArticleObject
 	String omnilogisme = "";
 	String auteur;
 	
-	String banniere = "file:///android_asset/banniere.png";
+	final static String DEFAULT_IMAGE = "file:///android_asset/banniere.png"; 
+	String banniere = DEFAULT_IMAGE;
+	
+	
 	
 	ArrayList<String> sourcesTitre = new ArrayList<String>();
 	ArrayList<String> sourcesUrl = new ArrayList<String>();
