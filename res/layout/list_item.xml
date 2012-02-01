@@ -3,9 +3,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <TextView
-        android:id="@+id/item_title"
+        android:id="@+id/list_item_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
@@ -15,18 +15,18 @@
         android:text="Titre"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16dp" />
-
+
     <TextView
-        android:id="@+id/item_subtitle"
+        android:id="@+id/list_item_subtitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:lines="2"
         android:padding="2dp"
         android:text="Accroche"
         android:textSize="13dp" />
-
+
     <TextView
-        android:id="@+id/item_extra"
+        android:id="@+id/list_item_extra"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"

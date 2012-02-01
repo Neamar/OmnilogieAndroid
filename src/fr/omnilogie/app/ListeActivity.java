@@ -39,7 +39,7 @@ public class ListeActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  
-	  setContentView(R.layout.listes);
+	  setContentView(R.layout.activity_listes);
 	  
       tryExpandListView();
 	  
@@ -123,7 +123,7 @@ public class ListeActivity extends ListActivity {
 			        	if ( accroche.equals("null") ) 
 			        	{
 			        		accroche = "";
-			        	}	
+			        	}
 			        	map.put("question", Html.fromHtml(accroche));
 			        	map.put("banniere", Html.fromHtml(e.getString("B")));
 			        	nouveauxArticles.add(map);
@@ -157,10 +157,9 @@ public class ListeActivity extends ListActivity {
 				}
 				else
 				{
-					//TODO Renommer les 'items'
-				  ListAdapter adapter = new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
+				  adapter = new SimpleAdapter(listeActivity, listeArticles , R.layout.list_item, 
 			              new String[] { "titre", "question", "auteur" }, 
-			              new int[] { R.id.item_title, R.id.item_subtitle, R.id.item_extra });
+			              new int[] { R.id.list_item_title, R.id.list_item_subtitle, R.id.list_item_extra });
 
 			      setListAdapter(adapter);
 				}
