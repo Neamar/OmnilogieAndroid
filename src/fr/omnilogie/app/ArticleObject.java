@@ -15,6 +15,8 @@ import org.json.JSONObject;
  */
 public class ArticleObject
 {
+	int id;
+	
 	String titre;
 	String accroche = "";
 	String omnilogisme;
@@ -36,7 +38,7 @@ public class ArticleObject
 			 * 
 			 * Ces paramètres sont forcément définis et non nuls.
 			 */
-			
+			id = jsonDatas.getInt("ID");
 			titre = jsonDatas.getString("Titre");
 			omnilogisme = jsonDatas.getString("Omnilogisme");
 			
@@ -68,9 +70,30 @@ public class ArticleObject
 		}
 	}
 	
-	public Boolean hasSources()
+	/**
+	 * Indique si l'article contient des sources
+	 * @return true si des sources sont présentes
+	 */
+	public boolean hasSources()
 	{
 		return (sourcesUrl.size() > 0);
-		
+	}
+	
+	/**
+	 * Indique l'URL pour accéder à l'article depuis la version Web.
+	 * @return une url compressée
+	 */
+	public String getShortUrl()
+	{
+		return "http://omnilogie.fr/" + Integer.toString(id, 35).toUpperCase();
+	}
+	
+	/**
+	 * Permet de récupérer l'accroche si elle est définie, sinon le titre
+	 * @return
+	 */
+	public String accrocheOuTitre()
+	{
+		return (accroche==""?titre:accroche);
 	}
 }

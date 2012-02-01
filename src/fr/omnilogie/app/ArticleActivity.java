@@ -6,9 +6,11 @@ import java.io.InputStream;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
@@ -78,6 +80,27 @@ public class ArticleActivity extends Activity {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId()) {
+		case R.id.menu_partager:
+			onShareButtonClick();
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	
+	public void onShareButtonClick()
+	{
+		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);  
+	    shareIntent.setType("text/plain");  
+
+	    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, article.accrocheOuTitre());  
+	    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + article.titre);  
+	    startActivity(Intent.createChooser(shareIntent, "Partager cet article via..."));  
 	}
 }
 
