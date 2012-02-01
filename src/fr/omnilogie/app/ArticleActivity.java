@@ -33,15 +33,24 @@ public class ArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article);
 		
-		//Quel article doit-on afficher ? Si rien n'est spécifié, c'est l'article du jour ; sinon une ID spécifique.
-		Uri uri = getIntent().getData();
-		String articleToDisplay = uri.getLastPathSegment();
+		if(savedInstanceState != null)
+		{
+			//Nous sommes en train de restaurer : pas besoin de tout recharger
+			article = (ArticleObject) savedInstanceState.getSerializable("article");
+		}
+		else
+		{
+			//Quel article doit-on afficher ? Si rien n'est spécifié, c'est l'article du jour ; sinon une ID spécifique.
+			Uri uri = getIntent().getData();
+			String articleToDisplay = uri.getLastPathSegment();
+			
+			JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
+	
+			//Remplir notre article avec les données fournies
+			article.remplirDepuisJSON(jsonDatas);
+		}
 		
-		JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
-
-		//Remplir notre article avec les données fournies
-		article.remplirDepuisJSON(jsonDatas);
-
+		
 		//Définir le titre de l'activité
 		setTitle(Html.fromHtml(article.titre));
 		//Créer le HTML
@@ -91,6 +100,12 @@ public class ArticleActivity extends Activity {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		outState.putSerializable("article", article);
 	}
 	
 	@Override

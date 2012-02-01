@@ -1,5 +1,6 @@
 package fr.omnilogie.app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -13,8 +14,10 @@ import org.json.JSONObject;
  * @author neamar
  *
  */
-public class ArticleObject
+public class ArticleObject implements Serializable
 {
+	private static final long serialVersionUID = 4314797233584545914L;
+
 	int id;
 	
 	String titre;
