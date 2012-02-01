@@ -67,12 +67,15 @@ public class ArticleActivity extends Activity {
 		inflater.inflate(R.menu.article, menu);
 
 		//Ajouter le menu pour les sources
-		SubMenu sources = menu.addSubMenu("Sources");
-		sources.getItem().setIcon(R.drawable.sources);
-		
-		for(int i = 0; i < article.sourcesTitre.size(); i++)
+		if(article.hasSources())
 		{
-			sources.add(article.sourcesTitre.get(i));
+			SubMenu sources = menu.addSubMenu("Sources");
+			sources.getItem().setIcon(R.drawable.sources);
+			
+			for(int i = 0; i < article.sourcesTitre.size(); i++)
+			{
+				sources.add(article.sourcesTitre.get(i));
+			}
 		}
 		return true;
 	}

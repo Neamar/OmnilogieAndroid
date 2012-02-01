@@ -67,4 +67,10 @@ public class ArticleObject
 			e.printStackTrace();
 		}
 	}
+	
+	public Boolean hasSources()
+	{
+		return (sourcesUrl.size() > 0);
+		
+	}
 }
