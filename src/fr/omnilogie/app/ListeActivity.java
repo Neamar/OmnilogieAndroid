@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
-import android.content.res.Resources.Theme;
 import android.view.View;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -120,7 +118,13 @@ public class ListeActivity extends ListActivity {
 						map.put("id", Html.fromHtml(e.getString("ID")));
 			        	map.put("titre", Html.fromHtml(e.getString("T")));
 			        	map.put("auteur", Html.fromHtml("par " + e.getString("A")));
-			        	map.put("question", Html.fromHtml(e.getString("Q")));
+			        	
+			        	String accroche = e.getString("Q");
+			        	if ( accroche.equals("null") ) 
+			        	{
+			        		accroche = "";
+			        	}	
+			        	map.put("question", Html.fromHtml(accroche));
 			        	map.put("banniere", Html.fromHtml(e.getString("B")));
 			        	nouveauxArticles.add(map);
 					}
