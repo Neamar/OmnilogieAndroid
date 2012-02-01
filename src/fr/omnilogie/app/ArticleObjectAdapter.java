@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,12 @@ public class ArticleObjectAdapter extends BaseAdapter {
 		
 		View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.list_item, null);
+        	try {
+        		LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(R.layout.item_liste_article, null);
+        	} catch (Exception e) {
+        		Log.e("log_tag", "Erreur la création de la vue d'un article "+e.toString());
+			}
         }
         
         ArticleObject article = articleList.get(position);

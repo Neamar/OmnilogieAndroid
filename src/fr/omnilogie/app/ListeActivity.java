@@ -41,11 +41,15 @@ public class ListeActivity extends ListActivity {
 	  
 	  setContentView(R.layout.activity_listes);
 	  
-	  // charge des articles
+	  // charge des articles (autre thread)
       tryExpandListView();
+      
 	  
       final ListView lv = getListView();
-      lv.setTextFilterEnabled(true);
+
+      // ajout du footer
+      View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
+      lv.addFooterView(footer);
       
       // initialisation du listener sur un clic
       lv.setOnItemClickListener(new OnItemClickListener() {
