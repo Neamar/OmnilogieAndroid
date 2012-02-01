@@ -29,7 +29,7 @@ public class HomeActivity extends Activity {
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-		    	Uri uri = Uri.parse("content://app.omnilogie.fr/article/last");
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/last");
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
 	  			startActivity(i);
 			}
@@ -39,7 +39,7 @@ public class HomeActivity extends Activity {
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-		    	Uri uri = Uri.parse("content://app.omnilogie.fr/liste");
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/liste");
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
 	  			startActivity(i);
 			}

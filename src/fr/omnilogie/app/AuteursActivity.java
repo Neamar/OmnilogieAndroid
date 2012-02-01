@@ -63,7 +63,7 @@ public class AuteursActivity extends ListActivity {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	String auteur = auteurs.get(position).get("ID");
 		    	
-		    	Uri uri = Uri.parse("content://app.omnilogie.fr/auteur/" + auteur);
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + auteur);
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
 	  			startActivity(i);
 			    }

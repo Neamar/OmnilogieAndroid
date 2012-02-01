@@ -47,7 +47,7 @@ public class ListeActivity extends ListActivity {
 	  //Quelle liste afficher ?
 	  //Choisir en fonction de l'URI.
 	  Uri uri = getIntent().getData();
-	  if(uri.getPath().startsWith("auteur/"))
+	  if(uri.getPath().startsWith("/auteur/"))
 		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
 	  else
 		  baseUrl = "http://omnilogie.fr/raw/articles.json";
@@ -64,7 +64,7 @@ public class ListeActivity extends ListActivity {
 			ArticleObject article = listeArticles.get(position);
   			if(article != null)
   			{
-		    	Uri uri = Uri.parse("content://app.omnilogie.fr/article/" + article.id);
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
 	  			startActivity(i);
   			}
