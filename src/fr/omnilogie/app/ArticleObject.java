@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+
 /**
  * Contient toutes les données pour un article.
  * 
@@ -24,6 +26,7 @@ public class ArticleObject
 	
 	final static String DEFAULT_IMAGE = "file:///android_asset/banniere.png"; 
 	String banniere = DEFAULT_IMAGE;
+	Bitmap banniereBmp;
 	
 	
 	

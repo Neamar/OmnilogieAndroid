@@ -82,8 +82,12 @@ public class ArticleObjectAdapter extends BaseAdapter {
         	// met l'image
         	if(banniereImageView != null && article.banniere != ArticleObject.DEFAULT_IMAGE)
         	{
-        		ImageDownloader downloader = new ImageDownloader(banniereImageView);
-				downloader.execute(article.banniere);
+        		if(article.banniereBmp != null)
+        			banniereImageView.setImageBitmap(article.banniereBmp);
+        		else {
+        			ImageDownloader downloader = new ImageDownloader(banniereImageView, article);
+    				downloader.execute(article.banniere);
+				}
         	}
         }
 		
