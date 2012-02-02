@@ -52,14 +52,12 @@ public class ArticleObjectAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		View v = convertView;
-        if (v == null) {
-        	try {
-        		LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.item_liste_article, null);
-        	} catch (Exception e) {
-        		Log.e("log_tag", "Erreur la création de la vue d'un article "+e.toString());
-			}
-        }
+    	try {
+    		LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = vi.inflate(R.layout.item_liste_article, null);
+    	} catch (Exception e) {
+    		Log.e("log_tag", "Erreur la création de la vue d'un article "+e.toString());
+		}
         
         ArticleObject article = articleList.get(position);
         if (article != null) {
