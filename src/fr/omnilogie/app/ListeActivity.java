@@ -38,60 +38,60 @@ public class ListeActivity extends ListActivity {
 	// Liste avec les méta-données des articles à ajouter
 	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	  super.onCreate(savedInstanceState);
-	  setContentView(R.layout.activity_listes);
-	  
-	  //Quelle liste afficher ?
-	  //Choisir en fonction de l'URI.
-	  Uri uri = getIntent().getData();
-	  if(uri.getPath().startsWith("/auteur/"))
-	  {
-		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
-		  setTitle("Articles de l'auteur");
-	  }
-	  else
-	  {
-		  baseUrl = "http://omnilogie.fr/raw/articles.json";
-		  setTitle("Derniers articles parus");
-	  }
-	  
-      tryExpandListView();
-	  
-      final ListView lv = getListView();
-
-      // ajout du footer
-      View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
-      lv.addFooterView(footer);
-      
-      // ajout de l'adapter
-      adapter = new ArticleObjectAdapter(this ,listeArticles);
-      setListAdapter(adapter);
-      
-	  // chargement des articles (autre thread)
-      tryExpandListView();
-      
-      // initialisation du listener sur un clic
-      lv.setOnItemClickListener(new OnItemClickListener() {
-      	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
-			ArticleObject article = listeArticles.get(position);
-  			if(article != null)
-  			{
-		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-	  			startActivity(i);
-  			}
-      	}
-      });
-      
-      // initialisation du listener de scroll pour catcher la fin de liste atteinte
-      lv.setOnScrollListener(new OnScrollListener() {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_listes);
 		
-    	// pas besoin de cette méthode
-    	public void onScrollStateChanged(AbsListView view, int scrollState) {
-			// vide
+		//Quelle liste afficher ?
+		//Choisir en fonction de l'URI.
+		Uri uri = getIntent().getData();
+		if(uri.getPath().startsWith("/auteur/"))
+		{
+			baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+			setTitle("Articles de l'auteur");
+		}
+		else
+		{
+			baseUrl = "http://omnilogie.fr/raw/articles.json";
+			setTitle("Derniers articles parus");
+		}
+		
+		tryExpandListView();
+		
+		final ListView lv = getListView();
+
+		// ajout du footer
+		View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
+		lv.addFooterView(footer);
+		
+		// ajout de l'adapter
+		adapter = new ArticleObjectAdapter(this ,listeArticles);
+		setListAdapter(adapter);
+		
+		// chargement des articles (autre thread)
+		tryExpandListView();
+		
+		// initialisation du listener sur un clic
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
+			ArticleObject article = listeArticles.get(position);
+			if(article != null)
+			{
+				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
+				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(i);
+			}
+			}
+		});
+		
+		// initialisation du listener de scroll pour catcher la fin de liste atteinte
+		lv.setOnScrollListener(new OnScrollListener() {
+		
+		// pas besoin de cette méthode
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// vide
 		}
 		
 		// à chaque mouvement, on regarde si le dernier est rendu visible
@@ -99,14 +99,14 @@ public class ListeActivity extends ListActivity {
 					int visibleItemCount, int totalItemCount) {
 				
 				// calcul de l'index du dernier item affiché
-			    int lastInScreen = firstVisibleItem + visibleItemCount;  
-			
-			    // si le dernier item affiché est le dernier de la liste
-			    // on en charge de nouveaux
+				int lastInScreen = firstVisibleItem + visibleItemCount;  
+				
+				// si le dernier item affiché est le dernier de la liste
+				// on en charge de nouveaux
 				if (lastInScreen == totalItemCount && totalItemCount > 0)
 					tryExpandListView();
-		}
-      });
+			}
+		});
 	}
 	
 	/**
@@ -147,20 +147,20 @@ public class ListeActivity extends ListActivity {
 			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
 			
 			// Insert les éléments JSON dans listeArticles
-		    try{		    	
-		    	for(int i=0;i<jsonArray.length();i++){						
+			try{		    	
+				for(int i=0;i<jsonArray.length();i++){						
 			
 					ArticleObject nouvelArticle = new ArticleObject();
 					nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
 					
 					nouveauxArticles.add(nouvelArticle);
 					dernierArticle++;
-		    	}
-		    }catch(JSONException e)        {
-			  	 Log.e("log_tag", "Error parsing data "+e.toString());
+				}
+			}catch(JSONException e)        {
+				Log.e("log_tag", "Error parsing data "+e.toString());
 			}
-			  
-		    // met à jour l'UI sur le thread dédié
+			
+			// met à jour l'UI sur le thread dédié
 			runOnUiThread(majListView);
 		};
 	};
@@ -180,7 +180,7 @@ public class ListeActivity extends ListActivity {
 				
 				// indique à l'adapter qu'il faut faire un resfresh UI du contenu de la liste
 				adapter.notifyDataSetChanged();
-	       		
+				
 			} catch (Exception e) {
 				 Log.e("log_tag", "Erreur pendant l'update UI de la ListView "+e.toString());
 			}
