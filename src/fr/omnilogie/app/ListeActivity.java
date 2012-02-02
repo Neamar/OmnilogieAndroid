@@ -6,7 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.view.View;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.AdapterView;
@@ -24,6 +26,9 @@ import android.widget.AbsListView.OnScrollListener;
 public class ListeActivity extends ListActivity {
 	
 	static final int ARTICLES_A_CHARGER = 20;
+	
+	String baseUrl;
+	
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	ArticleObjectAdapter adapter;
@@ -37,9 +42,24 @@ public class ListeActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
-	  
 	  setContentView(R.layout.activity_listes);
-	         
+	  
+	  //Quelle liste afficher ?
+	  //Choisir en fonction de l'URI.
+	  Uri uri = getIntent().getData();
+	  if(uri.getPath().startsWith("/auteur/"))
+	  {
+		  baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+		  setTitle("Articles de l'auteur");
+	  }
+	  else
+	  {
+		  baseUrl = "http://omnilogie.fr/raw/articles.json";
+		  setTitle("Derniers articles parus");
+	  }
+	  
+      tryExpandListView();
+	  
       final ListView lv = getListView();
 
       // ajout du footer
@@ -59,8 +79,9 @@ public class ListeActivity extends ListActivity {
 			ArticleObject article = listeArticles.get(position);
   			if(article != null)
   			{
-  				Log.v("todo", "Load article " + article.id);
-  				//TODO charger l'article
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
   			}
       	}
       });
@@ -120,8 +141,7 @@ public class ListeActivity extends ListActivity {
 	protected Runnable loadMoreItems = new Runnable() {
 		
 		public void run() {		
-			String url = "http://omnilogie.fr/raw/articles.json?start="+dernierArticle
-						+"&limit="+ARTICLES_A_CHARGER;
+			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
 			
 			// 
 			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);

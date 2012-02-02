@@ -40,13 +40,16 @@ while($article = mysql_fetch_assoc($articles))
 	if(is_file(PATH . $bannerPath))
 		$article['B'] = 'http://omnilogie.fr' . $bannerPath;
 	else
-		$article['B'] = 'http://omnilogie.fr/images/Banner/Thumbs/Default.png';
+		$article['B'] = null;
 
 	Typo::setTexte(utf8_decode($article['T']));
 	$article['T'] = utf8_encode(Typo::parseLinear());
 
-	Typo::setTexte(utf8_decode($article['Q']));
-	$article['Q'] = utf8_encode(Typo::parseLinear());
+	if(isset($article['Q']))
+	{
+		Typo::setTexte(utf8_decode($article['Q']));
+		$article['Q'] = utf8_encode(Typo::parseLinear());
+	}
 
 	$json[] = $article;
 }

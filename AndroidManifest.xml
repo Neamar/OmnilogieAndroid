@@ -5,23 +5,73 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="7" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        <activity
-            android:name=".ArticleActivity"
-            android:label="@string/app_name" >
-                       
-        </activity>
-        <activity android:name="ListeActivity">
- 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+        <!-- ACTIVITY : Accueil -->
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
+        <!--
+        ACTIVITY : Article
+        Accessible par intention implicite content://fr.omnilogie.app/article/last
+        Accessible par intention implicite content://fr.omnilogie.app/article/<ID-numérique>
+        -->
+        <activity
+            android:name=".ArticleActivity"
+            android:label="Affichage d&apos;un omnilogisme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="fr.omnilogie.app"
+                    android:pathPrefix="/article"
+                    android:scheme="content" />
+            </intent-filter>
+        </activity>
+
+        <!--
+        ACTIVITY : Liste d'articles
+        Accessible par intention implicite content://fr.omnilogie.app/liste
+        Accessible par intention implicite content://fr.omnilogie.app/auteur/<ID-numérique>
+        -->
+        <activity
+            android:name=".ListeActivity"
+            android:label="Affichage d&apos;une liste d&apos;omnilogismes" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="fr.omnilogie.app"
+                    android:pathPrefix="/auteur"
+                    android:scheme="content" />
+                <data
+                    android:host="fr.omnilogie.app"
+                    android:path="/liste"
+                    android:scheme="content" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVITY : Liste d'auteurs -->
+        <activity
+            android:name=".AuteursActivity"
+            android:label="Affichage de la liste des omnilogistes" />
     </application>
+
 </manifest>

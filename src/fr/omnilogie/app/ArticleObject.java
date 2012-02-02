@@ -1,5 +1,6 @@
 package fr.omnilogie.app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -15,14 +16,24 @@ import android.graphics.Bitmap;
  * @author neamar
  *
  */
-public class ArticleObject
+public class ArticleObject implements Serializable
 {
+	/**
+	 * Variable pour la sérialisation
+	 */
+	private static final long serialVersionUID = 4314797233584545914L;
+
+	/**
+	 * Identifiant unique de l'article.
+	 */
 	int id;
 	
 	String titre;
 	String accroche = "";
 	String omnilogisme = "";
 	String auteur;
+	String dateParution = "";
+	int auteurId = 0;
 	
 	final static String DEFAULT_IMAGE = "file:///android_asset/banniere.png"; 
 	String banniere = DEFAULT_IMAGE;
@@ -30,7 +41,16 @@ public class ArticleObject
 	
 	
 	
+	/**
+	 * Liste des sources.
+	 * Une correspondance d'index est effectuée avec sourcesUrl
+	 */
 	ArrayList<String> sourcesTitre = new ArrayList<String>();
+	
+	/**
+	 * Liste des sources
+	 * Une correspondance d'index est effectuée avec sourcesTitre
+	 */
 	ArrayList<String> sourcesUrl = new ArrayList<String>();
 	
 	/**
@@ -54,12 +74,16 @@ public class ArticleObject
 			 * 
 			 * Ces composants nécessitent de vérifier qu'ils ne sont pas nuls ou vides.
 			 */
-			if(!jsonDatas.isNull("Q"))
+			if(!jsonDatas.isNull("Q")) // Accroche
 				accroche = jsonDatas.getString("Q");
-			if(!jsonDatas.isNull("B"))
+			if(!jsonDatas.isNull("B")) // Bannière
 				banniere = jsonDatas.getString("B");
-			if(!jsonDatas.isNull("O"))
+			if(!jsonDatas.isNull("S")) // Date de parution
+				dateParution = jsonDatas.getString("S");			
+			if(!jsonDatas.isNull("O")) // Omnilogisme
 				omnilogisme = jsonDatas.getString("O");
+			if(!jsonDatas.isNull("AID")) // Identifiant de l'utilisateur
+				auteurId = jsonDatas.getInt("AID");
 			
 			//Traiter les sources
 			if(!jsonDatas.isNull("U"))
@@ -69,6 +93,9 @@ public class ArticleObject
 				{
 					sourcesUrl.add(sources.getJSONObject(i).getString("URL"));
 					
+					//Attention, si la source n'a pas été téléchargée depuis le serveur, son titre est
+					//vide.
+					//Dans ce cas, on reprend directement l'URL.
 					if(sources.getJSONObject(i).isNull("Titre"))
 						sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
 					else
@@ -76,7 +103,6 @@ public class ArticleObject
 				}
 			}
 		} catch (JSONException e) {
-			// TODO : gérer les erreurs
 			e.printStackTrace();
 		}
 	}
@@ -92,7 +118,7 @@ public class ArticleObject
 	
 	/**
 	 * Indique l'URL pour accéder à l'article depuis la version Web.
-	 * @return une url compressée
+	 * @return une url compressée sous la forme http://omnilogie.fr/AA
 	 */
 	public String getShortUrl()
 	{
@@ -101,7 +127,7 @@ public class ArticleObject
 	
 	/**
 	 * Permet de récupérer l'accroche si elle est définie, sinon le titre
-	 * @return
+	 * @return accroche ou titre
 	 */
 	public String accrocheOuTitre()
 	{
