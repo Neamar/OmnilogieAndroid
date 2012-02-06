@@ -31,7 +31,10 @@ public class ListeActivity extends ListActivity {
 	
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
+	Boolean updateAvailable = true;
 	ArticleObjectAdapter adapter;
+	
+	private View loadingFooter;
 	
 	// Liste avec les méta-données des articles chargés
 	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
@@ -63,8 +66,8 @@ public class ListeActivity extends ListActivity {
 		final ListView lv = getListView();
 
 		// ajout du footer
-		View footer = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
-		lv.addFooterView(footer);
+		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
+		lv.addFooterView(loadingFooter);
 		
 		// ajout de l'adapter
 		adapter = new ArticleObjectAdapter(this ,listeArticles);
@@ -103,7 +106,7 @@ public class ListeActivity extends ListActivity {
 				
 				// si le dernier item affiché est le dernier de la liste
 				// on en charge de nouveaux
-				if (lastInScreen == totalItemCount && totalItemCount > 0)
+				if (lastInScreen == totalItemCount && totalItemCount > 0 && updateAvailable)
 					tryExpandListView();
 			}
 		});
@@ -167,7 +170,8 @@ public class ListeActivity extends ListActivity {
 	
 	/**
 	 * Ajoute les nouveaux articles dans la liste des articles.
-	 * Puis crée/notifie l'adapter de la liste. 
+	 * Si aucun nouvel article, on désactive l'ajout le chargement de nouveaux articles.
+	 * Puis crée/notifie l'adapter de la liste.
 	 */
 	protected Runnable majListView = new Runnable() {
 		
@@ -175,8 +179,18 @@ public class ListeActivity extends ListActivity {
 			
 			try {
 				
-				listeArticles.addAll(nouveauxArticles);
-				nouveauxArticles.clear();
+				if(nouveauxArticles.size() == 0)
+				{
+					// aucun nouvel article : on désactive le chargement d'articles
+					ListView lv = getListView();
+					lv.removeFooterView(loadingFooter);
+					updateAvailable = false;
+				}
+				else
+				{
+					listeArticles.addAll(nouveauxArticles);
+					nouveauxArticles.clear();
+				}
 				
 				// indique à l'adapter qu'il faut faire un resfresh UI du contenu de la liste
 				adapter.notifyDataSetChanged();
