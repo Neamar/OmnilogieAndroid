@@ -2,6 +2,7 @@ package fr.omnilogie.app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,9 +18,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class AuteursActivity extends ListActivity implements CallbackObject {
 	private ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
+	private Hashtable<String, Integer> idFromAuteur = new Hashtable<String, Integer>();
 	AuteursActivity auteursActivity = this;
 	
 	@Override
@@ -35,7 +38,8 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 			
 		 lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	String auteur = auteurs.get(position).get("ID");
+		    	String nomAuteur = ((TextView) view.findViewById(R.id.item_auteurs_auteur_nomAuteur)).getText().toString();
+		    	String auteur = Integer.toString(idFromAuteur.get(nomAuteur));
 		    	
 		    	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + auteur);
                 Intent i = new Intent(Intent.ACTION_VIEW, uri);
@@ -64,7 +68,7 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 	};
 	
 	/**
-	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
+	 * Méthode de callback utilisée pour traiter le JSON une fois récupéré.
 	 * 
 	 * @param objet JSONArray récupéré contenant la liste des auteurs
 	 */
@@ -85,6 +89,8 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 						auteur.put("ID", data.getString("ID"));
 						auteur.put("Auteur", data.getString("A"));
 						auteur.put("NombreArticle", data.getString("N") + (data.getString("N").equals("1")?" article publié":" articles publiés"));
+						
+						idFromAuteur.put(data.getString("A"), data.getInt("ID"));
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
