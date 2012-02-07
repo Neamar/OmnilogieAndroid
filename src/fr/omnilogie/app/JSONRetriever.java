@@ -13,15 +13,23 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+interface CallbackObject{
+	void callback(Object o);
+}
+
 public class JSONRetriever {
 		
+	CallbackObject callbackObject;
+	String url;
+	
 	/**
-	 * Récupère le JSONObject à l'url spécifié.
+	 * Récupère le JSONObject à l'url spécifié de manière synchrone.
 	 * 
+	 * @deprecated
 	 * @param url, au format String
 	 * @return le JSONObject
 	 */
-	public JSONObject getJSONfromURL(String url){
+	public JSONObject getJSONfromURL(String url) {
 		JSONObject jObject = null;
 		
 		try{
@@ -37,8 +45,24 @@ public class JSONRetriever {
 	}
 	
 	/**
-	 * Récupère le JSONArray à l'url spécifié.
+	 * Récupère le JSONObject à l'url spécifié de manière asynchrone.
 	 * 
+	 * @param url, au format String
+	 * @param object CallbackObject appeler à la fin de l'opération
+	 * @return le JSONObject
+	 */
+	public void getJSONfromURL(String url, CallbackObject callbackObject){
+		this.url = url;
+		this.callbackObject = callbackObject;
+		
+		Thread thread = new Thread(null, downloadJSONObject);
+		thread.start();
+	}
+	
+	/**
+	 * Récupère le JSONArray à l'url spécifié de manière synchrone.
+	 * 
+	 * @deprecated
 	 * @param url, au format String
 	 * @return le JSONObject
 	 */
@@ -55,6 +79,21 @@ public class JSONRetriever {
 	    }
 		
 	    return jArray;
+	}
+	
+	/**
+	 * Récupère le JSONArray à l'url spécifié de manière asynchrone.
+	 * 
+	 * @param url, au format String
+	 * @param object CallbackObject appeler à la fin de l'opération
+	 * @return le JSONObject
+	 */
+	public void getJSONArrayfromURL(String url, CallbackObject callbackObject){
+		this.url = url;
+		this.callbackObject = callbackObject;
+		
+		Thread thread = new Thread(null, downloadJSONArray);
+		thread.start();
 	}
 	
 	/**
@@ -96,5 +135,45 @@ public class JSONRetriever {
 	    
 	    return result;
 	}
+	
+	protected Runnable downloadJSONArray = new Runnable() {
+		public void run() {
+			if(callbackObject != null)
+			{
+				JSONArray jArray = null;
+				
+				try{
+					String result = retrieveJSONResult(url);
+					
+					if(result != null && result.length() > 0)
+						jArray = new JSONArray(result);            
+			    }catch(Exception e){
+			            Log.e("log_tag", "Error parsing data "+e.toString());
+			    }
+				
+				callbackObject.callback(jArray);
+			}
+		}
+	};
+	
+	protected Runnable downloadJSONObject = new Runnable() {
+		public void run() {
+			if(callbackObject != null)
+			{
+				JSONObject jObject = null;
+				
+				try{
+					String result = retrieveJSONResult(url);
+					
+					if(result != null && result.length() > 0)
+						jObject = new JSONObject(result);            
+			    }catch(Exception e){
+			            Log.e("log_tag", "Error parsing data "+e.toString());
+			    }
+				
+				callbackObject.callback(jObject);
+			}
+		}
+	};
 	
 }

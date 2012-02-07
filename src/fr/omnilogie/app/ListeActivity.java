@@ -23,7 +23,7 @@ import android.widget.AbsListView.OnScrollListener;
  * @author Benoit
  *
  */
-public class ListeActivity extends ListActivity {
+public class ListeActivity extends ListActivity implements CallbackObject {
 	
 	static final int ARTICLES_A_CHARGER = 20;
 	
@@ -129,12 +129,18 @@ public class ListeActivity extends ListActivity {
 			Log.v("log_tag", "Ajout des articles "+dernierArticle
 					+" à "+(dernierArticle+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
-			Thread thread = new Thread(null, loadMoreItems);
-			thread.start();
+//			Thread thread = new Thread(null, loadMoreItems);
+//			thread.start();
+			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
+			
+			JSONRetriever jsonRetriever = new JSONRetriever();
+			jsonRetriever.getJSONArrayfromURL(url, this);
 		}
 		
 		return echec;
 	}
+	
+	
 	
 	/**
 	 * Routine qui télécharge de nouevaux articles puis demande au thread de l'UI d'updater l'UI.
@@ -144,28 +150,28 @@ public class ListeActivity extends ListActivity {
 	protected Runnable loadMoreItems = new Runnable() {
 		
 		public void run() {		
-			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
-			
-			// 
-			JSONRetriever jsonRetriever = new JSONRetriever();
-			JSONArray jsonArray = jsonRetriever.getJSONArrayfromURL(url);
-			
-			// Insert les éléments JSON dans listeArticles
-			try{		    	
-				for(int i=0;i<jsonArray.length();i++){						
-			
-					ArticleObject nouvelArticle = new ArticleObject();
-					nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
-					
-					nouveauxArticles.add(nouvelArticle);
-					dernierArticle++;
-				}
-			}catch(JSONException e)        {
-				Log.e("log_tag", "Error parsing data "+e.toString());
-			}
-			
-			// met à jour l'UI sur le thread dédié
-			runOnUiThread(majListView);
+//			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
+//			
+//			// 
+//			JSONRetriever jsonRetriever = new JSONRetriever();
+//			jsonRetriever.getJSONArrayfromURL(url, this);
+//			
+//			// Insert les éléments JSON dans listeArticles
+//			try{		    	
+//				for(int i=0;i<jsonArray.length();i++){						
+//			
+//					ArticleObject nouvelArticle = new ArticleObject();
+//					nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
+//					
+//					nouveauxArticles.add(nouvelArticle);
+//					dernierArticle++;
+//				}
+//			}catch(JSONException e)        {
+//				Log.e("log_tag", "Error parsing data "+e.toString());
+//			}
+//			
+//			// met à jour l'UI sur le thread dédié
+//			runOnUiThread(majListView);
 		};
 	};
 	
@@ -204,5 +210,32 @@ public class ListeActivity extends ListActivity {
 			updateEnCours = false;
 		}
 	};
+
+	public void callback(Object o) {
+		if(o != null)
+		{
+			JSONArray jsonArray = (JSONArray) o;
+			if(jsonArray != null)
+			{
+				// Insert les éléments JSON dans listeArticles
+				try{		    	
+					for(int i=0;i<jsonArray.length();i++){						
+				
+						ArticleObject nouvelArticle = new ArticleObject();
+						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
+						
+						nouveauxArticles.add(nouvelArticle);
+						dernierArticle++;
+					}
+				}catch(JSONException e)        {
+					Log.e("log_tag", "Error parsing data "+e.toString());
+				}
+				
+				// met à jour l'UI sur le thread dédié
+				runOnUiThread(majListView);
+			}
+		}
+		
+	}
 	
 }
