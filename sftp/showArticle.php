@@ -25,6 +25,7 @@ SELECT
 	O.Statut AS S,
 	O.Sortie AS D,
 	O.Accroche AS Q,
+	DATE_FORMAT(O.Sortie, "%d/%m/%y") AS S,
 
 	O.Omnilogisme AS O,
 
@@ -99,9 +100,8 @@ $article['U'] = array();
 
 while($source = mysql_fetch_assoc($sources))
 {
-	$article['U'][] = $source;
+	$article['U'][] = array_map("utf8_decode", $source);
 }
-
 
 
 
