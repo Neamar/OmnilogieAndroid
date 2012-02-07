@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/home_layout_article" android:layout_width="100dp"
+	android:layout_height="100dp" android:layout_alignParentTop="true"
+	android:orientation="vertical">
+
+   	<ImageView
+	    android:id="@+id/bulle_fond"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:src="@drawable/bulle" />
+    	
+	<ImageView
+	    android:id="@+id/bulle_image"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:src="@drawable/article" />
+
+	<TextView
+	    android:id="@+id/bulle_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:text="Article du jour" />
+
+</RelativeLayout>
