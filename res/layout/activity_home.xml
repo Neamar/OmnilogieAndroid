@@ -1,31 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/fr.omnilogie.app"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="center"
+    android:background="@drawable/fond_repetition"
     android:orientation="vertical" >
 
-    <Button
+    <!-- Article du jour -->
+    <RelativeLayout
         android:id="@+id/home_article"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Article du jour" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true" >
 
-    <Button
-        android:id="@+id/home_liste"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Liste des articles" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle" />
 
-    <Button
-        android:id="@+id/home_auteurs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Liste des auteurs" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle_article" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Article du jour" />
+    </RelativeLayout>
+
     
-    <Button
-        android:id="@+id/home_aleatoire"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Un article au hasard" />
+    <!-- Liste des articles -->
+    <RelativeLayout
+        android:id="@+id/home_liste"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/home_article" >
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle_liste" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Liste des articles" />
+    </RelativeLayout>
+
+    
+    <!-- Liste des auteurs -->
+    <RelativeLayout
+        android:id="@+id/home_auteurs"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/home_liste" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle_auteurs" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Auteurs" />
+    </RelativeLayout>
+
+    
+    <!-- Un article au hasard -->
+    <RelativeLayout
+        android:id="@+id/home_aleatoire"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/home_auteurs" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/bulle_aleatoire" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Au hasard" />
+    </RelativeLayout>
+</RelativeLayout>
