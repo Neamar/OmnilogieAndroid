@@ -4,8 +4,18 @@
         <item name="android:background">@drawable/widget_background</item>
     </style>
     
+	<style name="WidgetBackgroundLand">
+        <item name="android:background">@drawable/widget_background_land</item>
+    </style>
+    
 	<style name="WidgetTitle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    
+	<style name="WidgetTitleLand">
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
