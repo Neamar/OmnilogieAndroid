@@ -16,9 +16,10 @@ import android.util.Log;
 public class JSONRetriever {
 		
 	/**
-	 * TODO : WTF static ?!
-	 * @param url
-	 * @return
+	 * Récupère le JSONObject à l'url spécifié.
+	 * 
+	 * @param url, au format String
+	 * @return le JSONObject
 	 */
 	public JSONObject getJSONfromURL(String url){
 		JSONObject jObject = null;
@@ -35,6 +36,12 @@ public class JSONRetriever {
 	    return jObject;
 	}
 	
+	/**
+	 * Récupère le JSONArray à l'url spécifié.
+	 * 
+	 * @param url, au format String
+	 * @return le JSONObject
+	 */
 	public JSONArray getJSONArrayfromURL(String url){
 		JSONArray jArray = null;
 		
@@ -50,6 +57,12 @@ public class JSONRetriever {
 	    return jArray;
 	}
 	
+	/**
+	 * Récupère le JSON au format String à l'url spécifié.
+	 * 
+	 * @param url, au format String
+	 * @return String récupéré contenant le JSON
+	 */
 	private String retrieveJSONResult(String url)
 	{
 		InputStream is = null;
