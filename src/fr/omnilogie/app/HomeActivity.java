@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 public class HomeActivity extends Activity {
 	@Override
@@ -16,7 +17,7 @@ public class HomeActivity extends Activity {
 		/*
 		 * BOUTON : Article du jour 
 		 */
-		Button buttonArticle = ((Button) findViewById(R.id.home_article));
+		RelativeLayout buttonArticle = ((RelativeLayout) findViewById(R.id.home_article));
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -28,7 +29,7 @@ public class HomeActivity extends Activity {
 		/*
 		 * BOUTON : Liste des articles
 		 */
-		Button buttonListe = ((Button) findViewById(R.id.home_liste));
+		RelativeLayout buttonListe = ((RelativeLayout) findViewById(R.id.home_liste));
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -40,7 +41,7 @@ public class HomeActivity extends Activity {
 		/*
 		 * BOUTON : Liste des auteurs
 		 */
-		Button buttonAuteurs = ((Button) findViewById(R.id.home_auteurs));
+		RelativeLayout buttonAuteurs = ((RelativeLayout) findViewById(R.id.home_auteurs));
 		buttonAuteurs.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -52,7 +53,7 @@ public class HomeActivity extends Activity {
 		/*
 		 * BOUTON : Article au hasard
 		 */
-		Button buttonAleatoire = ((Button) findViewById(R.id.home_aleatoire));
+		RelativeLayout buttonAleatoire = ((RelativeLayout) findViewById(R.id.home_aleatoire));
 		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -62,4 +63,3 @@ public class HomeActivity extends Activity {
 		});
 	}
 }
-

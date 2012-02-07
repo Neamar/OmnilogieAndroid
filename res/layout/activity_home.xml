@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/fr.omnilogie.app"
+    android:id="@+id/home_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:textColor="#000"
             android:gravity="center_vertical|center_horizontal"
             android:text="Article du jour" />
     </RelativeLayout>
@@ -43,7 +45,7 @@
         android:id="@+id/home_liste"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/home_article" >
+        android:layout_toRightOf="@id/home_article" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -64,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:textColor="#000"
             android:gravity="center_vertical|center_horizontal"
             android:text="Liste des articles" />
     </RelativeLayout>
@@ -95,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:textColor="#000"
             android:gravity="center_vertical|center_horizontal"
             android:text="Auteurs" />
     </RelativeLayout>
@@ -105,7 +109,8 @@
         android:id="@+id/home_aleatoire"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/home_auteurs" >
+        android:layout_below="@id/home_liste"
+        android:layout_toRightOf="@id/home_auteurs">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -126,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:textColor="#000"
             android:gravity="center_vertical|center_horizontal"
             android:text="Au hasard" />
     </RelativeLayout>
