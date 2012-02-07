@@ -20,8 +20,7 @@ public class HomeActivity extends Activity {
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/last");
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/last"));
 	  			startActivity(i);
 			}
 		});
@@ -33,8 +32,7 @@ public class HomeActivity extends Activity {
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-		    	Uri uri = Uri.parse("content://fr.omnilogie.app/liste");
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/liste"));
 	  			startActivity(i);
 			}
 		});
@@ -58,8 +56,7 @@ public class HomeActivity extends Activity {
 		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/random");
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random"));
 	  			startActivity(i);
 			}
 		});
