@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_widget"
+    style="@style/WidgetBackground"
     android:layout_width="320dp"
     android:layout_height="100dp"
-    android:background="@drawable/background"
-    android:orientation="horizontal" >
+    android:focusable="true" >
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="8dip"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.15"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_launcher" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:maxLines="2"
+            android:text="Titre"
+			style="@style/WidgetTitle"/>
+
+        <TextView
+            android:id="@+id/widget_subtitle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/widget_title"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:text="Titre"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/widget_subtitle"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="Accroche" />
-
-        </LinearLayout>
+            android:text="Accroche" 
+            style="@style/WidgetText"/>
+    </LinearLayout>
 
 </LinearLayout>
