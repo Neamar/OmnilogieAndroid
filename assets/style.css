@@ -53,7 +53,6 @@ p {margin:.75em 0}
 blockquote{color:#4f81bd;border-bottom:1px solid; padding-left:25px}
 blockquote p{text-indent:0}
 blockquote p:first-letter{color:black!important}
-blockquote p:after{color:black;content:"»"}
 .TexTexte{white-space:nowrap;font-style:italic;font-size:90%;color:#1e1e1e}
 caption {color:#243f60;border:1px solid black}
 .labelimage{float:right;clear:right;display:block;border:1px solid black;margin:5px;background-color:#F2F2F2;width:305px;font-size:.95em}

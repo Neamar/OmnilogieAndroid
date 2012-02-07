@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Composants génériques TODO : passer dans un fichier XML et hériter si possible ? -->
+    <!-- Composants génériques qui peuvent être affichés sur toutes les activités -->
     <item android:id="@+id/menu_rediger"
           android:title="Devenir rédacteur" android:titleCondensed="Rédiger" android:icon="@drawable/redacteur"/>
-    
-    <!-- Composants spécifiques à l'activité -->
-    <item android:id="@+id/menu_partager" android:title="Partager" android:icon="@drawable/partager"></item>
-    <item android:id="@+id/menu_autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur" android:icon="@drawable/articles_auteur"></item>
-
-
+    <item android:id="@+id/menu_aleatoire"
+          android:title="Un article au hasard" android:titleCondensed="Aléatoire" android:icon="@drawable/aleatoire"/>    
 </menu>

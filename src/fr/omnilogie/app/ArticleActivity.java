@@ -20,7 +20,7 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class ArticleActivity extends Activity implements CallbackObject {
+public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	
 	/**
 	 * L'article qui est affiché sur cette activité.
@@ -135,7 +135,9 @@ public class ArticleActivity extends Activity implements CallbackObject {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//Récupérer le menu de base défini en XML
+		super.onCreateOptionsMenu(menu);
+		
+		//Récupérer le menu pour les articles :
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.article, menu);
 
@@ -202,32 +204,11 @@ public class ArticleActivity extends Activity implements CallbackObject {
 		case R.id.menu_autres_auteur:
 			onOtherBySameAuthor();
 			break;
-		case R.id.menu_rediger:
-			//Le lecteur souhaite devenir rédacteur
-		    AlertDialog ad = new AlertDialog.Builder(this).create();  
-		    ad.setMessage("Omnilogie a toujours besoin de rédacteurs ! Souhaitez-vous rejoindre l'interface de rédaction du site ?");
-		    
-		    //Rejoindre l'interface de rédaction
-		    ad.setButton(DialogInterface.BUTTON_POSITIVE, "C'est parti !", new DialogInterface.OnClickListener() {  
-		        public void onClick(DialogInterface dialog, int which) {  
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://omnilogie.fr/membres/Redaction"));
-					startActivity(browserIntent);                     
-		        }  
-		    });
-		    
-		    //Retourner à l'article
-		    ad.setButton(DialogInterface.BUTTON_NEGATIVE, "Pas maintenant", new DialogInterface.OnClickListener() {  
-		        public void onClick(DialogInterface dialog, int which) {  
-		            dialog.dismiss();                      
-		        }  
-		    }); 
-		    
-		    ad.show();  
 		default:
 			break;
 		}
 		
-		return super.onContextItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 	
 	/**
