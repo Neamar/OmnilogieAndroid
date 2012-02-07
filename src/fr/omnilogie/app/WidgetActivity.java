@@ -1,10 +1,5 @@
 package fr.omnilogie.app;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -20,7 +15,6 @@ import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * Activity animant le desktop widget.
@@ -52,41 +46,19 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 		jsonRetriever.getJSONArrayfromURL(url, this);
     }
 
-//	@Override 
-//    public void onEnabled(Context context) {
-//		if(article != null) {
-//			//Intent intent = new Intent(context, UpdateService.class);
-//			Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-//			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//			intent.setClassName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity");
-//			PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
-//			
-//			RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
-//			remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
-//			
-//			remoteViews.setTextViewText(R.id.widget_title, Html.fromHtml(article.titre));
-//			remoteViews.setTextViewText(R.id.widget_subtitle, Html.fromHtml(article.accroche));
-//	
-//			// Tell the widget manager
-//			final int N = appWidgetIds.length;
-//	        for (int i=0; i<N; i++) {
-//	            int appWidgetId = appWidgetIds[i]; 
-//	            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-//	        }
-//		}
-//		
-//	}
+	@Override 
+    public void onEnabled(Context context) {
+	    String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+		
+		JSONRetriever jsonRetriever = new JSONRetriever();
+		jsonRetriever.getJSONArrayfromURL(url, this);
+	}
 	
 	public class UpdateService extends Service {
         @Override
         public void onStart(Intent intent, int startId) {
         	//WidgetActivity.Widget.onUpdate(context, appWidgetManager, appWidgetIds);
         	//Toast.makeText(context, "Update Widget", Toast.LENGTH_SHORT).show();
-//        	if(article != null) {
-//        		Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-//    			Intent i = new Intent(Intent.ACTION_VIEW, uri);
-//    			startActivity(i);
-//        	}
         }
         
 		@Override
@@ -109,10 +81,8 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 					
 					//Intent intent = new Intent(context, UpdateService.class);
 					Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-	    			Intent intent = new Intent(Intent.ACTION_MAIN, uri);
-	    			intent.addCategory(Intent.CATEGORY_LAUNCHER);
-	    			intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
-	    			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 					PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 					
 					RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
