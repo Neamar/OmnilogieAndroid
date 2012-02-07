@@ -17,7 +17,7 @@ import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 
-public class ArticleActivity extends Activity {
+public class ArticleActivity extends Activity implements CallbackObject {
 	
 	/**
 	 * L'article qui est affiché sur cette activité.
@@ -35,6 +35,8 @@ public class ArticleActivity extends Activity {
 			//Nous sommes en train de restaurer : pas besoin de tout recharger
 			//il suffit de récupérer l'article du Bundle fourni.
 			article = (ArticleObject) savedInstanceState.getSerializable("article");
+			
+			runOnUiThread(initialiseViewWithData);
 		}
 		else
 		{
@@ -44,53 +46,63 @@ public class ArticleActivity extends Activity {
 			Uri uri = getIntent().getData();
 			String articleToDisplay = uri.getLastPathSegment();
 			
+			//Télécharge le contenu de l'article de manière asynchrone.
+			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriver = new JSONRetriever();
-			JSONObject jsonDatas = jsonRetriver.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
-	
-			//Remplir notre article avec les données fournies
-			article.remplirDepuisJSON(jsonDatas);
-		}
-		
-		
-		//Définir le titre de l'activité.
-		//Parser à la recherche d'entités HTML qui doivent être rendues à l'écran (&oelig;, ...)
-		setTitle(Html.fromHtml(article.titre));
-		
-		//Créer le HTML depuis le fichier template
-		//situé dans assets/article.html
-		String html = "";
-		try
-		{
-			InputStream fin = getAssets().open("article.html");
-			byte[] buffer = new byte[fin.available()];
-			fin.read(buffer);
-			fin.close();
+			jsonRetriver.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
 			
-			html = new String(buffer);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		
-		//Remplacer les placeholders par le texte de l'article
-		html = html.replace("{{banniere}}", article.banniere);
-		html = html.replace("{{titre}}", article.titre);
-		html = html.replace("{{accroche}}", article.accroche);
-		html = html.replace("{{omnilogisme}}", article.omnilogisme);
-		html = html.replace("{{auteur}}", article.auteur);
-		html = html.replace("{{dateParution}}", article.dateParution);
-		
-		//Afficher le contenu de l'article
-		WebView webView = ((WebView) findViewById(R.id.article));
-		
-		//Sur une seule colonne, pour éviter au maximum de devoir scroller horizontalement
-		//Dans certains cas toutefois, on ne peut rien y faire et le scroll horizontal apparaît
-		//(par exemple, sur une balise <pre> contenant du texte trop long)
-		webView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-
-		//Il faut spécifier l'URL de base du site afin que les images (indiquées en chemin relatif)
-		//soient disponibles.
-		webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
 	}
+	
+	/**
+	 * Termine la préparation de la vue, une fois que les données distantes sont récupérées.
+	 * Doit être lancé dans le thread UI (ex. runOnUiThread(initialiseViewWithData);)
+	 *  
+	 */
+	protected Runnable initialiseViewWithData = new Runnable() {
+
+		public void run(){
+			
+			//Définir le titre de l'activité.
+			//Parser à la recherche d'entités HTML qui doivent être rendues à l'écran (&oelig;, ...)
+			setTitle(Html.fromHtml(article.titre));
+			
+			//Créer le HTML depuis le fichier template
+			//situé dans assets/article.html
+			String html = "";
+			try
+			{
+				InputStream fin = getAssets().open("article.html");
+				byte[] buffer = new byte[fin.available()];
+				fin.read(buffer);
+				fin.close();
+				
+				html = new String(buffer);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			//Remplacer les placeholders par le texte de l'article
+			html = html.replace("{{banniere}}", article.banniere);
+			html = html.replace("{{titre}}", article.titre);
+			html = html.replace("{{accroche}}", article.accroche);
+			html = html.replace("{{omnilogisme}}", article.omnilogisme);
+			html = html.replace("{{auteur}}", article.auteur);
+			html = html.replace("{{dateParution}}", article.dateParution);
+			
+			//Afficher le contenu de l'article
+			WebView webView = ((WebView) findViewById(R.id.article));
+			
+			//Sur une seule colonne, pour éviter au maximum de devoir scroller horizontalement
+			//Dans certains cas toutefois, on ne peut rien y faire et le scroll horizontal apparaît
+			//(par exemple, sur une balise <pre> contenant du texte trop long)
+			webView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+	
+			//Il faut spécifier l'URL de base du site afin que les images (indiquées en chemin relatif)
+			//soient disponibles.
+			webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
+		}
+	};
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -191,6 +203,25 @@ public class ArticleActivity extends Activity {
     	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
         Intent i = new Intent(Intent.ACTION_VIEW, uri);
 			startActivity(i);
+	}
+
+	/**
+	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
+	 * 
+	 * @param JSONObject récupéré 
+	 */
+	public void callback(Object o) {
+		if(o != null)
+		{
+			JSONObject jsonDatas = (JSONObject) o;
+			if(jsonDatas != null)
+			{
+				//Remplir notre article avec les données fournies
+				article.remplirDepuisJSON(jsonDatas);
+				
+				runOnUiThread(initialiseViewWithData);
+			}
+		}
 	}
 }
 

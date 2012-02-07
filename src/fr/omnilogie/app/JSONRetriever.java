@@ -14,6 +14,12 @@ import org.json.JSONObject;
 import android.util.Log;
 
 interface CallbackObject{
+	
+	/**
+	 * Méthode qui sera appelé par une méthode asynchrone si l'instance de CallbackObject est en paramètre.  
+	 * 
+	 * @param disponible pour un paramètre de retour
+	 */
 	void callback(Object o);
 }
 
@@ -102,7 +108,7 @@ public class JSONRetriever {
 	 * @param url, au format String
 	 * @return String récupéré contenant le JSON
 	 */
-	private String retrieveJSONResult(String url)
+	protected String retrieveJSONResult(String url)
 	{
 		InputStream is = null;
 		String result = "";
@@ -136,9 +142,13 @@ public class JSONRetriever {
 	    return result;
 	}
 	
+	/**
+	 * Routine de téléchargement d'un JSONArray.
+	 * L'url et l'objet sur lequel effectuer le callback doivent être spécifiés.
+	 */
 	protected Runnable downloadJSONArray = new Runnable() {
 		public void run() {
-			if(callbackObject != null)
+			if(callbackObject != null && url != null)
 			{
 				JSONArray jArray = null;
 				
@@ -156,9 +166,13 @@ public class JSONRetriever {
 		}
 	};
 	
+	/**
+	 * Routine de téléchargement d'un JSONObject.
+	 * L'url et l'objet sur lequel effectuer le callback doivent être spécifiés.
+	 */
 	protected Runnable downloadJSONObject = new Runnable() {
 		public void run() {
-			if(callbackObject != null)
+			if(callbackObject != null && url != null)
 			{
 				JSONObject jObject = null;
 				
