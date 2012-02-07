@@ -36,7 +36,7 @@ public class ArticleActivity extends Activity implements CallbackObject {
 			//il suffit de récupérer l'article du Bundle fourni.
 			article = (ArticleObject) savedInstanceState.getSerializable("article");
 			
-			runOnUiThread(initialiseViewWithData);
+			runOnUiThread(remplirUIAvecDatas);
 		}
 		else
 		{
@@ -59,7 +59,7 @@ public class ArticleActivity extends Activity implements CallbackObject {
 	 * Doit être lancé dans le thread UI (ex. runOnUiThread(initialiseViewWithData);)
 	 *  
 	 */
-	protected Runnable initialiseViewWithData = new Runnable() {
+	protected Runnable remplirUIAvecDatas = new Runnable() {
 
 		public void run(){
 			
@@ -208,18 +208,18 @@ public class ArticleActivity extends Activity implements CallbackObject {
 	/**
 	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
 	 * 
-	 * @param JSONObject récupéré 
+	 * @param objet JSON récupéré contenant les données de l'article
 	 */
-	public void callback(Object o) {
-		if(o != null)
+	public void callback(Object objet) {
+		if(objet != null)
 		{
-			JSONObject jsonDatas = (JSONObject) o;
+			JSONObject jsonDatas = (JSONObject) objet;
 			if(jsonDatas != null)
 			{
 				//Remplir notre article avec les données fournies
 				article.remplirDepuisJSON(jsonDatas);
 				
-				runOnUiThread(initialiseViewWithData);
+				runOnUiThread(remplirUIAvecDatas);
 			}
 		}
 	}

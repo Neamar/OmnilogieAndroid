@@ -13,16 +13,12 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-interface CallbackObject{
-	
-	/**
-	 * Méthode qui sera appelé par une méthode asynchrone si l'instance de CallbackObject est en paramètre.  
-	 * 
-	 * @param disponible pour un paramètre de retour
-	 */
-	void callback(Object o);
-}
-
+/**
+ * Classe permettant de récupérer des éléments JSON de manière asynchrone.
+ * 
+ * @author Benoit
+ *
+ */
 public class JSONRetriever {
 		
 	CallbackObject callbackObject;
@@ -43,19 +39,19 @@ public class JSONRetriever {
 			
 			if(result != null && result.length() > 0)
 				jObject = new JSONObject(result);            
-	    }catch(Exception e){
-	            Log.e("log_tag", "Error parsing data "+e.toString());
-	    }
+		}catch(Exception e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
 		
-	    return jObject;
+		return jObject;
 	}
 	
 	/**
 	 * Récupère le JSONObject à l'url spécifié de manière asynchrone.
 	 * 
-	 * @param url, au format String
-	 * @param object CallbackObject appeler à la fin de l'opération
-	 * @return le JSONObject
+	 * @param url url source au format String
+	 * @param callbackObject object CallbackObject appeler à la fin de l'opération
+	 * @return le JSONObject récupéré
 	 */
 	public void getJSONfromURL(String url, CallbackObject callbackObject){
 		this.url = url;
@@ -80,18 +76,18 @@ public class JSONRetriever {
 			
 			if(result != null && result.length() > 0)
 				jArray = new JSONArray(result);            
-	    }catch(Exception e){
-	            Log.e("log_tag", "Error parsing data "+e.toString());
-	    }
+		}catch(Exception e){
+			Log.e("log_tag", "Error parsing data "+e.toString());
+		}
 		
-	    return jArray;
+		return jArray;
 	}
 	
 	/**
 	 * Récupère le JSONArray à l'url spécifié de manière asynchrone.
 	 * 
-	 * @param url, au format String
-	 * @param object CallbackObject appeler à la fin de l'opération
+	 * @param url url source au format String
+	 * @param callbackObject object CallbackObject appeler à la fin de l'opération
 	 * @return le JSONObject
 	 */
 	public void getJSONArrayfromURL(String url, CallbackObject callbackObject){
@@ -105,7 +101,7 @@ public class JSONRetriever {
 	/**
 	 * Récupère le JSON au format String à l'url spécifié.
 	 * 
-	 * @param url, au format String
+	 * @param url url source au format String
 	 * @return String récupéré contenant le JSON
 	 */
 	protected String retrieveJSONResult(String url)
@@ -114,32 +110,32 @@ public class JSONRetriever {
 		String result = "";
 		
 		//http post
-	    try{
-	            HttpClient httpclient = new DefaultHttpClient();
-	            HttpPost httppost = new HttpPost(url);
-	            HttpResponse response = httpclient.execute(httppost);
-	            HttpEntity entity = response.getEntity();
-	            is = entity.getContent();
+		try{
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(url);
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
 
-	    }catch(Exception e){
-	            Log.e("log_tag", "Error in http connection "+e.toString());
-	    }
-	    
-	  //convert response to string
-	    try{
-	            BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
-	            StringBuilder sb = new StringBuilder();
-	            String line = null;
-	            while ((line = reader.readLine()) != null) {
-	                    sb.append(line + "\n");
-	            }
-	            is.close();
-	            result=sb.toString();
-	    }catch(Exception e){
-	            Log.e("log_tag", "Error converting result "+e.toString());
-	    }
-	    
-	    return result;
+		}catch(Exception e){
+			Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+		
+		//convert response to string
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result=sb.toString();
+		}catch(Exception e){
+			Log.e("log_tag", "Error converting result "+e.toString());
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -157,9 +153,9 @@ public class JSONRetriever {
 					
 					if(result != null && result.length() > 0)
 						jArray = new JSONArray(result);            
-			    }catch(Exception e){
-			            Log.e("log_tag", "Error parsing data "+e.toString());
-			    }
+				}catch(Exception e){
+					Log.e("log_tag", "Error parsing data "+e.toString());
+				}
 				
 				callbackObject.callback(jArray);
 			}
@@ -181,9 +177,9 @@ public class JSONRetriever {
 					
 					if(result != null && result.length() > 0)
 						jObject = new JSONObject(result);            
-			    }catch(Exception e){
-			            Log.e("log_tag", "Error parsing data "+e.toString());
-			    }
+				}catch(Exception e){
+					Log.e("log_tag", "Error parsing data "+e.toString());
+				}
 				
 				callbackObject.callback(jObject);
 			}

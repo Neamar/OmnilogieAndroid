@@ -67,19 +67,19 @@ public class ArticleObjectAdapter extends BaseAdapter {
 			ImageView banniereImageView = (ImageView) v.findViewById(R.id.list_item_image);
 			
 			
-			// met le titre
+			// place le titre
 			if(titreTextView != null)
 				titreTextView.setText( Html.fromHtml(article.titre));
 			
-			// met l'accroche
+			// place l'accroche
 			if(accrocheTextView != null)
 				accrocheTextView.setText( Html.fromHtml(article.accroche));
 			
-			// met l'auteur
+			// place l'auteur
 			if(auteurTextView != null)
 				auteurTextView.setText( Html.fromHtml("par "+article.auteur));
 			
-			// met l'image
+			// place l'image
 			if(banniereImageView != null && article.banniere != ArticleObject.DEFAULT_IMAGE)
 			{
 				if(article.banniereBmp != null)

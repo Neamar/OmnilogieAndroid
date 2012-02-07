@@ -114,7 +114,7 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 	
 	/**
 	 * Essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread).
-	 * @return échec, de nouveaux articles sont déjà en train d'être chargés
+	 * @return échec si true, de nouveaux articles sont certainement déjà en train d'être chargés
 	 */
 	protected boolean tryExpandListView()
 	{
@@ -178,12 +178,12 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 	/**
 	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
 	 * 
-	 * @param JSONArray récupéré 
+	 * @param objet JSON récupéré contenant la liste des articles
 	 */
-	public void callback(Object o) {
-		if(o != null)
+	public void callback(Object objet) {
+		if(objet != null)
 		{
-			JSONArray jsonArray = (JSONArray) o;
+			JSONArray jsonArray = (JSONArray) objet;
 			if(jsonArray != null)
 			{
 				// Insert les éléments JSON dans listeArticles

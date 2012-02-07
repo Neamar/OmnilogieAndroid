@@ -18,8 +18,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class AuteursActivity extends ListActivity {
+public class AuteursActivity extends ListActivity implements CallbackObject {
 	private ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
+	AuteursActivity auteursActivity = this;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,35 +28,10 @@ public class AuteursActivity extends ListActivity {
 		setTitle("Liste des auteurs sur Omnilogie");
 		
 		JSONRetriever jsonretriever = new JSONRetriever();
-		JSONArray jsonArray = jsonretriever.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json");
-		
-		for(int i = 0; i < jsonArray.length(); i++)
-		{
-			HashMap<String, String> auteur = new HashMap<String, String>();  
-			JSONObject data;
-			try {
-				data = jsonArray.getJSONObject(i);
-			
-				auteur.put("ID", data.getString("ID"));
-				auteur.put("Auteur", data.getString("A"));
-				auteur.put("NombreArticle", data.getString("N") + (data.getString("N").equals("1")?" article publié":" articles publiés"));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			auteurs.add(auteur);
-		}
-		
-		ListAdapter adapter = new SimpleAdapter(this, auteurs , R.layout.item_auteurs_auteur, 
-			new String[] { "Auteur", "NombreArticle" }, 
-			new int[] { R.id.item_auteurs_auteur_nomAuteur, R.id.item_auteurs_auteur_nbArticles });
-		
-		setListAdapter(adapter);
-
+		jsonretriever.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json", this);
+				
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
-
 			
 		 lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,6 +43,59 @@ public class AuteursActivity extends ListActivity {
 			    }
 			  });
 
+	}
+	
+	
+	/**
+	 * Termine la préparation de la vue, une fois que les données distantes sont récupérées.
+	 * Doit être lancé dans le thread UI (ex. runOnUiThread(initialiseViewWithData);)
+	 *  
+	 */
+	protected Runnable remplirUIAvecDatas = new Runnable() {
+
+		public void run(){
+			
+			ListAdapter adapter = new SimpleAdapter(auteursActivity, auteurs , R.layout.item_auteurs_auteur, 
+					new String[] { "Auteur", "NombreArticle" }, 
+					new int[] { R.id.item_auteurs_auteur_nomAuteur, R.id.item_auteurs_auteur_nbArticles });
+			setListAdapter(adapter);
+					
+		}
+	};
+	
+	/**
+	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
+	 * 
+	 * @param objet JSONArray récupéré contenant la liste des auteurs
+	 */
+	public void callback(Object objet) {
+		if(objet != null)
+		{
+			JSONArray jsonDatas = (JSONArray) objet;
+			if(jsonDatas != null)
+			{
+				//Remplir notre article avec les données fournies
+				for(int i = 0; i < jsonDatas.length(); i++)
+				{
+					HashMap<String, String> auteur = new HashMap<String, String>();  
+					JSONObject data;
+					try {
+						data = jsonDatas.getJSONObject(i);
+					
+						auteur.put("ID", data.getString("ID"));
+						auteur.put("Auteur", data.getString("A"));
+						auteur.put("NombreArticle", data.getString("N") + (data.getString("N").equals("1")?" article publié":" articles publiés"));
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					auteurs.add(auteur);
+				}
+				
+				runOnUiThread(remplirUIAvecDatas);
+			}
+		}
 	}
 }
 
