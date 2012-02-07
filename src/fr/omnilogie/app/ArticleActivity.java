@@ -156,11 +156,15 @@ public class ArticleActivity extends Activity {
 		switch(id) {
 		case R.id.menu_partager:
 			onShareButtonClick();
+			break;
 		case R.id.menu_autres_auteur:
 			onOtherBySameAuthor();
+			break;
 		default:
-			return super.onContextItemSelected(item);
+			break;
 		}
+		
+		return super.onContextItemSelected(item);
 	}
 	
 	/**
@@ -172,8 +176,8 @@ public class ArticleActivity extends Activity {
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);  
 	    shareIntent.setType("text/plain");  
 
-	    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, article.accrocheOuTitre());  
-	    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + article.titre);  
+	    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, Html.fromHtml(article.accrocheOuTitre()));  
+	    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + Html.fromHtml(article.titre));  
 	    startActivity(Intent.createChooser(shareIntent, "Partager cet article via..."));  
 	}
 	
