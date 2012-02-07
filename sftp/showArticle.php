@@ -7,15 +7,26 @@ $params = array(
 	'id' => array(
 		'regexp' => '[0-9]+',
 		'default' => -1,
-	)
+	),
+	'titre' => array(
+		'regexp' => '.*',
+		'default' => '',
+	),
 );
 
 include('common.php');
 
 //Charger l'article du jour
-if($_GET['id'] == -1)
+if($_GET['titre'] == 'last')
 {
-	$_GET['id'] = '(SELECT ID FROM OMNI_Omnilogismes ORDER BY Sortie DESC LIMIT 1)';
+	$where = 'O.ID = (SELECT ID FROM OMNI_Omnilogismes ORDER BY Sortie DESC LIMIT 1)';
+} else if($_GET['titre'] != '')
+{
+	$where = 'O.Titre = "' . mysql_real_escape_string(utf8_encode(Encoding::decodeFromGet('titre'))) . '"';
+}
+else
+{
+	$where = 'O.ID = ' . $_GET['id'];
 }
 
 $article = mysql_fetch_assoc(Sql::query('
@@ -34,7 +45,7 @@ SELECT
 
 FROM OMNI_Omnilogismes O
 LEFT JOIN OMNI_Auteurs A ON (A.ID = O.Auteur)
-WHERE O.ID = ' . $_GET['id'] . '
+WHERE ' . $where . '
 LIMIT 1'));
 
 /**

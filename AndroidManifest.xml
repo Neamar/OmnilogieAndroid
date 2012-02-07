@@ -40,6 +40,10 @@
                     android:host="fr.omnilogie.app"
                     android:pathPrefix="/article"
                     android:scheme="content" />
+                <data
+                    android:host="omnilogie.fr"
+                    android:pathPrefix="/O/"
+                    android:scheme="http" />             
             </intent-filter>
         </activity>
 
