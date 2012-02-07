@@ -77,7 +77,7 @@ public class ArticleObjectAdapter extends BaseAdapter {
 			
 			// place l'auteur
 			if(auteurTextView != null)
-				auteurTextView.setText( Html.fromHtml("par "+article.auteur));
+				auteurTextView.setText( Html.fromHtml("par "+article.auteur+", le "+article.dateParution));
 			
 			// place l'image
 			if(banniereImageView != null && article.banniere != ArticleObject.DEFAULT_IMAGE)
