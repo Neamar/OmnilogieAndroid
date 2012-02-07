@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_widget"
+    android:layout_height="120dp"
+    android:layout_width="320dp"
+    android:orientation="horizontal" >
+    
+    <TextView  
+	android:id="@+id/widget_textview"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:gravity="center_vertical|center_horizontal"
+    android:textColor="@android:color/white"
+    android:text="00:00:00 PM"
+    android:textSize="16pt"
+    />
+
+</LinearLayout>

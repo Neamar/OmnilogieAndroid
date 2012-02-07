@@ -72,6 +72,21 @@
         <activity
             android:name=".AuteursActivity"
             android:label="Affichage de la liste des omnilogistes" />
+        <receiver android:name=".Reciever" android:label="@string/app_name">
+   			<intent-filter>
+    			<action android:name="MyTestIntent" />
+   			</intent-filter>
+  		</receiver>  
+        <receiver android:name=".WidgetActivity" android:label="@string/widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data 
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
+		
+		<service android:name=".WidgetActivity$UpdateService" />
     </application>
 
 </manifest>

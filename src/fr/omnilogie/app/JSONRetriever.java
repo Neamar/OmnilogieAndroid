@@ -101,6 +101,7 @@ public class JSONRetriever {
 	/**
 	 * Récupère le JSON au format String à l'url spécifié.
 	 * 
+	 * @author Androidpxr | p-xr.com
 	 * @param url url source au format String
 	 * @return String récupéré contenant le JSON
 	 */

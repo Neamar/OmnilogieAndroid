@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">Omnilogie</string>
+    <string name="widget_name">Omnilogisme du jour</string>
 
 </resources>
