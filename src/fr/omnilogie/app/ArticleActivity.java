@@ -44,7 +44,8 @@ public class ArticleActivity extends Activity {
 			Uri uri = getIntent().getData();
 			String articleToDisplay = uri.getLastPathSegment();
 			
-			JSONObject jsonDatas = JSONfunctions.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
+			JSONRetriever jsonRetriver = new JSONRetriever();
+			JSONObject jsonDatas = jsonRetriver.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json");
 	
 			//Remplir notre article avec les données fournies
 			article.remplirDepuisJSON(jsonDatas);

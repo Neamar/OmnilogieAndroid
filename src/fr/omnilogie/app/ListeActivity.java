@@ -147,7 +147,8 @@ public class ListeActivity extends ListActivity {
 			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
 			
 			// 
-			JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL(url);
+			JSONRetriever jsonRetriever = new JSONRetriever();
+			JSONArray jsonArray = jsonRetriever.getJSONArrayfromURL(url);
 			
 			// Insert les éléments JSON dans listeArticles
 			try{		    	

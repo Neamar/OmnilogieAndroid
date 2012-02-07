@@ -26,7 +26,8 @@ public class AuteursActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setTitle("Liste des auteurs sur Omnilogie");
 		
-		JSONArray jsonArray = JSONfunctions.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json");
+		JSONRetriever jsonretriever = new JSONRetriever();
+		JSONArray jsonArray = jsonretriever.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json");
 		
 		for(int i = 0; i < jsonArray.length(); i++)
 		{
