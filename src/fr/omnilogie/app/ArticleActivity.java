@@ -6,6 +6,8 @@ import java.io.InputStream;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -200,6 +202,27 @@ public class ArticleActivity extends Activity implements CallbackObject {
 		case R.id.menu_autres_auteur:
 			onOtherBySameAuthor();
 			break;
+		case R.id.menu_rediger:
+			//Le lecteur souhaite devenir rédacteur
+		    AlertDialog ad = new AlertDialog.Builder(this).create();  
+		    ad.setMessage("Omnilogie a toujours besoin de rédacteurs ! Souhaitez-vous rejoindre l'interface de rédaction du site ?");
+		    
+		    //Rejoindre l'interface de rédaction
+		    ad.setButton(DialogInterface.BUTTON_POSITIVE, "C'est parti !", new DialogInterface.OnClickListener() {  
+		        public void onClick(DialogInterface dialog, int which) {  
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://omnilogie.fr/membres/Redaction"));
+					startActivity(browserIntent);                     
+		        }  
+		    });
+		    
+		    //Retourner à l'article
+		    ad.setButton(DialogInterface.BUTTON_NEGATIVE, "Pas maintenant", new DialogInterface.OnClickListener() {  
+		        public void onClick(DialogInterface dialog, int which) {  
+		            dialog.dismiss();                      
+		        }  
+		    }); 
+		    
+		    ad.show();  
 		default:
 			break;
 		}
