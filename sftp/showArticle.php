@@ -20,6 +20,9 @@ include('common.php');
 if($_GET['titre'] == 'last')
 {
 	$where = 'O.ID = (SELECT ID FROM OMNI_Omnilogismes ORDER BY Sortie DESC LIMIT 1)';
+} else if($_GET['titre'] == 'random')
+{
+	$where = '!ISNULL(Sortie) ORDER BY RAND()';
 } else if($_GET['titre'] != '')
 {
 	$where = 'O.Titre = "' . mysql_real_escape_string(utf8_encode(Encoding::decodeFromGet('titre'))) . '"';

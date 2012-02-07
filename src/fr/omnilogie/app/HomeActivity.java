@@ -50,6 +50,19 @@ public class HomeActivity extends Activity {
                 startActivity(myIntent);
 			}
 		});
+		
+		/*
+		 * BOUTON : Article au hasard
+		 */
+		Button buttonAleatoire = ((Button) findViewById(R.id.home_aleatoire));
+		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+		    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/random");
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+	  			startActivity(i);
+			}
+		});
 	}
 }
 
