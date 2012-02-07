@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class ArticleActivity extends Activity implements CallbackObject {
 	
@@ -98,6 +99,32 @@ public class ArticleActivity extends Activity implements CallbackObject {
 			//(par exemple, sur une balise <pre> contenant du texte trop long)
 			webView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 	
+			//Intercepter directement les liens vers les omnilogismes.
+			//En théorie, on pourrait ne rien faire : l'utilisateur se verrait alors présenter un choix
+			//entre tous ses navigateurs et Omnilogie. Toutefois, ce n'est pas très intuitif !
+	       WebViewClient webClient = new WebViewClient()
+	       {
+	           @Override
+	           public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+	           {
+	            if (url.startsWith("http://omnilogie.fr/O/"))
+	            {
+	            	//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
+	            	//avec les nouveaux paramètres
+			    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
+	                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+		  			startActivity(i);
+		  			
+	               return true;
+	            }
+	             
+	            //Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
+	            //son navigateur préféré
+	            return false;
+	           }
+	       };
+	       webView.setWebViewClient(webClient);
+	       
 			//Il faut spécifier l'URL de base du site afin que les images (indiquées en chemin relatif)
 			//soient disponibles.
 			webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
@@ -211,17 +238,27 @@ public class ArticleActivity extends Activity implements CallbackObject {
 	 * @param objet JSON récupéré contenant les données de l'article
 	 */
 	public void callback(Object objet) {
-		if(objet != null)
+		JSONObject jsonDatas = (JSONObject) objet;
+		if(jsonDatas != null)
 		{
-			JSONObject jsonDatas = (JSONObject) objet;
-			if(jsonDatas != null)
-			{
-				//Remplir notre article avec les données fournies
-				article.remplirDepuisJSON(jsonDatas);
-				
-				runOnUiThread(remplirUIAvecDatas);
-			}
+			//Remplir notre article avec les données fournies
+			article.remplirDepuisJSON(jsonDatas);
+			
 		}
+		else
+		{
+			//Article introuvable ou pas de connexion internet
+			//Simuler un article "spécial".
+			article.id=-1;
+			article.titre="Article introuvable";
+			article.accroche="Impossible de charger l'omnilogisme demandé !";
+			article.omnilogisme="Vérifiez votre connexion Internet. Il est aussi possible que l'article ait été supprimé, ou qu'une grenouille de l'espace s'en soit servi comme éponge.";
+			article.auteur="OmniScient";
+			article.auteurId = 50;
+			article.dateParution="premier jour !";
+		}
+		
+		runOnUiThread(remplirUIAvecDatas);
 	}
 }
 
