@@ -3,8 +3,6 @@
     <!-- Composants génériques TODO : passer dans un fichier XML et hériter si possible ? -->
     <item android:id="@+id/menu_rediger"
           android:title="Devenir rédacteur" android:titleCondensed="Rédiger" android:icon="@drawable/redacteur"/>
-    <item android:id="@+id/menu_parametres"
-          android:title="Paramètres" android:icon="@drawable/parametres"/>
     
     <!-- Composants spécifiques à l'activité -->
     <item android:id="@+id/menu_partager" android:title="Partager" android:icon="@drawable/partager"></item>
