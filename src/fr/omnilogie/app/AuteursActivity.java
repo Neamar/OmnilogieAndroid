@@ -36,16 +36,16 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 			
-		 lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	String nomAuteur = ((TextView) view.findViewById(R.id.item_auteurs_auteur_nomAuteur)).getText().toString();
-		    	String auteur = Integer.toString(idFromAuteur.get(nomAuteur));
-		    	
-		    	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + auteur);
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-	  			startActivity(i);
-			    }
-			  });
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String nomAuteur = ((TextView) view.findViewById(R.id.item_auteurs_auteur_nomAuteur)).getText().toString();
+				String auteur = Integer.toString(idFromAuteur.get(nomAuteur));
+				
+				Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + auteur);
+				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(i);
+				}
+			});
 
 	}
 	

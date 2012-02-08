@@ -5,9 +5,6 @@ import java.io.InputStream;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -104,29 +101,29 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Intercepter directement les liens vers les omnilogismes.
 			//En théorie, on pourrait ne rien faire : l'utilisateur se verrait alors présenter un choix
 			//entre tous ses navigateurs et Omnilogie. Toutefois, ce n'est pas très intuitif !
-	       WebViewClient webClient = new WebViewClient()
-	       {
-	           @Override
-	           public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-	           {
-	            if (url.startsWith("http://omnilogie.fr/O/"))
-	            {
-	            	//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
-	            	//avec les nouveaux paramètres
-			    	Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
-	                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-		  			startActivity(i);
-		  			
-	               return true;
-	            }
-	             
-	            //Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
-	            //son navigateur préféré
-	            return false;
-	           }
-	       };
-	       webView.setWebViewClient(webClient);
-	       
+			WebViewClient webClient = new WebViewClient()
+			{
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+				{
+					if (url.startsWith("http://omnilogie.fr/O/"))
+					{
+						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
+						//avec les nouveaux paramètres
+						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						startActivity(i);
+						
+						return true;
+					}
+					
+					//Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
+					//son navigateur préféré
+					return false;
+				}
+			};
+			webView.setWebViewClient(webClient);
+		
 			//Il faut spécifier l'URL de base du site afin que les images (indiquées en chemin relatif)
 			//soient disponibles.
 			webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
@@ -218,11 +215,11 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	protected void onShareButtonClick()
 	{
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);  
-	    shareIntent.setType("text/plain");  
+		shareIntent.setType("text/plain");  
 
-	    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, Html.fromHtml(article.accrocheOuTitre()));  
-	    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + Html.fromHtml(article.titre));  
-	    startActivity(Intent.createChooser(shareIntent, "Partager cet article via..."));  
+		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, Html.fromHtml(article.accrocheOuTitre()));  
+		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getShortUrl() + " : " + Html.fromHtml(article.titre));  
+		startActivity(Intent.createChooser(shareIntent, "Partager cet article via..."));  
 	}
 	
 	/**
@@ -231,8 +228,8 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	 */
 	protected void onOtherBySameAuthor()
 	{
-    	Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
-        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+		Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
+		Intent i = new Intent(Intent.ACTION_VIEW, uri);
 			startActivity(i);
 	}
 

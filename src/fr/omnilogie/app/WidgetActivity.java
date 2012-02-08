@@ -30,42 +30,42 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 	public ArticleObject article;
 	
 	@Override
-    public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )    {		
+	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )	{		
 		if (null == context) context = WidgetActivity.context;
-	    if (null == appWidgetManager) appWidgetManager = WidgetActivity.appWidgetManager;
-	    if (null == appWidgetIds) appWidgetIds = WidgetActivity.appWidgetIds;
+		if (null == appWidgetManager) appWidgetManager = WidgetActivity.appWidgetManager;
+		if (null == appWidgetIds) appWidgetIds = WidgetActivity.appWidgetIds;
 
-	    WidgetActivity.Widget = this;
-	    WidgetActivity.context = context;
-	    WidgetActivity.appWidgetManager = appWidgetManager;
-	    WidgetActivity.appWidgetIds = appWidgetIds;
-	    		
-	    String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+		WidgetActivity.Widget = this;
+		WidgetActivity.context = context;
+		WidgetActivity.appWidgetManager = appWidgetManager;
+		WidgetActivity.appWidgetIds = appWidgetIds;
+				
+		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
-    }
+	}
 
 	@Override 
-    public void onEnabled(Context context) {
-	    String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+	public void onEnabled(Context context) {
+		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
 	}
 	
 	public class UpdateService extends Service {
-        @Override
-        public void onStart(Intent intent, int startId) {
-        	//WidgetActivity.Widget.onUpdate(context, appWidgetManager, appWidgetIds);
-        	//Toast.makeText(context, "Update Widget", Toast.LENGTH_SHORT).show();
-        }
-        
+		@Override
+		public void onStart(Intent intent, int startId) {
+			//WidgetActivity.Widget.onUpdate(context, appWidgetManager, appWidgetIds);
+			//Toast.makeText(context, "Update Widget", Toast.LENGTH_SHORT).show();
+		}
+		
 		@Override
 		public IBinder onBind(Intent arg0) {
 			return null;
 		}
-    }
+	}
 
 	public void callback(Object objet) {
 		
@@ -93,17 +93,17 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 
 					// Tell the widget manager
 					final int N = appWidgetIds.length;
-			        for (int i=0; i<N; i++) {
-			            int appWidgetId = appWidgetIds[i]; 
-			            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-			        }
+					for (int i=0; i<N; i++) {
+						int appWidgetId = appWidgetIds[i];
+						appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+					}
 						
 				}catch(JSONException e) {
 					Log.e("log_tag", "Error parsing data "+e.toString());
 				}
 				
 			}
-		}		
+		}
 	}
 	
 }

@@ -1,14 +1,12 @@
 package fr.omnilogie.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends DefaultActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,8 +19,8 @@ public class HomeActivity extends Activity {
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/last"));
-	  			startActivity(i);
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/last"));
+				startActivity(i);
 			}
 		});
 		
@@ -33,8 +31,8 @@ public class HomeActivity extends Activity {
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/liste"));
-	  			startActivity(i);
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/liste"));
+				startActivity(i);
 			}
 		});
 		
@@ -45,8 +43,8 @@ public class HomeActivity extends Activity {
 		buttonAuteurs.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), AuteursActivity.class);
-                startActivity(myIntent);
+				Intent myIntent = new Intent(v.getContext(), AuteursActivity.class);
+				startActivity(myIntent);
 			}
 		});
 		
@@ -57,8 +55,8 @@ public class HomeActivity extends Activity {
 		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random"));
-	  			startActivity(i);
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random"));
+				startActivity(i);
 			}
 		});
 	}
