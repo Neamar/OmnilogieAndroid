@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
@@ -20,7 +21,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class AuteursActivity extends ListActivity implements CallbackObject {
+public class AuteursActivity extends DefaultActivity implements CallbackObject {
+	private ListView listView;
+	
 	private ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
 	private Hashtable<String, Integer> idFromAuteur = new Hashtable<String, Integer>();
 	AuteursActivity auteursActivity = this;
@@ -29,14 +32,15 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle("Liste des auteurs sur Omnilogie");
+		setContentView(R.layout.activity_auteurs);
 		
 		JSONRetriever jsonretriever = new JSONRetriever();
 		jsonretriever.getJSONArrayfromURL("http://omnilogie.fr/raw/auteurs.json", this);
-				
-		ListView lv = getListView();
-		lv.setTextFilterEnabled(true);
+		
+		listView = ((ListView) findViewById(R.id.auteurs));
+		listView.setTextFilterEnabled(true);
 			
-		lv.setOnItemClickListener(new OnItemClickListener() {
+		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String nomAuteur = ((TextView) view.findViewById(R.id.item_auteurs_auteur_nomAuteur)).getText().toString();
 				String auteur = Integer.toString(idFromAuteur.get(nomAuteur));
@@ -62,7 +66,8 @@ public class AuteursActivity extends ListActivity implements CallbackObject {
 			ListAdapter adapter = new SimpleAdapter(auteursActivity, auteurs , R.layout.item_auteurs_auteur, 
 					new String[] { "Auteur", "NombreArticle" }, 
 					new int[] { R.id.item_auteurs_auteur_nomAuteur, R.id.item_auteurs_auteur_nbArticles });
-			setListAdapter(adapter);
+			
+			listView.setAdapter(adapter);
 					
 		}
 	};
