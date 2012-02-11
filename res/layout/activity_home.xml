@@ -6,6 +6,14 @@
     android:gravity="center"
     android:stretchColumns="0,1" >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#AA0000"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Ceci est la version ß de l&apos;application Omnilogie pour Android. Des erreurs, des remarques ? Signalez-les en utilisant le menu « Bug ». Merci !" />
+
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -49,8 +57,7 @@
         <RelativeLayout
             android:id="@+id/home_liste"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_toRightOf="@id/home_article" >
+            android:layout_height="100dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -89,8 +96,7 @@
         <RelativeLayout
             android:id="@+id/home_auteurs"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/home_liste" >
+            android:layout_height="100dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -121,9 +127,7 @@
         <RelativeLayout
             android:id="@+id/home_aleatoire"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/home_liste"
-            android:layout_toRightOf="@id/home_auteurs" >
+            android:layout_height="100dp">
 
             <ImageView
                 android:layout_width="wrap_content"
