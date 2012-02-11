@@ -28,16 +28,36 @@ public class DefaultActivity extends Activity {
 		//Traitement des menus standards :
 		switch(item.getItemId()) {
 		case R.id.menu_aleatoire:
-			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random"));
-  			startActivity(i);
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random")));
+			break;
+		case R.id.menu_bug:
+			AlertDialog dialogBug = new AlertDialog.Builder(this).create();  
+			dialogBug.setMessage("Vous allez être redirigé vers la page web de contact d'Omnilogie, depuis laquelle vous pourrez faire votre rapport de bug (ou suggestion d'idée). Merci pour votre contribution !");
+			
+			//Rejoindre l'interface de rédaction
+			dialogBug.setButton(DialogInterface.BUTTON_POSITIVE, "Signaler bug ou remarque", new DialogInterface.OnClickListener() {  
+				public void onClick(DialogInterface dialog, int which) {
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://omnilogie.fr/Contact#Application Android"));
+					startActivity(browserIntent);
+				}
+			});
+			
+			//Annuler la soumission
+			dialogBug.setButton(DialogInterface.BUTTON_NEGATIVE, "Annuler", new DialogInterface.OnClickListener() {  
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+
+			dialogBug.show();
 			break;
 		case R.id.menu_rediger:
 			//Le lecteur souhaite devenir rédacteur
-			AlertDialog ad = new AlertDialog.Builder(this).create();  
-			ad.setMessage("Omnilogie a toujours besoin de rédacteurs ! Souhaitez-vous rejoindre l'interface de rédaction du site ?");
+			AlertDialog dialogRediger = new AlertDialog.Builder(this).create();  
+			dialogRediger.setMessage("Omnilogie a toujours besoin de rédacteurs ! Souhaitez-vous rejoindre l'interface de rédaction du site ?");
 			
 			//Rejoindre l'interface de rédaction
-			ad.setButton(DialogInterface.BUTTON_POSITIVE, "C'est parti !", new DialogInterface.OnClickListener() {  
+			dialogRediger.setButton(DialogInterface.BUTTON_POSITIVE, "C'est parti !", new DialogInterface.OnClickListener() {  
 				public void onClick(DialogInterface dialog, int which) {
 					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://omnilogie.fr/membres/Redaction"));
 					startActivity(browserIntent);
@@ -45,13 +65,13 @@ public class DefaultActivity extends Activity {
 			});
 			
 			//Retourner à l'article
-			ad.setButton(DialogInterface.BUTTON_NEGATIVE, "Pas maintenant", new DialogInterface.OnClickListener() {  
+			dialogRediger.setButton(DialogInterface.BUTTON_NEGATIVE, "Pas maintenant", new DialogInterface.OnClickListener() {  
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}
 			});
 			
-			ad.show();
+			dialogRediger.show();
 		default:
 			break;
 		}
