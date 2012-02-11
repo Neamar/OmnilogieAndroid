@@ -23,7 +23,7 @@ import android.widget.AbsListView.OnScrollListener;
  * @author Benoit
  *
  */
-public class ListeActivity extends ListActivity implements CallbackObject {
+public class ListeActivity extends DefaultActivity implements CallbackObject {
 	
 	static final int ARTICLES_A_CHARGER = 20;
 	
@@ -35,6 +35,7 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 	ArticleObjectAdapter adapter;
 	
 	private View loadingFooter;
+	private ListView listView;
 	
 	// Liste avec les méta-données des articles chargés
 	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
@@ -62,22 +63,21 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 		}
 		
 		tryExpandListView();
-		
-		final ListView lv = getListView();
 
+		listView = ((ListView) findViewById(R.id.liste));
 		// ajout du footer
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
-		lv.addFooterView(loadingFooter);
+		listView.addFooterView(loadingFooter);
 		
 		// ajout de l'adapter
 		adapter = new ArticleObjectAdapter(this ,listeArticles);
-		setListAdapter(adapter);
+		listView.setAdapter(adapter);
 		
 		// chargement des articles (autre thread)
 		tryExpandListView();
 		
 		// initialisation du listener sur un clic
-		lv.setOnItemClickListener(new OnItemClickListener() {
+		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
 			ArticleObject article = listeArticles.get(position);
 			if(article != null)
@@ -90,7 +90,7 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 		});
 		
 		// initialisation du listener de scroll pour catcher la fin de liste atteinte
-		lv.setOnScrollListener(new OnScrollListener() {
+		listView.setOnScrollListener(new OnScrollListener() {
 		
 		// pas besoin de cette méthode
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -153,8 +153,7 @@ public class ListeActivity extends ListActivity implements CallbackObject {
 				if(nouveauxArticles.size() == 0)
 				{
 					// aucun nouvel article : on désactive le chargement d'articles
-					ListView lv = getListView();
-					lv.removeFooterView(loadingFooter);
+					listView.removeFooterView(loadingFooter);
 					updateAvailable = false;
 				}
 				else
