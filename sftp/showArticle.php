@@ -36,8 +36,6 @@ $article = mysql_fetch_assoc(Sql::query('
 SELECT
 	O.ID,
 	O.Titre AS T,
-	O.Statut AS S,
-	O.Sortie AS D,
 	O.Accroche AS Q,
 	DATE_FORMAT(O.Sortie, "%d/%m/%y") AS S,
 

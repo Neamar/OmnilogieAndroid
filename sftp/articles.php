@@ -25,7 +25,7 @@ $params = array(
 include('common.php');
 
 
-$articles = Sql::query('SELECT O.ID AS ID, O.Titre AS T, A.Auteur AS A, O.Accroche AS Q
+$articles = Sql::query('SELECT O.ID AS ID, O.Titre AS T, A.Auteur AS A, O.Accroche AS Q, DATE_FORMAT(Sortie, "%d/%m/%y") AS S
 FROM OMNI_Omnilogismes O
 LEFT JOIN OMNI_Auteurs A ON (A.ID = O.Auteur)
 WHERE !ISNULL(Sortie)
