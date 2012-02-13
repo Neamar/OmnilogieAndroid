@@ -153,7 +153,7 @@ public class JSONRetriever {
 					String result = retrieveJSONResult(url);
 					
 					if(result != null && result.length() > 0)
-						jArray = new JSONArray(result);            
+						jArray = new JSONArray(result);
 				}catch(Exception e){
 					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
 				}

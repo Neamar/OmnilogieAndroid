@@ -186,15 +186,15 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			{
 				// Insert les éléments JSON dans listeArticles
 				try{		    	
-					for(int i=0;i<jsonArray.length();i++){						
-				
+					for(int i=0;i<jsonArray.length();i++)
+					{
 						ArticleObject nouvelArticle = new ArticleObject();
 						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
 						
 						nouveauxArticles.add(nouvelArticle);
 						dernierArticle++;
 					}
-				}catch(JSONException e)        {
+				}catch(JSONException e) {
 					Log.e("log_tag", "Error parsing data "+e.toString());
 				}
 				
