@@ -3,6 +3,7 @@
 
     <string name="app_name">Omnilogie</string>
     <string name="widget_name">Omnilogisme du jour</string>
+    <string name="disclaimer">Ceci est la version ß de l\'application Omnilogie pour Android. Des erreurs, des remarques ? Signalez-les en utilisant le menu « Bug ». Merci !</string>
     <string name="credits">
 <b>Développeurs :</b>\n
   Neamar &lt;neamar@neamar.fr&gt;\n

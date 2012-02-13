@@ -49,24 +49,25 @@ public class AuteursActivity extends SpecialActivity implements CallbackObject {
 				}
 			});
 
+		isLoading(true);
 	}
 	
 	
 	/**
 	 * Termine la préparation de la vue, une fois que les données distantes sont récupérées.
 	 * Doit être lancé dans le thread UI (ex. runOnUiThread(initialiseViewWithData);)
-	 *  
+	 * 
 	 */
 	protected Runnable remplirUIAvecDatas = new Runnable() {
 
 		public void run(){
+			isLoading(false);
 			
 			ListAdapter adapter = new SimpleAdapter(auteursActivity, auteurs , R.layout.item_auteurs_auteur, 
 					new String[] { "Auteur", "NombreArticle" }, 
 					new int[] { R.id.item_auteurs_auteur_nomAuteur, R.id.item_auteurs_auteur_nbArticles });
 			
 			listView.setAdapter(adapter);
-					
 		}
 	};
 	

@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@drawable/fond_repetition"
     android:gravity="center"
-    android:stretchColumns="0,1" >
+    android:stretchColumns="0,1,2" >
 
     <TextView
         android:id="@+id/textView1"
@@ -30,6 +30,12 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             layout="@layout/bulle_liste" />
+        
+        <!-- Liste des auteurs -->
+        <include
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            layout="@layout/bulle_auteurs" />
     </TableRow>
 
     <TableRow
@@ -38,24 +44,11 @@
         android:layout_weight="1"
         android:gravity="center" >
 
-        <!-- Liste des auteurs -->
-        <include
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            layout="@layout/bulle_auteurs" />
-
         <!-- Un article au hasard -->
         <include
             android:layout_width="100dp"
             android:layout_height="100dp"
             layout="@layout/bulle_aleatoire" />
-    </TableRow>
-    
-        <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:gravity="center" >
 
         <!-- Rechercher -->
         <include

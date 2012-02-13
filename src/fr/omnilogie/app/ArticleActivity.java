@@ -47,13 +47,13 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Il suffit de lire l'URI avec lequel cette activité a été appelée
 			Uri uri = getIntent().getData();
 			String articleToDisplay = uri.getLastPathSegment();
-			Log.e("wtf", articleToDisplay);
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
-			JSONRetriever jsonRetriver = new JSONRetriever();
-			jsonRetriver.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
-			
+			JSONRetriever jsonRetriever = new JSONRetriever();
+			jsonRetriever.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
 		}
+		
+		isLoading(true);
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	protected Runnable remplirUIAvecDatas = new Runnable() {
 
 		public void run(){
-			
+			isLoading(false);
 			//Définir le titre de l'activité.
 			//Parser à la recherche d'entités HTML qui doivent être rendues à l'écran (&oelig;, ...)
 			setTitle(Html.fromHtml(article.titre));
@@ -236,7 +236,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	}
 
 	/**
-	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
+	 * Méthode de callback utilisée pour traiter le JSON une fois récupéré.
 	 * 
 	 * @param objet JSON récupéré contenant les données de l'article
 	 */

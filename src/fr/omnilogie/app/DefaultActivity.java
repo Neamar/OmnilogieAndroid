@@ -2,6 +2,7 @@ package fr.omnilogie.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +10,40 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class DefaultActivity extends Activity {
+/**
+ * Activité par défaut.
+ * 
+ * Toutes les activités de l'application en hérite.
+ * 
+ * Cette activité définit les menus communs à tous.
+ * 
+ * Cette activité offre des fonctions permettant d'afficher un ProgressDialog simplement.
+ * @author neamar
+ *
+ */
+public abstract class DefaultActivity extends Activity {
+	protected ProgressDialog progressDialog;
+	
+	/**
+	 * Affiche ou non un spinner indiquant que l'activité est en train de charger ses données.
+	 * 
+	 * @param isLoading true pour afficher , false une fois le chargement terminé.
+	 */
+	protected void isLoading(boolean isLoading)
+	{
+		if(isLoading)
+		{
+			progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
+		}
+		else
+		{
+			progressDialog.dismiss();
+		}
+	}
+	
+	/**
+	 * Gestion des menus standards, inflaté de res/menu/base.xml
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//Récupérer le menu de base défini en XML

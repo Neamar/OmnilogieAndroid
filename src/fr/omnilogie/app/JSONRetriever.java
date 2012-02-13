@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -113,8 +113,8 @@ public class JSONRetriever {
 		//http post
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(url);
-			HttpResponse response = httpclient.execute(httppost);
+			HttpGet httpget = new HttpGet(url);
+			HttpResponse response = httpclient.execute(httpget);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
 
@@ -153,7 +153,7 @@ public class JSONRetriever {
 					String result = retrieveJSONResult(url);
 					
 					if(result != null && result.length() > 0)
-						jArray = new JSONArray(result);            
+						jArray = new JSONArray(result);
 				}catch(Exception e){
 					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
 				}

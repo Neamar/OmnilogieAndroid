@@ -15,7 +15,7 @@ import android.view.Menu;
  * @author neamar
  *
  */
-public class SpecialActivity extends DefaultActivity {
+public abstract class SpecialActivity extends DefaultActivity {
 	
 	/**
 	 * Supprimer le menu "aléatoire".
