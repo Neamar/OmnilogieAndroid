@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.app.ListActivity;
 import android.content.Intent;
-import android.view.View;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.AbsListView.OnScrollListener;
 
 /**
  * Récupère et affiche les articles récents dans un ListView.
