@@ -3,5 +3,4 @@
     android:id="@+id/rechercher_liste"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:fadeScrollbars="true">
-</ListView>
+    android:fadeScrollbars="true" />
