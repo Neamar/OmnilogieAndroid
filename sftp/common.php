@@ -16,8 +16,11 @@ function vue($json)
 {
 	if(isset($_GET['readable']))
 	{
+		header('Content-Type:text/html; charset=UTF-8');
 		echo '<pre>';
+		ob_start();
 		print_r($json);
+		echo htmlentities(ob_get_clean());
 	}
 	else
 	{
