@@ -19,6 +19,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -189,7 +190,34 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 					new String[] { "titre", "fragment" }, 
 					new int[] { R.id.item_recherche_resultat_titre, R.id.item_recherche_resultat_fragment });
 			
+
+			listView.addFooterView(getFooter(resultats.size()), new Object(), false);
 			listView.setAdapter(adapter);
+		}
+		
+		protected View getFooter(int nbItems)
+		{
+			TextView footer = new TextView(RechercheActivity.this);
+			footer.setGravity(Gravity.RIGHT);
+
+			if(nbItems == 0)
+			{
+				footer.setText("Aucun résultat trouvé.");
+			}
+			else if(nbItems == 1)
+			{
+				footer.setText("1 seul résultat.");
+			}
+			else if(nbItems == 8)
+			{
+				footer.setText("Trop de résultats, affichage des 8 premiers.");
+			}
+			else
+			{
+				footer.setText(nbItems + " résultats trouvés.");
+			}
+			
+			return footer;
 		}
 	};
 }
