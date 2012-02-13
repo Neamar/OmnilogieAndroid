@@ -25,7 +25,8 @@ if($_GET['titre'] == 'last')
 	$where = '!ISNULL(Sortie) ORDER BY RAND()';
 } else if($_GET['titre'] != '')
 {
-	$where = 'O.Titre = "' . mysql_real_escape_string(utf8_encode(Encoding::decodeFromGet('titre'))) . '"';
+	$titre = mysql_real_escape_string(utf8_encode(Encoding::decodeFromGet('titre')));
+	$where = '(O.Titre = "' . $titre . '" OR O.Titre = "' . $titre . '?")';
 }
 else
 {

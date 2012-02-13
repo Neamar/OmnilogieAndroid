@@ -155,7 +155,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jArray = new JSONArray(result);            
 				}catch(Exception e){
-					Log.e("log_tag", "Error parsing data "+e.toString());
+					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
 				}
 				
 				callbackObject.callback(jArray);
@@ -179,7 +179,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jObject = new JSONObject(result);            
 				}catch(Exception e){
-					Log.e("log_tag", "Error parsing data "+e.toString());
+					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
 				}
 				
 				callbackObject.callback(jObject);

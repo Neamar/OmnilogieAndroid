@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,7 +47,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Il suffit de lire l'URI avec lequel cette activité a été appelée
 			Uri uri = getIntent().getData();
 			String articleToDisplay = uri.getLastPathSegment();
-			
+			Log.e("wtf", articleToDisplay);
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriver = new JSONRetriever();
@@ -132,7 +134,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
+		boolean r = super.onCreateOptionsMenu(menu);
 		
 		//Récupérer le menu pour les articles :
 		MenuInflater inflater = getMenuInflater();
@@ -155,7 +157,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 				sources.add(0, i, i, article.sourcesTitre.get(i));
 			}
 		}
-		return true;
+		return r;
 	}
 	
 	

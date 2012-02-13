@@ -1,8 +1,13 @@
 package fr.omnilogie.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -59,5 +64,34 @@ public class HomeActivity extends DefaultActivity {
 				startActivity(i);
 			}
 		});
+	}
+	
+	/**
+	 * Ajouter un bouton pour l'affichage des auteurs de l'application
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean r = super.onCreateOptionsMenu(menu);
+		
+		MenuItem creditsMenu = menu.add("Crédits");
+		creditsMenu.setIcon(R.drawable.credits);
+
+		return r;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if(item.getItemId() == 0)
+		{
+			//Afficher les crédits
+			new AlertDialog.Builder(HomeActivity.this)
+				.setTitle("Crédits")
+				.setMessage(getResources().getText(R.string.credits))
+				.setPositiveButton(android.R.string.ok, null)
+				.show();
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 }
