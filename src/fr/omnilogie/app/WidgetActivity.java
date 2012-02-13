@@ -2,6 +2,7 @@ package fr.omnilogie.app;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 import java.util.TimeZone;
 
 import android.app.AlarmManager;
@@ -10,14 +11,12 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.sax.StartElementListener;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
- * Activity en charge d'animer le widget de l'application.
- * La fréquence de mise à jour du widget est configuré dans widget_provider.xml avec le paramètre 
- * updatePeriodMillis.
+ * Activity en charge de programmer les mises à jour du widget.
+ * Ces mises à jour sont réalisées par {@link WidgetAlarmService} via une alarme ou directement.
  * 
  * 
  * @author Benoit
@@ -26,20 +25,18 @@ import android.widget.RemoteViews;
 public class WidgetActivity extends AppWidgetProvider {
 	
 	/**
-	 * Sauvegarde du contexte d'appel de l'update du widget
+	 * Sauvegarde du contexte d'appel de l'update du widget pour pouvoir y accéder lorsqu'on aura récupérer les données 
 	 */
 	public static Context context;
 	
 	/**
-	 * Sauvegarde de l'appWidgetManager
-	 */
-	protected AppWidgetManager appWidgetManager;
-	
-	/**
-	 * Sauvegarde des ID des instances du widget
+	 * Sauvegarde des ID des instances du widget pour pouvoir y accéder lorsqu'on aura récupérer les données
 	 */
 	public static int appWidgetIds[];
 	
+	/**
+	 * Référence vers le service de mise à jour du widget  
+	 */
 	private PendingIntent service = null;
 	
 	@Override
@@ -52,6 +49,7 @@ public class WidgetActivity extends AppWidgetProvider {
 				
 		final Intent intent = new Intent(context, WidgetAlarmService.class);  
 		
+		// Si c'est le premier lancement, on lance le service directement
 		if (service == null)  
 		{  
 			Log.v("omni_widget", "Mise à jour du widget");
@@ -59,20 +57,20 @@ public class WidgetActivity extends AppWidgetProvider {
 			context.startService(intent);			
 			service = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		}
-		else
-		{
-			final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);  
-			final Calendar nextUpdateTime = new GregorianCalendar(TimeZone.getTimeZone("Paris"));
-			nextUpdateTime.add(Calendar.HOUR_OF_DAY, 24);
-			nextUpdateTime.set(Calendar.HOUR_OF_DAY, 0);
-			nextUpdateTime.set(Calendar.MINUTE, 15);  //TODO ajouter un seed pour les minutes 
-			nextUpdateTime.set(Calendar.SECOND, 0); 
-			nextUpdateTime.set(Calendar.MILLISECOND, 0);
-			
-			Log.v("omni_widget", "Prochaine mise à jour du widget le "+ nextUpdateTime.getTime().toString());
-			
-			alarmManager.set(AlarmManager.RTC, nextUpdateTime.getTime().getTime(), service); 
-		}
+		
+		// On crée une alarme se déclenchant à 00h(15+randomOffset) heure de Paris le lendemain
+		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);  
+		final Calendar nextUpdateTime = new GregorianCalendar(TimeZone.getTimeZone("France"));
+		nextUpdateTime.add(Calendar.DAY_OF_YEAR, 1);		
+		nextUpdateTime.set(Calendar.HOUR_OF_DAY, 23); //TODO charger dynamiquement l'offset de Paris (00h00 Paris -> 23h00 GMT)
+		final int randomOffset = new Random().nextInt(15); 
+		nextUpdateTime.set(Calendar.MINUTE, 15 + randomOffset); 
+		nextUpdateTime.set(Calendar.SECOND, 0); 
+		nextUpdateTime.set(Calendar.MILLISECOND, 0);
+		
+		Log.v("omni_widget", "Prochaine mise à jour du widget le "+ nextUpdateTime.getTime().toString());
+		
+		alarmManager.set(AlarmManager.RTC, nextUpdateTime.getTime().getTime(), service); 
 		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}

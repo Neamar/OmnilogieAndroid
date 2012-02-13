@@ -14,6 +14,12 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+/**
+ * Service ayant pour rôle de mettre à jour (de manière asynchrones) les instances du widget.
+ * 
+ * @author Benoit
+ *
+ */
 public class WidgetAlarmService extends Service implements CallbackObject {
 	
 	@Override  
@@ -48,13 +54,13 @@ public class WidgetAlarmService extends Service implements CallbackObject {
 	 */
 	public void callback(Object objet) {
 		
-		if(objet != null)
+		if(objet != null && WidgetActivity.appWidgetIds != null && WidgetActivity.context != null)
 		{
 			JSONArray jsonArray = (JSONArray) objet;
 			
 			if(jsonArray != null)
 			{
-				Log.v("omni_widget", "Données pour le widget récupérées");
+				Log.v("omni_widget", "Données pour le widget récupérées et insérées");
 				
 				try{
 					// Récupère l'article du JSON
