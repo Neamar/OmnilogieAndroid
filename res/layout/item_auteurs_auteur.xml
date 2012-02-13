@@ -12,7 +12,7 @@
         android:lines="1"
         android:padding="2dp"
         android:scrollHorizontally="true"
-        android:text="Auteur"
+        android:text="@string/auteurs_item_placeholder_auteur"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16dp" />
 
@@ -23,7 +23,7 @@
         android:gravity="right"
         android:lines="1"
         android:padding="2dp"
-        android:text="Nb Articles"
+        android:text="@string/auteurs_item_placeholder_nbarticles"
         android:textSize="10dp" />
 
 </LinearLayout>

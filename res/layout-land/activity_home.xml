@@ -7,12 +7,12 @@
     android:stretchColumns="0,1,2" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/disclaimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#AA0000"
         android:gravity="center_vertical|center_horizontal"
-        android:text="@string/disclaimer" />
+        android:text="@string/home_disclaimer" />
 
     <TableRow
         android:layout_width="wrap_content"

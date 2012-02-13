@@ -1,11 +1,9 @@
 package fr.omnilogie.app;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +96,7 @@ public class HomeActivity extends DefaultActivity {
 			//Afficher les crédits
 			new AlertDialog.Builder(HomeActivity.this)
 				.setTitle("Crédits")
-				.setMessage(getResources().getText(R.string.credits))
+				.setMessage(getResources().getText(R.string.home_credits))
 				.setPositiveButton(android.R.string.ok, null)
 				.show();
 		}

@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/home_bulle"
         android:src="@drawable/bulle" />
 
     <ImageView
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/home_bulle_accueil"
         android:src="@drawable/bulle_article" />
 
     <TextView
@@ -23,7 +25,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Article du jour"
+        android:text="@string/home_bulle_accueil"
         android:textColor="#000" />
 
 </RelativeLayout>

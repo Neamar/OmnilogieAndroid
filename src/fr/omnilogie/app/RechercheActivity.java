@@ -1,7 +1,5 @@
 package fr.omnilogie.app;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,25 +14,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.inputmethod.EditorInfo;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Cette activité permet de faire des recherches en utilisant Google.

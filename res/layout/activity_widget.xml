@@ -13,11 +13,12 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="8dip"
+        android:contentDescription="@string/widget_icone"
         android:src="@drawable/ic_launcher" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="fill_parent"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="10dp"

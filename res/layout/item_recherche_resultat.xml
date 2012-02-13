@@ -12,7 +12,7 @@
         android:lines="1"
         android:padding="2dp"
         android:scrollHorizontally="true"
-        android:text="Titre"
+        android:text="@string/recherche_item_placeholder_titre"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16dp" />
 
@@ -20,6 +20,6 @@
         android:id="@+id/item_recherche_resultat_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fragment" />
+        android:text="@string/recherche_item_placeholder_fragment" />
 
 </LinearLayout>

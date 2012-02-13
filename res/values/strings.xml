@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Chaînes globales -->
     <string name="app_name">Omnilogie</string>
     <string name="widget_name">Omnilogisme du jour</string>
-    <string name="disclaimer">Ceci est la version ß de l\'application Omnilogie pour Android. Des erreurs, des remarques ? Signalez-les en utilisant le menu « Bug ». Merci !</string>
-    <string name="credits">
-<b>Développeurs :</b>\n
-  Neamar &lt;neamar@neamar.fr&gt;\n
-  Hartok &lt;hartok@hartok.fr&gt;\n
-\n
-<b>Fork us on Github !</b>\n
-  https://github.com/Neamar/OmnilogieAndroid/
-</string>
-    <string name="widget_loading_label">Chargement&#8230;</string>
+
+    <!-- Chaînes pour l'activité home -->
+    <string name="home_disclaimer">Ceci est la version ß de l\'application Omnilogie pour Android. Des erreurs, des remarques ? Signalez-les en utilisant le menu « Bug ». Merci !</string>
+    <string name="home_bulle"></string>
+    <string name="home_bulle_accueil">Article du jour</string>
+    <string name="home_bulle_liste">Liste des articles</string>
+    <string name="home_bulle_auteurs">Auteurs</string>
+    <string name="home_bulle_aleatoire">Au hasard</string>
+    <string name="home_bulle_recherche">Recherche</string>
+
+    <!-- Chaînes pour l'activité Auteurs -->
+    <string name="auteurs_item_placeholder_auteur">Auteur</string>
+    <string name="auteurs_item_placeholder_nbarticles">Nb Articles</string>
+
+    <!-- Chaînes pour l'activité Liste -->
+    <string name="liste_item_placeholder_titre">Titre</string>
+    <string name="liste_item_placeholder_accroche">Accroche</string>
+    <string name="liste_item_placeholder_auteur">Auteur</string>
+
+    <!-- Chaînes pour l'activité Recherche -->
+    <string name="recherche_item_placeholder_titre">Titre</string>
+    <string name="recherche_item_placeholder_fragment">Fragment d\'article</string>
+
+    <!-- Chaînes pour l'activité Widget -->
+    <string name="widget_icone">Icone</string>
+    <string name="widget_loading_label">Chargement…</string>
+
+    <!-- Chaînes spéciales (longues) -->
+    <string name="home_credits"><b>Développeurs :</b>n
+  Neamar &lt;neamar@neamar.fr>\n
+  Hartok &lt;hartok@hartok.fr>\n
+\n<b>Fork us on Github !</b>n
+  https://github.com/Neamar/OmnilogieAndroid/</string>
 
 </resources>
