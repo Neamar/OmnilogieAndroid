@@ -15,7 +15,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Votre recherche..." />
+            android:hint="Votre recherche..."
+            android:text="pi" />
 
         <ImageButton
             android:id="@+id/rechercher_button"
@@ -25,10 +26,11 @@
             android:contentDescription="Rechercher" />
 
     </LinearLayout>
-	
-    <WebView
+
+    <ListView
+        android:id="@+id/rechercher_liste"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/rechercher_web" />
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

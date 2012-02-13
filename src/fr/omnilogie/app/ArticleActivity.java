@@ -236,7 +236,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	}
 
 	/**
-	 * Méthode de callback utilisée pour traité le JSON une fois récupéré.
+	 * Méthode de callback utilisée pour traiter le JSON une fois récupéré.
 	 * 
 	 * @param objet JSON récupéré contenant les données de l'article
 	 */
