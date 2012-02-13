@@ -18,7 +18,10 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.LayoutAlgorithm;
@@ -79,6 +82,21 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		buttonRecherche.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				lancerRecherche();
+			}
+		});
+		
+		//Accrocher un évènement lorsque l'on appuie sur Entrée
+		EditText textRecherche = (EditText) findViewById(R.id.rechercher_text);
+		textRecherche.setOnKeyListener(new OnKeyListener() {
+			
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+				{
+					lancerRecherche();
+					return true;
+				}
+				
+				return false;
 			}
 		});
 		
