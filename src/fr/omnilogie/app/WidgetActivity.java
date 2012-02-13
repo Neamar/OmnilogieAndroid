@@ -4,51 +4,69 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.PendingIntent;
-import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
- * Activity animant le desktop widget.
+ * Activity en charge d'animer le widget de l'application.
+ * La fréquence de mise à jour du widget est configuré dans widget_provider.xml avec le paramètre 
+ * updatePeriodMillis.
+ * 
  * 
  * @author Benoit
  *
  */
 public class WidgetActivity extends AppWidgetProvider implements CallbackObject {
-	public static WidgetActivity Widget = null;
-	public static Context context;
-	public static AppWidgetManager appWidgetManager;
-	public static int appWidgetIds[];
-	public ArticleObject article;
+	
+	/**
+	 * Sauvegarde du contexte d'appel de l'update du widget
+	 */
+	protected Context context;
+	
+	/**
+	 * Sauvegarde de l'appWidgetManager
+	 */
+	protected AppWidgetManager appWidgetManager;
+	
+	/**
+	 * Sauvegarde des ID des instances du widget
+	 */
+	protected int appWidgetIds[];
 	
 	@Override
+	// Routine de mise à jour du widget, appelée suivant l'attribut updatePeriodMillis du Widget Provider.
 	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )	{		
-		if (null == context) context = WidgetActivity.context;
-		if (null == appWidgetManager) appWidgetManager = WidgetActivity.appWidgetManager;
-		if (null == appWidgetIds) appWidgetIds = WidgetActivity.appWidgetIds;
-
+		
 		Log.v("omni_widget", "Update du widget");
 		
-		WidgetActivity.Widget = this;
-		WidgetActivity.context = context;
-		WidgetActivity.appWidgetManager = appWidgetManager;
-		WidgetActivity.appWidgetIds = appWidgetIds;		
+		// Essaye de récupérer les paramètres indispensables s'ils sont absents
+		if (null == context) context = this.context;
+		if (null == appWidgetManager) appWidgetManager = this.appWidgetManager;
+		if (null == appWidgetIds) appWidgetIds = this.appWidgetIds;
+
+		// Sauvegarde les paramètres de mise à jour		
+		this.context = context;
+		this.appWidgetManager = appWidgetManager;
+		this.appWidgetIds = appWidgetIds;		
 		
-		String url = "http://omnilogie.fr/raw/articles.json?start=4&limit=1";
-		
+		// Récupération asynchrone des données sur le dernier article paru.
+		// La méthode callback est appelée quand la récupération est terminée.
+		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
+		
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
-	@Override 
+	@Override
+	// Routine d'initialisation du widget, appelée lors de la création d'une instance du widget.
 	public void onEnabled(Context context) {
 		
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);	
@@ -56,52 +74,42 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 		
 		Log.v("omni_widget", "Chargement du widget");
 		
-		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
-		
-		JSONRetriever jsonRetriever = new JSONRetriever();
-		jsonRetriever.getJSONArrayfromURL(url, this);
-		
 		super.onEnabled(context);
 	}
-	
-	public class UpdateService extends Service {
-		@Override
-		public void onStart(Intent intent, int startId) {
-			//WidgetActivity.Widget.onUpdate(context, appWidgetManager, appWidgetIds);
-			//Toast.makeText(context, "Update Widget", Toast.LENGTH_SHORT).show();
-		}
-		
-		@Override
-		public IBinder onBind(Intent arg0) {
-			return null;
-		}
-	}
 
+	/**
+	 * Récupère les données du JSON, les insère sur le widget et assigne l'action sur le clic.
+	 * 
+	 * @param objet contenant les informations sur l'article dans un {@link JSONArray} possédant un unique élément. 
+	 */
 	public void callback(Object objet) {
 		
 		if(objet != null)
 		{
 			JSONArray jsonArray = (JSONArray) objet;
+			
 			if(jsonArray != null)
 			{
-				// Insert les éléments JSON dans listeArticles
 				try{
-					article = new ArticleObject();
+					// Récupère l'article du JSON
+					ArticleObject article = new ArticleObject();
 					article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
 					
-					//Intent intent = new Intent(context, UpdateService.class);
+					// Récupère une référence vers la vue du widget
+					RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
+					
+					// Configuration de l'action sur l'event clic
 					Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
 					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 					PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-					
-					RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
 					remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 					
+					// Affichage des informations de l'article sur le widget
 					remoteViews.setTextViewText(R.id.widget_title, Html.fromHtml(article.titre));
 					remoteViews.setTextViewText(R.id.widget_subtitle, Html.fromHtml(article.accroche));
 
-					// Tell the widget manager
+					// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
 					final int N = appWidgetIds.length;
 					for (int i=0; i<N; i++) {
 						int appWidgetId = appWidgetIds[i];
@@ -109,7 +117,7 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 					}
 						
 				}catch(JSONException e) {
-					Log.e("log_tag", "Error parsing data "+e.toString());
+					Log.e("omni_widget", "Erreur à la mise à jour du widget "+e.toString());
 				}
 				
 			}
