@@ -20,38 +20,23 @@ import android.util.Log;
  *
  */
 public class JSONRetriever {
-		
-	CallbackObject callbackObject;
-	String url;
-	
 	/**
-	 * Récupère le JSONObject à l'url spécifié de manière synchrone.
-	 * 
-	 * @deprecated
-	 * @param url, au format String
-	 * @return le JSONObject
+	 * L'objet à "réveiller" une fois le chargement terminé.
+	 * Dans la plupart des cas, il s'agira d'une activité implémentant CallbackObject.
 	 */
-	public JSONObject getJSONfromURL(String url) {
-		JSONObject jObject = null;
-		
-		try{
-			String result = retrieveJSONResult(url);
-			
-			if(result != null && result.length() > 0)
-				jObject = new JSONObject(result);            
-		}catch(Exception e){
-			Log.e("log_tag", "Error parsing data "+e.toString());
-		}
-		
-		return jObject;
-	}
+	protected CallbackObject callbackObject;
 	
 	/**
-	 * Récupère le JSONObject à l'url spécifié de manière asynchrone.
+	 * L'URL à télécharger
+	 */
+	protected String url;
+	
+	/**
+	 * Récupère un élément JSONObject à l'url spécifiée, de manière asynchrone.
 	 * 
-	 * @param url url source au format String
-	 * @param callbackObject object CallbackObject appeler à la fin de l'opération
-	 * @return le JSONObject récupéré
+	 * @param url l'URL à télécharger
+	 * @param callbackObject l'object CallbackObject à appeler à la fin de l'opération
+	 * @return (via la méthode callback du paramètre callbackObject) le JSONObject récupéré
 	 */
 	public void getJSONfromURL(String url, CallbackObject callbackObject){
 		this.url = url;
@@ -60,35 +45,14 @@ public class JSONRetriever {
 		Thread thread = new Thread(null, downloadJSONObject);
 		thread.start();
 	}
+
 	
 	/**
-	 * Récupère le JSONArray à l'url spécifié de manière synchrone.
+	 * Récupère un élément JSONArray à l'url spécifiée, de manière asynchrone.
 	 * 
-	 * @deprecated
-	 * @param url, au format String
-	 * @return le JSONObject
-	 */
-	public JSONArray getJSONArrayfromURL(String url){
-		JSONArray jArray = null;
-		
-		try{
-			String result = retrieveJSONResult(url);
-			
-			if(result != null && result.length() > 0)
-				jArray = new JSONArray(result);            
-		}catch(Exception e){
-			Log.e("log_tag", "Error parsing data "+e.toString());
-		}
-		
-		return jArray;
-	}
-	
-	/**
-	 * Récupère le JSONArray à l'url spécifié de manière asynchrone.
-	 * 
-	 * @param url url source au format String
-	 * @param callbackObject object CallbackObject appeler à la fin de l'opération
-	 * @return le JSONObject
+	 * @param url l'URL à télécharger
+	 * @param callbackObject l'object CallbackObject à appeler à la fin de l'opération
+	 * @return (via la méthode callback du paramètre callbackObject) le JSONArray récupéré
 	 */
 	public void getJSONArrayfromURL(String url, CallbackObject callbackObject){
 		this.url = url;
@@ -99,8 +63,9 @@ public class JSONRetriever {
 	}
 	
 	/**
-	 * Récupère le JSON au format String à l'url spécifié.
+	 * Récupère la chaîne de caractères JSON à l'url spécifiée.
 	 * 
+	 * @see http://p-xr.com/android-tutorial-how-to-parse-read-json-data-into-a-android-listview/
 	 * @author Androidpxr | p-xr.com
 	 * @param url url source au format String
 	 * @return String récupéré contenant le JSON
@@ -110,16 +75,15 @@ public class JSONRetriever {
 		InputStream is = null;
 		String result = "";
 		
-		//http post
-		try{
+		try
+		{
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpGet httpget = new HttpGet(url);
 			HttpResponse response = httpclient.execute(httpget);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
-
-		}catch(Exception e){
-			Log.e("log_tag", "Error in http connection "+e.toString());
+		} catch(Exception e) {
+			Log.e("log", e.toString());
 		}
 		
 		//convert response to string
@@ -133,7 +97,7 @@ public class JSONRetriever {
 			is.close();
 			result=sb.toString();
 		}catch(Exception e){
-			Log.e("log_tag", "Error converting result "+e.toString());
+			Log.e("log", e.toString());
 		}
 		
 		return result;
@@ -143,7 +107,8 @@ public class JSONRetriever {
 	 * Routine de téléchargement d'un JSONArray.
 	 * L'url et l'objet sur lequel effectuer le callback doivent être spécifiés.
 	 */
-	protected Runnable downloadJSONArray = new Runnable() {
+	protected Runnable downloadJSONArray = new Runnable()
+	{
 		public void run() {
 			if(callbackObject != null && url != null)
 			{
@@ -155,7 +120,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jArray = new JSONArray(result);
 				}catch(Exception e){
-					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
+					Log.e("log", e.toString());
 				}
 				
 				callbackObject.callback(jArray);
@@ -177,14 +142,13 @@ public class JSONRetriever {
 					String result = retrieveJSONResult(url);
 					
 					if(result != null && result.length() > 0)
-						jObject = new JSONObject(result);            
+						jObject = new JSONObject(result);
 				}catch(Exception e){
-					Log.e("log_tag", "Error parsing data "+url+" : "+e.toString());
+					Log.e("log", e.toString());
 				}
 				
 				callbackObject.callback(jObject);
 			}
 		}
 	};
-	
 }
