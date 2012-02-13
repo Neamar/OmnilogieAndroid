@@ -64,6 +64,18 @@ public class HomeActivity extends DefaultActivity {
 				startActivity(i);
 			}
 		});
+		
+		/*
+		 * BOUTON : Article au hasard
+		 */
+		RelativeLayout buttonRecherche = ((RelativeLayout) findViewById(R.id.home_recherche));
+		buttonRecherche.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent i = new Intent(v.getContext(), RechercheActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 	
 	/**
