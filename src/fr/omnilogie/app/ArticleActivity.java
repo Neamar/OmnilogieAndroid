@@ -47,7 +47,6 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Il suffit de lire l'URI avec lequel cette activité a été appelée
 			Uri uri = getIntent().getData();
 			String articleToDisplay = uri.getLastPathSegment();
-			Log.e("wtf", articleToDisplay);
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriver = new JSONRetriever();

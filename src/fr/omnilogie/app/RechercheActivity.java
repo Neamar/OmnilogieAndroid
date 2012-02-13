@@ -22,11 +22,14 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.LayoutAlgorithm;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Cette activité permet de faire des recherches en utilisant Google.
@@ -38,6 +41,7 @@ import android.widget.SimpleAdapter;
  */
 public class RechercheActivity extends SpecialActivity implements CallbackObject {
 	private ArrayList<HashMap<String, Spanned>> resultats;
+	private ArrayList<String> urls;
 	protected ListView listView;
 	protected RechercheActivity rechercheActivity = this;
 	
@@ -51,11 +55,18 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		ImageButton buttonRecherche = (ImageButton) findViewById(R.id.rechercher_button);
 		
 		buttonRecherche.setOnClickListener(new View.OnClickListener() {
-			
 			public void onClick(View v) {
 				lancerRecherche();
 			}
 		});
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + urls.get(position));
+				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(i);
+				}
+			});
 
 	}
 	
@@ -75,8 +86,8 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		
 		String userQuery = URLEncoder.encode(textRecherche.getText().toString());
 		
-		JSONRetriever jsonRetriver = new JSONRetriever();
-		jsonRetriver.getJSONfromURL(baseUrl +restrainQuery+userQuery, this);
+		JSONRetriever jsonRetriever = new JSONRetriever();
+		jsonRetriever.getJSONfromURL(baseUrl +restrainQuery+userQuery, this);
 	}
 	
 	/**
@@ -89,6 +100,7 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		if(jsonDatas != null)
 		{
 			resultats = new ArrayList<HashMap<String,Spanned>>();
+			urls = new ArrayList<String>();
 			try {
 				JSONArray jsonArray = jsonDatas.getJSONObject("responseData").getJSONArray("results");
 				for(int i=0;i<jsonArray.length();i++)
@@ -98,8 +110,9 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 					HashMap<String,Spanned> resultat = new HashMap<String,Spanned>();
 					
 					resultat.put("titre", Html.fromHtml(Html.toHtml(decodeJson(jsonResult, "titleNoFormatting")).replace("| Un article d'Omnilogie.fr", "")));
-					resultat.put("url", decodeJson(jsonResult, "unescapedUrl"));
 					resultat.put("fragment", decodeJson(jsonResult, "content"));
+					
+					urls.add(jsonResult.getString("unescapedUrl").replace("http://omnilogie.fr/O/", ""));
 					
 					resultats.add(resultat);
 				}
