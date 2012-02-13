@@ -134,7 +134,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
+		boolean r = super.onCreateOptionsMenu(menu);
 		
 		//Récupérer le menu pour les articles :
 		MenuInflater inflater = getMenuInflater();
@@ -157,7 +157,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 				sources.add(0, i, i, article.sourcesTitre.get(i));
 			}
 		}
-		return true;
+		return r;
 	}
 	
 	

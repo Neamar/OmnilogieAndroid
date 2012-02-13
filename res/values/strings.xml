@@ -3,5 +3,13 @@
 
     <string name="app_name">Omnilogie</string>
     <string name="widget_name">Omnilogisme du jour</string>
+    <string name="credits">
+<b>Développeurs :</b>\n
+  Neamar &lt;neamar@neamar.fr&gt;\n
+  Hartok &lt;hartok@hartok.fr&gt;\n
+\n
+<b>Fork us on Github !</b>\n
+  https://github.com/Neamar/OmnilogieAndroid/
+</string>
 
 </resources>
