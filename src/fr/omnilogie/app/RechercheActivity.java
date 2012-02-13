@@ -94,6 +94,8 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 				startActivity(i);
 				}
 			});
+		
+		isLoading(true);
 	}
 	
 	
@@ -180,6 +182,8 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 
 		public void run()
 		{
+			isLoading(false);
+			
 			//Adaptateur classique pour les données simples :
 			ListAdapter adapter = new SimpleAdapter(rechercheActivity, resultats , R.layout.item_recherche_resultat, 
 					new String[] { "titre", "fragment" }, 
