@@ -4,30 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical" >
-
-        <EditText
-            android:id="@+id/rechercher_text"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Votre recherche..."
-            android:singleLine="true"
-            android:text="pi" />
-
-        <ImageButton
-            android:id="@+id/rechercher_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/recherche"
-            android:contentDescription="Rechercher" />
-
-    </LinearLayout>
-
     <ListView
         android:id="@+id/rechercher_liste"
         android:layout_width="fill_parent"

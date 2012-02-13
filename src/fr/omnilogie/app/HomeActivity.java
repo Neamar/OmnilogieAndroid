@@ -72,8 +72,7 @@ public class HomeActivity extends DefaultActivity {
 		buttonRecherche.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Intent i = new Intent(v.getContext(), RechercheActivity.class);
-				startActivity(i);
+				onSearchRequested();
 			}
 		});
 	}

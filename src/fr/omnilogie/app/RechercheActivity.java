@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,29 +77,13 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		super.onCreate(savedInstanceState);
 		setTitle("Rechercher dans les omnilogismes");
 		setContentView(R.layout.activity_recherche);
-		
-		//Accrocher un évènement au clic sur le bouton rechercher
-		ImageButton buttonRecherche = (ImageButton) findViewById(R.id.rechercher_button);
-		buttonRecherche.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				lancerRecherche();
-			}
-		});
-		
-		//Accrocher un évènement lorsque l'on appuie sur Entrée
-		EditText textRecherche = (EditText) findViewById(R.id.rechercher_text);
-		textRecherche.setOnKeyListener(new OnKeyListener() {
-			
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-				{
-					lancerRecherche();
-					return true;
-				}
-				
-				return false;
-			}
-		});
+
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			lancerRecherche(query);
+		}
+
 		
 		//Accrocher un évènement lors d'un clic sur un élément de la liste afin de lancer l'application Omnilogie
 		listView = (ListView) findViewById(R.id.rechercher_liste);
@@ -114,25 +99,25 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 	
 	/**
 	 * Lance la recherche sur le texte actuellement entré dans l'EditText.
+	 * 
+	 * @param texteRecherche le texte recherché
 	 */
-	protected void lancerRecherche()
+	protected void lancerRecherche(String texteRecherche)
 	{
-		String textRecherche = ((EditText) findViewById(R.id.rechercher_text)).getText().toString();
-
 		//Construire l'URL à accéder :
 		// URL de base pour l'API Google, avec 8 résultats
 		String baseUrl = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=large&q=";
 		// Restreindre au site Omnilogie.fr et même plus spécifiquement aux articles
 		String restrainQuery = "site%3Aomnilogie.fr+intitle%3A%22Un+article+d%27Omnilogie.fr%22+";
 		// La partie définie par l'utilisateur
-		String userQuery = URLEncoder.encode(textRecherche);
+		String userQuery = URLEncoder.encode(texteRecherche);
 		
 		// Et télécharger le résultat
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONfromURL(baseUrl +restrainQuery+userQuery, this);
 		
 		//Définir le titre de l'activité pendant la recherche
-		setTitle("Recherche : " + textRecherche);
+		setTitle("Recherche : " + texteRecherche);
 	}
 	
 	/**
