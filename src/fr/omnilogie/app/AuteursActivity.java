@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class AuteursActivity extends DefaultActivity implements CallbackObject {
+public class AuteursActivity extends SpecialActivity implements CallbackObject {
 	private ListView listView;
 	
 	private ArrayList<HashMap<String, String>> auteurs = new ArrayList<HashMap<String, String>>();
