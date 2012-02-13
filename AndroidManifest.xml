@@ -109,7 +109,6 @@
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".RechercheActivity" />
-		<service android:name="WidgetAlarmService" android:label="Service de mise à jour du widget"></service>
     </application>
 
 </manifest>
