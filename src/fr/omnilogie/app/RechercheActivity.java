@@ -40,26 +40,50 @@ import android.widget.AdapterView.OnItemClickListener;
  *
  */
 public class RechercheActivity extends SpecialActivity implements CallbackObject {
+	/**
+	 * ArrayList utilisé pour les items de la liste.
+	 * Contient des objets Spanned, afin de décoder les entités HTML et de supprimer les
+	 * balises inclues.
+	 */
 	private ArrayList<HashMap<String, Spanned>> resultats;
+	
+	/**
+	 * Liste des URLs.
+	 * Ces URLs sont tronquées de la partie commune "http://omnilogie.fr/O/" et ne contiennent plus
+	 * que le titre sous forme d'URL.
+	 * 
+	 * Les index de cette liste sont liés aux index de `resultats`.
+	 */
 	private ArrayList<String> urls;
+	
+	/**
+	 * La listView qui affiche les résultats.
+	 * Doit être stocké en propriété afin qu'on puisse y accéder depuis le thread.
+	 */
 	protected ListView listView;
+	
+	/**
+	 * Référence à l'instance courante, pour le thread.
+	 */
 	protected RechercheActivity rechercheActivity = this;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		//Initialisation standard
 		super.onCreate(savedInstanceState);
 		setTitle("Rechercher dans les omnilogismes");
 		setContentView(R.layout.activity_recherche);
-		listView = (ListView) findViewById(R.id.rechercher_liste);
 		
+		//Accrocher un évènement au clic sur le bouton rechercher
 		ImageButton buttonRecherche = (ImageButton) findViewById(R.id.rechercher_button);
-		
 		buttonRecherche.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				lancerRecherche();
 			}
 		});
 		
+		//Accrocher un évènement lors d'un clic sur un élément de la liste afin de lancer l'application Omnilogie
+		listView = (ListView) findViewById(R.id.rechercher_liste);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + urls.get(position));
@@ -67,7 +91,6 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 				startActivity(i);
 				}
 			});
-
 	}
 	
 	
@@ -76,22 +99,27 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 	 */
 	protected void lancerRecherche()
 	{
-		EditText textRecherche = (EditText) findViewById(R.id.rechercher_text);
+		String textRecherche = ((EditText) findViewById(R.id.rechercher_text)).getText().toString();
 
-		// URL de base pour l'API Google
+		//Construire l'URL à accéder :
+		// URL de base pour l'API Google, avec 8 résultats
 		String baseUrl = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=large&q=";
-		
-		// Restreindre aux articles
+		// Restreindre au site Omnilogie.fr et même plus spécifiquement aux articles
 		String restrainQuery = "site%3Aomnilogie.fr+intitle%3A%22Un+article+d%27Omnilogie.fr%22+";
+		// La partie définie par l'utilisateur
+		String userQuery = URLEncoder.encode(textRecherche);
 		
-		String userQuery = URLEncoder.encode(textRecherche.getText().toString());
-		
+		// Et télécharger le résultat
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONfromURL(baseUrl +restrainQuery+userQuery, this);
+		
+		//Définir le titre de l'activité pendant la recherche
+		setTitle("Recherche : " + textRecherche);
 	}
 	
 	/**
-	 * Méthode de callback utilisée pour traiter le JSON une fois récupéré.
+	 * Méthode de callback utilisée pour traiter le JSON une fois celui-ci récupéré.
+	 * On arrive à cette méthode après la fonction lancerRecherche().
 	 * 
 	 * @param objet JSON récupéré contenant les données de l'article
 	 */
@@ -102,7 +130,10 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 			resultats = new ArrayList<HashMap<String,Spanned>>();
 			urls = new ArrayList<String>();
 			try {
+				//Lire le tableau.
+				//Cf. https://developers.google.com/web-search/docs/#fonje pour les détails
 				JSONArray jsonArray = jsonDatas.getJSONObject("responseData").getJSONArray("results");
+				
 				for(int i=0;i<jsonArray.length();i++)
 				{
 					JSONObject jsonResult = jsonArray.getJSONObject(i);
@@ -112,18 +143,28 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 					resultat.put("titre", Html.fromHtml(Html.toHtml(decodeJson(jsonResult, "titleNoFormatting")).replace("| Un article d'Omnilogie.fr", "")));
 					resultat.put("fragment", decodeJson(jsonResult, "content"));
 					
+					//Enregistrer l'URL et le résultat :
 					urls.add(jsonResult.getString("unescapedUrl").replace("http://omnilogie.fr/O/", ""));
-					
 					resultats.add(resultat);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
+			//Mettre à jour l'activité
 			runOnUiThread(remplirUIAvecDatas);
 		}
 	}
 	
+	/**
+	 * Renvoie un élément du JSON dans l'encodage correct, sous forme de Spanned.
+	 * @param jsonObject l'objet dans lequel on souhaite lire
+	 * @param key la clé à récupérer 
+	 * @return Un objet Spanned utilisable dans les TextEdit
+	 * 
+	 * @throws UnsupportedEncodingException
+	 * @throws JSONException
+	 */
 	protected Spanned decodeJson(JSONObject jsonObject, String key) throws UnsupportedEncodingException, JSONException
 	{
 		return Html.fromHtml(new String(jsonObject.getString(key).getBytes("ISO-8859-1"), "UTF-8"));
@@ -131,12 +172,12 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 	
 	/**
 	 * Termine la préparation de la vue, une fois que les données distantes ont été récupérées.
-	 *
 	 */
 	protected Runnable remplirUIAvecDatas = new Runnable() {
 
 		public void run()
 		{
+			//Adaptateur classique pour les données simples :
 			ListAdapter adapter = new SimpleAdapter(rechercheActivity, resultats , R.layout.item_recherche_resultat, 
 					new String[] { "titre", "fragment" }, 
 					new int[] { R.id.item_recherche_resultat_titre, R.id.item_recherche_resultat_fragment });
