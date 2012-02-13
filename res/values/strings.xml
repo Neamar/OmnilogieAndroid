@@ -11,5 +11,6 @@
 <b>Fork us on Github !</b>\n
   https://github.com/Neamar/OmnilogieAndroid/
 </string>
+    <string name="widget_loading_label">Chargement&#8230;</string>
 
 </resources>
