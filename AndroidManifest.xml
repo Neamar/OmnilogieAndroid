@@ -91,6 +91,7 @@
         </receiver>
 		
 		<service android:name=".WidgetActivity$UpdateService" />
+		<service android:name="WidgetAlarmService" android:label="Service de mise à jour du widget"></service>
     </application>
 
 </manifest>
