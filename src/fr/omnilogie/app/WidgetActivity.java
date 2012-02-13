@@ -38,8 +38,8 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 		WidgetActivity.Widget = this;
 		WidgetActivity.context = context;
 		WidgetActivity.appWidgetManager = appWidgetManager;
-		WidgetActivity.appWidgetIds = appWidgetIds;
-				
+		WidgetActivity.appWidgetIds = appWidgetIds;		
+		
 		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		
 		JSONRetriever jsonRetriever = new JSONRetriever();
@@ -48,10 +48,16 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 
 	@Override 
 	public void onEnabled(Context context) {
+		
+		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);	
+		remoteViews.setTextViewText(R.id.widget_title, "Chargement...");
+		
 		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
+		
+		super.onEnabled(context);
 	}
 	
 	public class UpdateService extends Service {
