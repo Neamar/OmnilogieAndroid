@@ -35,12 +35,14 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 		if (null == appWidgetManager) appWidgetManager = WidgetActivity.appWidgetManager;
 		if (null == appWidgetIds) appWidgetIds = WidgetActivity.appWidgetIds;
 
+		Log.v("omni_widget", "Update du widget");
+		
 		WidgetActivity.Widget = this;
 		WidgetActivity.context = context;
 		WidgetActivity.appWidgetManager = appWidgetManager;
 		WidgetActivity.appWidgetIds = appWidgetIds;		
 		
-		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+		String url = "http://omnilogie.fr/raw/articles.json?start=4&limit=1";
 		
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
@@ -51,6 +53,8 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 		
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);	
 		remoteViews.setTextViewText(R.id.widget_title, "Chargement...");
+		
+		Log.v("omni_widget", "Chargement du widget");
 		
 		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		
