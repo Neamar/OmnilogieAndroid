@@ -23,7 +23,7 @@ import android.widget.Toast;
  *
  */
 public abstract class DefaultActivity extends Activity {
-	protected ProgressDialog progressDialog;
+	protected ProgressDialog progressDialog = null;
 	protected String toastText;
 	
 	/**
@@ -37,7 +37,7 @@ public abstract class DefaultActivity extends Activity {
 		{
 			progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
 		}
-		else
+		else if(progressDialog != null)
 		{
 			progressDialog.dismiss();
 		}
