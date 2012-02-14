@@ -33,10 +33,10 @@
     <string name="widget_loading_label">Chargement…</string>
 
     <!-- Chaînes spéciales (longues) -->
-    <string name="home_credits"><b>Développeurs :</b>n
+    <string name="home_credits"><b>Développeurs :</b> \n
   Neamar &lt;neamar@neamar.fr>\n
   Hartok &lt;hartok@hartok.fr>\n
-\n<b>Fork us on Github !</b>n
-  https://github.com/Neamar/OmnilogieAndroid/</string>
+\n<b>Fork us on Github !</b> \n
+<a href="https://github.com/Neamar/OmnilogieAndroid/">https://github.com/Neamar/OmnilogieAndroid/</a></string>
 
 </resources>
