@@ -83,7 +83,7 @@ public class JSONRetriever {
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
 		} catch(Exception e) {
-			Log.e("log", e.toString());
+			Log.e("omni", e.toString());
 		}
 		
 		//convert response to string
@@ -97,7 +97,7 @@ public class JSONRetriever {
 			is.close();
 			result=sb.toString();
 		}catch(Exception e){
-			Log.e("log", e.toString());
+			Log.e("omni", e.toString());
 		}
 		
 		return result;
@@ -120,7 +120,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jArray = new JSONArray(result);
 				}catch(Exception e){
-					Log.e("log", e.toString());
+					Log.e("omni", e.toString());
 				}
 				
 				callbackObject.callback(jArray);
@@ -144,7 +144,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jObject = new JSONObject(result);
 				}catch(Exception e){
-					Log.e("log", e.toString());
+					Log.e("omni", e.toString());
 				}
 				
 				callbackObject.callback(jObject);

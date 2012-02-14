@@ -117,7 +117,7 @@ public class WidgetActivity extends AppWidgetProvider implements CallbackObject 
 					}
 						
 				}catch(JSONException e) {
-					Log.e("omni_widget", "Erreur à la mise à jour du widget "+e.toString());
+					Log.e("omni", e.toString());
 				}
 				
 			}

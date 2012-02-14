@@ -165,7 +165,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 				adapter.notifyDataSetChanged();
 				
 			} catch (Exception e) {
-				 Log.e("log_tag", "Erreur pendant l'update UI de la ListView "+e.toString());
+				Log.e("omni", e.toString());
 			}
 	
 			// Fin de l'opération
@@ -195,7 +195,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 						dernierArticle++;
 					}
 				}catch(JSONException e) {
-					Log.e("log_tag", "Error parsing data "+e.toString());
+					Log.e("omni", e.toString());
 				}
 				
 				// met à jour l'UI sur le thread dédié

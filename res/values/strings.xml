@@ -24,6 +24,7 @@
     <string name="liste_item_placeholder_auteur">Auteur</string>
 
     <!-- Chaînes pour l'activité Recherche -->
+    <string name="recherche_popup_hint">Rechercher dans les omnilogismes</string>
     <string name="recherche_item_placeholder_titre">Titre</string>
     <string name="recherche_item_placeholder_fragment">Fragment d\'article</string>
 
