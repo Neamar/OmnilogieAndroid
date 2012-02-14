@@ -202,6 +202,10 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 				runOnUiThread(majListView);
 			}
 		}
+		else
+		{
+			unableToConnect();
+		}
 		
 	}
 	

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * Activité par défaut.
@@ -23,6 +24,7 @@ import android.view.MenuItem;
  */
 public abstract class DefaultActivity extends Activity {
 	protected ProgressDialog progressDialog;
+	protected String toastText;
 	
 	/**
 	 * Affiche ou non un spinner indiquant que l'activité est en train de charger ses données.
@@ -112,4 +114,43 @@ public abstract class DefaultActivity extends Activity {
 		
 		return super.onContextItemSelected(item);
 	}
+	
+	/**
+	 * Retourne à {@link HomeActivity} et affiche le message dans un {@link Toast}.
+	 * @param message à afficher 
+	 */
+	protected void unableToConnect(String message) {
+		
+		showToast(message);		
+		startActivity(new Intent(this, HomeActivity.class));
+	}
+	
+	/**
+	 * Retourne à {@link HomeActivity} et affiche un message standard dans un {@link Toast}.
+	 */
+	protected void unableToConnect() {
+		final String message = "Problème de connexion. Veuillez réessayer ultérieurement.";
+		unableToConnect(message);
+	}
+	
+	/**
+	 * Affiche un toast contenant le message
+	 * 
+	 * @param message à afficher dans le toast
+	 */
+	protected void showToast(String message) {
+		
+		toastText = message;
+		
+		Runnable showToastRunnable = new Runnable() {
+			public void run() {
+				Toast toast = Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		};
+		
+		runOnUiThread(showToastRunnable);
+		
+	}
+	
 }
