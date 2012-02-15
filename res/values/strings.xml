@@ -6,7 +6,7 @@
     <string name="widget_name">Omnilogisme du jour</string>
 
     <!-- Chaînes pour l'activité home -->
-    <string name="home_disclaimer">Version ß</string>
+    <string name="home_disclaimer">Version ß - Blackberry</string>
     <string name="home_bulle"></string>
     <string name="home_bulle_accueil">Article du jour</string>
     <string name="home_bulle_liste">Liste des articles</string>

@@ -65,7 +65,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			isLoading(false);
 			//Définir le titre de l'activité.
 			//Parser à la recherche d'entités HTML qui doivent être rendues à l'écran (&oelig;, ...)
-			setTitle(Html.fromHtml(article.titre));
+			//setTitle(Html.fromHtml(article.titre));
 			
 			//Créer le HTML depuis le fichier template
 			//situé dans assets/article.html
