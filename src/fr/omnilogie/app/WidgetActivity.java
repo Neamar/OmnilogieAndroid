@@ -63,9 +63,8 @@ public class WidgetActivity extends AppWidgetProvider {
 		final Calendar nextUpdateTime = new GregorianCalendar(TimeZone.getTimeZone("France"));
 		nextUpdateTime.add(Calendar.DAY_OF_YEAR, 1);		
 		nextUpdateTime.set(Calendar.HOUR_OF_DAY, 23); //TODO charger dynamiquement l'offset de Paris (00h00 Paris -> 23h00 GMT)
-		final int randomOffset = new Random().nextInt(15); 
-		nextUpdateTime.set(Calendar.MINUTE, 15 + randomOffset); 
-		nextUpdateTime.set(Calendar.SECOND, 0); 
+		nextUpdateTime.set(Calendar.MINUTE, 1 + new Random().nextInt(5)); 
+		nextUpdateTime.set(Calendar.SECOND, new Random().nextInt(60)); 
 		nextUpdateTime.set(Calendar.MILLISECOND, 0);
 		
 		Log.v("omni_widget", "Prochaine mise à jour du widget le "+ nextUpdateTime.getTime().toString());

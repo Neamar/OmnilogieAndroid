@@ -103,7 +103,7 @@
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <service android:name=".WidgetActivity$UpdateService" />
+        <service android:name=".WidgetAlarmService" />
 
         <!-- Toutes les activités se servent de RechercheActivity pour effectuer les recherches -->
         <meta-data
