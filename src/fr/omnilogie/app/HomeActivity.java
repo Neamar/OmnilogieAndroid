@@ -2,12 +2,15 @@ package fr.omnilogie.app;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class HomeActivity extends DefaultActivity {
 	@Override
@@ -15,6 +18,8 @@ public class HomeActivity extends DefaultActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		
+		TextView disclaimer = (TextView) findViewById(R.id.disclaimer);
+		disclaimer.append(" – " + getVersionName());
 		/*
 		 * BOUTON : Article du jour 
 		 */
@@ -102,5 +107,18 @@ public class HomeActivity extends DefaultActivity {
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	protected String getVersionName()
+	{
+		try {
+			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			return pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "test";
 	}
 }
