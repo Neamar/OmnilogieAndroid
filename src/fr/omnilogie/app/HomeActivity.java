@@ -75,7 +75,9 @@ public class HomeActivity extends DefaultActivity {
 		buttonTop.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				onSearchRequested();
+				Uri uri = Uri.parse("content://fr.omnilogie.app/top");
+				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(i);
 			}
 		});
 	}

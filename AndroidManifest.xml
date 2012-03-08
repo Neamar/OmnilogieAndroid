@@ -70,6 +70,10 @@
                     android:host="fr.omnilogie.app"
                     android:path="/liste"
                     android:scheme="content" />
+                <data
+                    android:host="fr.omnilogie.app"
+                    android:path="/top"
+                    android:scheme="content" />
             </intent-filter>
         </activity>
 

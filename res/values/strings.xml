@@ -32,6 +32,9 @@
     <!-- Chaînes pour l'activité Widget -->
     <string name="widget_icone">Icone</string>
     <string name="widget_loading_label">Chargement…</string>
+    
+    <!-- Chaînes pour l'activité Top -->
+    <string name="top_header">Cette liste affiche le top des articles tel qu\'il a été voté par les membres. Pour élire le prochain article à apparaître, cliquez ici !</string>
 
     <!-- Chaînes spéciales (longues) -->
     <string name="home_credits"><b>Développeurs :</b> \n
