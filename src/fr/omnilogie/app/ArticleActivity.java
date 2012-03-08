@@ -49,6 +49,10 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 					.replace("content://fr.omnilogie.app/article/", "")
 					.replace("http://omnilogie.fr/O/", "");
 			
+			//Si le nom de l'article finit par un "?", le supprimer car il ferait bugger l'URL.
+			//L'API se chargera de retrouver l'article quand même.
+			if(articleToDisplay.lastIndexOf('?') == articleToDisplay.length() - 1)
+				articleToDisplay = articleToDisplay.substring(0, articleToDisplay.length() - 1);
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriever = new JSONRetriever();
