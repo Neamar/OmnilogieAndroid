@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -104,22 +105,26 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			WebViewClient webClient = new WebViewClient()
 			{
 				@Override
-				public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+				public boolean shouldOverrideUrlLoading(WebView view, String url)
 				{
+					
 					if (url.startsWith("http://omnilogie.fr/O/"))
 					{
+						Log.e("wtf", url);
 						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
 						//avec les nouveaux paramètres
 						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
 						Intent i = new Intent(Intent.ACTION_VIEW, uri);
 						startActivity(i);
-						
-						return true;
+					}
+					else
+					{
+						Uri uri = Uri.parse(url);
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						startActivity(i);
 					}
 					
-					//Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
-					//son navigateur préféré
-					return false;
+					return true;
 				}
 			};
 			webView.setWebViewClient(webClient);
