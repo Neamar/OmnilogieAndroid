@@ -4,26 +4,20 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="220dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:orientation="vertical" >
-
         <ImageView
             android:id="@+id/list_item_image"
-            android:layout_width="fill_parent"
-        	android:layout_height="fill_parent"
+       		android:layout_width="220dp"
+        	android:layout_height="53dp"
+        	android:layout_marginBottom="10dp"
+        	android:layout_marginTop="10dp"
+        	android:orientation="vertical"
             android:contentDescription="Bannière de l&apos;article"
             android:src="@drawable/petite_banniere" />
-    </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="73dp"
         android:layout_marginLeft="5dp"
         android:orientation="vertical" >
 
@@ -43,28 +37,29 @@
         android:text="Titre"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16dp" />
-
+
     <TextView
         android:id="@+id/list_item_subtitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-4dp"
+        android:layout_below="@id/list_item_title"
+        android:layout_marginBottom="-10dp"
         android:ellipsize="end"
         android:lines="2"
         android:padding="2dp"
         android:text="Accroche"
         android:textSize="13dp" />
-
+
     <TextView
         android:id="@+id/list_item_extra"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:lines="1"
-        android:padding="2dp"
         android:text="Auteur"
-        android:textSize="10dp" />
+        android:textSize="10dp"
+        android:layout_alignParentBottom="true" />
 
-	</LinearLayout>
+	</RelativeLayout>
 
 </LinearLayout>
