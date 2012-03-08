@@ -69,10 +69,10 @@ public class HomeActivity extends DefaultActivity {
 		});
 		
 		/*
-		 * BOUTON : Article au hasard
+		 * BOUTON : Top articles
 		 */
-		RelativeLayout buttonRecherche = ((RelativeLayout) findViewById(R.id.home_recherche));
-		buttonRecherche.setOnClickListener(new View.OnClickListener() {
+		RelativeLayout buttonTop = ((RelativeLayout) findViewById(R.id.home_top));
+		buttonTop.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				onSearchRequested();
