@@ -45,7 +45,10 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Quel article doit-on afficher ? Ce peut-être une ID spécifique ou l'article du jour.
 			//Il suffit de lire l'URI avec lequel cette activité a été appelée
 			Uri uri = getIntent().getData();
-			String articleToDisplay = uri.getLastPathSegment();
+			String articleToDisplay = uri.toString()
+					.replace("content://fr.omnilogie.app/article/", "")
+					.replace("http://omnilogie.fr/O/", "");
+			
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriever = new JSONRetriever();
@@ -110,7 +113,6 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 					
 					if (url.startsWith("http://omnilogie.fr/O/"))
 					{
-						Log.e("wtf", url);
 						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
 						//avec les nouveaux paramètres
 						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
