@@ -61,8 +61,6 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			setTitle("Derniers articles parus");
 		}
 		
-		tryExpandListView();
-
 		listView = ((ListView) findViewById(R.id.liste));
 		// ajout du footer
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
@@ -149,13 +147,14 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			
 			try {
 				
-				if(nouveauxArticles.size() == 0)
+				if(nouveauxArticles.size() < ARTICLES_A_CHARGER)
 				{
-					// aucun nouvel article : on désactive le chargement d'articles
+					// plus d'articles à récupérer : on désactive le chargement d'articles
 					listView.removeFooterView(loadingFooter);
 					updateAvailable = false;
 				}
-				else
+				
+				if(nouveauxArticles.size() > 0)
 				{
 					listeArticles.addAll(nouveauxArticles);
 					nouveauxArticles.clear();
