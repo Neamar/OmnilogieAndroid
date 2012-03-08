@@ -57,9 +57,9 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriever = new JSONRetriever();
 			jsonRetriever.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
+			
+			isLoading(true);
 		}
-		
-		isLoading(true);
 	}
 	
 	/**
