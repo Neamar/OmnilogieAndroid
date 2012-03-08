@@ -13,6 +13,7 @@
     <string name="home_bulle_auteurs">Auteurs</string>
     <string name="home_bulle_aleatoire">Au hasard</string>
     <string name="home_bulle_recherche">Recherche</string>
+    <string name="home_bulle_top">Top</string>
 
     <!-- Chaînes pour l'activité Auteurs -->
     <string name="auteurs_item_placeholder_auteur">Auteur</string>

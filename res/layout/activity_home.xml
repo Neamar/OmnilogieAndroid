@@ -52,13 +52,13 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="center" >
-
-        <!-- Rechercher -->
+        
+        <!-- Top -->
 
         <include
             android:layout_width="100dp"
             android:layout_height="100dp"
-            layout="@layout/bulle_recherche" />
+            layout="@layout/bulle_top" />
     </TableRow>
 
     <TextView
