@@ -109,6 +109,9 @@
 
         <service android:name=".WidgetAlarmService" />
 
+         <provider android:name="fr.omnilogie.app.OmnilogieProvider"
+            android:authorities="fr.omnilogie.app"/>
+        
         <!-- Toutes les activités se servent de RechercheActivity pour effectuer les recherches -->
         <meta-data
             android:name="android.app.default_searchable"
