@@ -29,17 +29,23 @@ public abstract class DefaultActivity extends Activity {
 	/**
 	 * Affiche ou non un spinner indiquant que l'activité est en train de charger ses données.
 	 * 
-	 * @param isLoading true pour afficher , false une fois le chargement terminé.
+	 * @param isLoading true pour afficher, false une fois le chargement terminé.
 	 */
 	protected void isLoading(boolean isLoading)
 	{
-		if(isLoading)
+		try
 		{
-			progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
-		}
-		else if(progressDialog != null)
+			if(isLoading)
+			{
+				progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
+			}
+			else if(progressDialog != null)
+			{
+				progressDialog.dismiss();
+			}
+		} catch(Exception e)
 		{
-			progressDialog.dismiss();
+			//Si on fait une rotation alors que l'icone était affichée, une Exception est lancée.
 		}
 	}
 	

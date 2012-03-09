@@ -86,7 +86,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		// initialisation du listener sur un clic
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			if(!headerLink.equals(null))
+			if(headerLink != null)
 			{
 				//Si la liste a un header :
 				if(position == 0)
