@@ -1,10 +1,5 @@
 package fr.omnilogie.app;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.json.JSONObject;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
