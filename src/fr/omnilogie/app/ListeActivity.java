@@ -28,7 +28,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	
 	String baseUrl;
 	
-	int dernierArticle = 0; // id du dernier article chargé
+	int prochainArticleATelecharger = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	Boolean updateAvailable = true;
 	String headerLink = null;
@@ -38,7 +38,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	private ListView listView;
 	
 	// Liste avec les méta-données des articles chargés
-	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
+	ArrayList<ArticleObject> listeArticles = null;
 	// Liste avec les méta-données des articles à ajouter
 	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
@@ -76,12 +76,25 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
 		listView.addFooterView(loadingFooter);
 		
+		// récupère la liste des article si elle a été conservée par une précédente instance
+		listeArticles = (ArrayList<ArticleObject>)getLastNonConfigurationInstance();
+		Log.v("omni_orientation", "Liste des articles restaurée : " + (listeArticles != null));
+		if(listeArticles == null)
+		{
+			// les articles n'ont pas pu être restaurés, on les télécharge
+			listeArticles = new ArrayList<ArticleObject>();
+			// chargement des articles (autre thread)
+			tryExpandListView();
+		}
+		else
+		{
+			prochainArticleATelecharger = listeArticles.size();
+		}
+		
 		// ajout de l'adapter
 		adapter = new ArticleObjectAdapter(this ,listeArticles);
 		listView.setAdapter(adapter);
 		
-		// chargement des articles (autre thread)
-		tryExpandListView();
 		
 		// initialisation du listener sur un clic
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -131,6 +144,12 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		});
 	}
 	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		// on sauvegarde la liste des articles pour la prochaine instance
+		return this.listeArticles.clone();
+	}
+	
 	/**
 	 * Essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread).
 	 * @return échec si true, de nouveaux articles sont certainement déjà en train d'être chargés
@@ -145,11 +164,11 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		}
 		else
 		{
-			Log.v("log_tag", "Ajout des articles "+dernierArticle
-					+" à "+(dernierArticle+ARTICLES_A_CHARGER) );
+			Log.v("log_tag", "Ajout des articles "+prochainArticleATelecharger
+					+" à "+(prochainArticleATelecharger+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
 
-			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
+			String url = baseUrl + "?start="+prochainArticleATelecharger+"&limit="+ARTICLES_A_CHARGER;
 			
 			JSONRetriever jsonRetriever = new JSONRetriever();
 			jsonRetriever.getJSONArrayfromURL(url, this);
@@ -213,7 +232,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
 						
 						nouveauxArticles.add(nouvelArticle);
-						dernierArticle++;
+						prochainArticleATelecharger++;
 					}
 				}catch(JSONException e) {
 					Log.e("omni", e.toString());
