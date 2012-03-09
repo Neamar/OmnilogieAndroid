@@ -44,14 +44,21 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//Quel article doit-on afficher ? Ce peut-être une ID spécifique ou l'article du jour.
 			//Il suffit de lire l'URI avec lequel cette activité a été appelée
 			Uri uri = getIntent().getData();
-			String articleToDisplay = uri.getLastPathSegment();
+			String articleToDisplay = uri.toString()
+					.replace("content://fr.omnilogie.app/article/", "")
+					.replace("http://omnilogie.fr/O/", "");
+			
+			//Si le nom de l'article finit par un "?", le supprimer car il ferait bugger l'URL.
+			//L'API se chargera de retrouver l'article quand même.
+			if(articleToDisplay.lastIndexOf('?') == articleToDisplay.length() - 1)
+				articleToDisplay = articleToDisplay.substring(0, articleToDisplay.length() - 1);
 			//Télécharge le contenu de l'article de manière asynchrone.
 			//La méthode callback est appelée après la récupération.
 			JSONRetriever jsonRetriever = new JSONRetriever();
 			jsonRetriever.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
+			
+			isLoading(true);
 		}
-		
-		isLoading(true);
 	}
 	
 	/**
@@ -104,8 +111,9 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			WebViewClient webClient = new WebViewClient()
 			{
 				@Override
-				public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+				public boolean shouldOverrideUrlLoading(WebView view, String url)
 				{
+					
 					if (url.startsWith("http://omnilogie.fr/O/"))
 					{
 						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
@@ -113,13 +121,15 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
 						Intent i = new Intent(Intent.ACTION_VIEW, uri);
 						startActivity(i);
-						
-						return true;
+					}
+					else
+					{
+						Uri uri = Uri.parse(url);
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						startActivity(i);
 					}
 					
-					//Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
-					//son navigateur préféré
-					return false;
+					return true;
 				}
 			};
 			webView.setWebViewClient(webClient);

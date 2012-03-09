@@ -24,12 +24,25 @@ $params = array(
 
 include('common.php');
 
+if(is_numeric($_GET['author_id']))
+	$Where = 'WHERE !ISNULL(Sortie) AND A.ID = ' . $_GET['author_id'];
+else if(isset($_GET['top']))
+{
+	$Where = 'JOIN (
+	SELECT MONTH(Sortie) AS Mois, YEAR(Sortie) AS Annee, MAX(NbVotes) AS Max
+	FROM OMNI_Omnilogismes
+	GROUP BY Mois, Annee
+	HAVING Max !=0
+	) Votes ON (Votes.Mois = MONTH(O.Sortie) AND Votes.Annee = YEAR(O.Sortie) AND Votes.Max = O.NbVotes)';
+}
+else
+	$Where = 'WHERE !ISNULL(Sortie)';
+
 
 $articles = Sql::query('SELECT O.ID AS ID, O.Titre AS T, A.Auteur AS A, O.Accroche AS Q, DATE_FORMAT(Sortie, "%d/%m/%y") AS S
 FROM OMNI_Omnilogismes O
 LEFT JOIN OMNI_Auteurs A ON (A.ID = O.Auteur)
-WHERE !ISNULL(Sortie)
-' . (is_numeric($_GET['author_id']) ? 'AND A.ID = ' . $_GET['author_id']:'') . '
+' . $Where . '
 ORDER BY Sortie ' . $_GET['order'] . '
 LIMIT ' . $_GET['start'] . ',' . $_GET['limit']);
 

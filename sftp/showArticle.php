@@ -22,7 +22,7 @@ if($_GET['titre'] == 'last')
 	$where = 'O.ID = (SELECT ID FROM OMNI_Omnilogismes ORDER BY Sortie DESC LIMIT 1)';
 } else if($_GET['titre'] == 'random')
 {
-	$where = '!ISNULL(Sortie) ORDER BY RAND()';
+	$where = '!ISNULL(O.Sortie) ORDER BY RAND()';
 } else if($_GET['titre'] != '')
 {
 	$titre = mysql_real_escape_string(utf8_encode(Encoding::decodeFromGet('titre')));
@@ -43,10 +43,14 @@ SELECT
 	O.Omnilogisme AS O,
 
 	A.Auteur AS A,
-	A.ID AS AID
+	A.ID AS AID,
+	Precedent.Titre AS Prev,
+	Suivant.Titre AS Next
 
 FROM OMNI_Omnilogismes O
 LEFT JOIN OMNI_Auteurs A ON (A.ID = O.Auteur)
+LEFT JOIN OMNI_Omnilogismes Precedent ON (Precedent.SuiviPar = O.ID)
+LEFT JOIN OMNI_Omnilogismes Suivant ON (O.SuiviPar = Suivant.ID)
 WHERE ' . $where . '
 LIMIT 1'));
 
@@ -58,7 +62,7 @@ if(!isset($article['ID']))
 	exit('Article introuvable.');
 
 //Ajouter une vue à l'article
-SQL::update('OMNI_Omnilogismes', $article['ID'],array('_NbVues'=>'NbVues+1'));
+SQL::update('OMNI_Omnilogismes', $article['ID'],array('_NbVues'=>'NbVues+1', '_NbVuesMobile'=>'NbVuesMobile+1'));
 
 
 
@@ -99,6 +103,18 @@ if(isset($article['Q']))
 
 Typo::setTexte(utf8_decode($article['O']));
 $article['O'] = ParseMath(utf8_encode(Typo::parse()));
+
+
+//Gérer les articles suivants / précédents
+if(!is_null($article['Prev']))
+{
+	$article['O'] = utf8_encode('<p class="read-previous-article"><a href="' . Link::omni($article['Prev']) . '">Avant de lire cet article, assurez-vous d\'avoir lu l\'épisode précédent !</a></p>') . "\n" . $article['O'];
+}
+if(!is_null($article['Next']))
+{
+	$article['O'] = $article['O'] . "\n" . utf8_encode('<p class="read-next-article"><a href="' . Link::omni($article['Next']) . '">Cet article vous a plu ? Courez lire la suite !</a></p>') . "\n";
+}
+unset($article['Prev'], $article['Next']);
 
 // Ajouter la bannière si nécessaire
 $bannerPath = '/images/Banner/' . $article['ID'] . '.png';

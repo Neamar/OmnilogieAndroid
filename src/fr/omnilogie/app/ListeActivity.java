@@ -31,6 +31,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	int dernierArticle = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	Boolean updateAvailable = true;
+	String headerLink = null;
 	ArticleObjectAdapter adapter;
 	
 	private View loadingFooter;
@@ -55,6 +56,15 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
 			setTitle("Articles de l'auteur");
 		}
+		else if(uri.getPath().equals("/top"))
+		{
+			baseUrl = "http://omnilogie.fr/raw/top.json";
+			setTitle("Top articles");
+			
+			View topHeader = getLayoutInflater().inflate(R.layout.item_liste_top, null);
+			((ListView) findViewById(R.id.liste)).addHeaderView(topHeader);
+			headerLink = "http://omnilogie.fr/Vote";
+		}
 		else
 		{
 			baseUrl = "http://omnilogie.fr/raw/articles.json";
@@ -75,7 +85,19 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		
 		// initialisation du listener sur un clic
 		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			if(!headerLink.equals(null))
+			{
+				//Si la liste a un header :
+				if(position == 0)
+				{
+					//Soit on a cliqué dessus, auquel cas on lance l'URI spécifiée
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(headerLink)));
+					return;
+				}
+				else
+					position--; //Soit on décale les offsets pour accéder à l'article correct.
+			}
 			ArticleObject article = listeArticles.get(position);
 			if(article != null)
 			{
