@@ -108,11 +108,11 @@ $article['O'] = ParseMath(utf8_encode(Typo::parse()));
 //Gérer les articles suivants / précédents
 if(!is_null($article['Prev']))
 {
-	$article['O'] = utf8_encode('<p class="read-previous-article"><a href="' . Link::omni($article['Prev']) . '">Avant de lire cet article, assurez-vous d\'avoir lu l\'épisode précédent !</a></p>') . "\n" . $article['O'];
+	$article['O'] = '<p class="read-previous-article"><a href="' . Link::omni($article['Prev']) . '">Avant de lire cet article, assurez-vous d\'avoir lu ' . utf8_encode('l\'épisode précédent') . ' !</a></p>' . "\n" . $article['O'];
 }
 if(!is_null($article['Next']))
 {
-	$article['O'] = $article['O'] . "\n" . utf8_encode('<p class="read-next-article"><a href="' . Link::omni($article['Next']) . '">Cet article vous a plu ? Courez lire la suite !</a></p>') . "\n";
+	$article['O'] = $article['O'] . "\n" . '<p class="read-next-article"><a href="' . Link::omni($article['Next']) . '">Cet article vous a plu ? Courez lire la suite !</a></p>' . "\n";
 }
 unset($article['Prev'], $article['Next']);
 
