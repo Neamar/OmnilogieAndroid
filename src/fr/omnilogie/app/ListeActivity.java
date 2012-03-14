@@ -77,7 +77,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		listView.addFooterView(loadingFooter);
 		
 		// récupère la liste des article si elle a été conservée par une précédente instance
-		listeArticles = (ArrayList<ArticleObject>)getLastNonConfigurationInstance();
+		listeArticles = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
 		Log.v("omni_orientation", "Liste des articles restaurée : " + (listeArticles != null));
 		if(listeArticles == null)
 		{
@@ -99,25 +99,29 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		// initialisation du listener sur un clic
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			if(headerLink != null)
-			{
-				//Si la liste a un header :
-				if(position == 0)
+				if(headerLink != null)
 				{
-					//Soit on a cliqué dessus, auquel cas on lance l'URI spécifiée
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(headerLink)));
-					return;
+					//Si la liste a un header :
+					if(position == 0)
+					{
+						//Soit on a cliqué dessus, auquel cas on lance l'URI spécifiée
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(headerLink)));
+						return;
+					}
+					else
+						position--; //Soit on décale les offsets pour accéder à l'article correct.
 				}
-				else
-					position--; //Soit on décale les offsets pour accéder à l'article correct.
-			}
-			ArticleObject article = listeArticles.get(position);
-			if(article != null)
-			{
-				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-				Intent i = new Intent(Intent.ACTION_VIEW, uri);
-				startActivity(i);
-			}
+				
+				if(position < listeArticles.size())//Vérifier que l'on n'a pas cliqué sur le throbber
+				{
+					ArticleObject article = listeArticles.get(position);
+					if(article != null)
+					{
+						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						startActivity(i);
+					}
+				}
 			}
 		});
 		
