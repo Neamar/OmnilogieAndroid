@@ -6,6 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,11 +104,16 @@ public class HomeActivity extends DefaultActivity {
 		if(item.getItemId() == 0)
 		{
 			//Afficher les crédits
-			new AlertDialog.Builder(HomeActivity.this)
+			AlertDialog d = new AlertDialog.Builder(HomeActivity.this)
 				.setTitle("Crédits")
-				.setMessage(getResources().getText(R.string.home_credits))
+				.setMessage(new SpannableString(getResources().getText(R.string.home_credits)))
 				.setPositiveButton(android.R.string.ok, null)
 				.show();
+			
+			//Il faut "ruser" pour avoir un lien cliquable
+			//@see http://stackoverflow.com/questions/1997328/android-clickable-hyperlinks-in-alertdialog
+			((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
 		}
 		
 		return super.onOptionsItemSelected(item);
