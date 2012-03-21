@@ -12,6 +12,7 @@ import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class HomeActivity extends DefaultActivity {
 		/*
 		 * BOUTON : Article du jour 
 		 */
-		RelativeLayout buttonArticle = ((RelativeLayout) findViewById(R.id.home_article));
+		ImageButton buttonArticle = ((ImageButton) findViewById(R.id.home_article_button));
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -38,7 +39,7 @@ public class HomeActivity extends DefaultActivity {
 		/*
 		 * BOUTON : Liste des articles
 		 */
-		RelativeLayout buttonListe = ((RelativeLayout) findViewById(R.id.home_liste));
+		ImageButton buttonListe = ((ImageButton) findViewById(R.id.home_liste_button));
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -50,7 +51,7 @@ public class HomeActivity extends DefaultActivity {
 		/*
 		 * BOUTON : Liste des auteurs
 		 */
-		RelativeLayout buttonAuteurs = ((RelativeLayout) findViewById(R.id.home_auteurs));
+		ImageButton buttonAuteurs = ((ImageButton) findViewById(R.id.home_auteurs_button));
 		buttonAuteurs.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -62,7 +63,7 @@ public class HomeActivity extends DefaultActivity {
 		/*
 		 * BOUTON : Article au hasard
 		 */
-		RelativeLayout buttonAleatoire = ((RelativeLayout) findViewById(R.id.home_aleatoire));
+		ImageButton buttonAleatoire = ((ImageButton) findViewById(R.id.home_aleatoire_button));
 		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -74,7 +75,7 @@ public class HomeActivity extends DefaultActivity {
 		/*
 		 * BOUTON : Top articles
 		 */
-		RelativeLayout buttonTop = ((RelativeLayout) findViewById(R.id.home_top));
+		ImageButton buttonTop = ((ImageButton) findViewById(R.id.home_top_button));
 		buttonTop.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
