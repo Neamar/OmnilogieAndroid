@@ -1,6 +1,7 @@
 package fr.omnilogie.app;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
 import java.util.TimeZone;
@@ -58,19 +59,25 @@ public class WidgetActivity extends AppWidgetProvider {
 			service = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		}
 
-		// On crée une alarme se déclenchant à 00h(randomOffset) heure de Paris le lendemain
+		// On crée une alarme se déclenchant à 00:0X:XX heure de Paris le lendemain
 		//Le random offset permet d'éviter de DDOS le serveur en faisant tous la requête à minuit pile !
+		TimeZone franceTimeZone = TimeZone.getTimeZone("GMT+1");
 		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		final Calendar nextUpdateTime = new GregorianCalendar(TimeZone.getTimeZone("France"));
-		nextUpdateTime.add(Calendar.DAY_OF_YEAR, 1);
-		nextUpdateTime.set(Calendar.HOUR_OF_DAY, 23); //TODO charger dynamiquement l'offset de Paris (00h00 Paris -> 23h00 GMT)
-		nextUpdateTime.set(Calendar.MINUTE, new Random().nextInt(5));
+		final Calendar nextUpdateTime = new GregorianCalendar();
+		nextUpdateTime.set(Calendar.HOUR_OF_DAY, 23 ); // Paris 00:00 > GMT 23:00
+		// Ajout du décalage dû à l'heure d'été, si applicable en France
+		if(franceTimeZone.inDaylightTime(new Date()))
+			nextUpdateTime.add(Calendar.HOUR_OF_DAY, franceTimeZone.getDSTSavings()); // Paris été : GMT+2
+		nextUpdateTime.set(Calendar.MINUTE, 1 + new Random().nextInt(5));
 		nextUpdateTime.set(Calendar.SECOND, 1 + new Random().nextInt(59));
 		nextUpdateTime.set(Calendar.MILLISECOND, 0);
+		// on passe au jour suivant si nécessaire
+		if(nextUpdateTime.before(new GregorianCalendar()))
+			nextUpdateTime.add(Calendar.DAY_OF_YEAR, 1);
 
 		Log.v("omni_widget", "Prochaine mise à jour du widget le "+ nextUpdateTime.getTime().toString());
 
-		alarmManager.set(AlarmManager.RTC, nextUpdateTime.getTime().getTime(), service);
+		alarmManager.set(AlarmManager.RTC, nextUpdateTime.getTimeInMillis(), service);
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
