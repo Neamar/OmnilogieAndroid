@@ -127,7 +127,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 				@Override
 				public CacheResponse get(URI uri, String s, Map<String, List<String>> headers) throws IOException {
 					final File file = new File(cacheDir, escape(uri.getPath()));
-					if (file.exists() && file.length()>100) {
+					if (file.length()>500) {
 						Log.v("omni_cache","Loading image from cache: "+ file.getName());
 						return new CacheResponse() {
 							@Override
@@ -141,6 +141,8 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 							}
 						};
 					} else {
+						Boolean deleted = file.getCanonicalFile().delete();
+						Log.v("omni_cache", "Deleting cached file "+file.getName()+"...\t Success: "+deleted);
 						return null;
 					}
 				}
