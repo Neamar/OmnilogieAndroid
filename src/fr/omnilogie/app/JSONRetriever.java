@@ -43,6 +43,7 @@ public class JSONRetriever {
 		this.callbackObject = callbackObject;
 		
 		Thread thread = new Thread(null, downloadJSONObject);
+		thread.setPriority(Thread.NORM_PRIORITY-1);
 		thread.start();
 	}
 
@@ -59,6 +60,7 @@ public class JSONRetriever {
 		this.callbackObject = callbackObject;
 		
 		Thread thread = new Thread(null, downloadJSONArray);
+		thread.setPriority(Thread.NORM_PRIORITY-1);
 		thread.start();
 	}
 	
