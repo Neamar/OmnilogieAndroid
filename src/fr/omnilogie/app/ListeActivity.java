@@ -8,7 +8,6 @@ import org.json.JSONException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -43,6 +42,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
 	/** Called when the activity is first created. */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,8 +77,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		listView.addFooterView(loadingFooter);
 		
 		// récupère la liste des article si elle a été conservée par une précédente instance
-		listeArticles = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
-		Log.v("omni_orientation", "Liste des articles restaurée : " + (listeArticles != null));
+		ArrayList<ArticleObject> lastNonConfigurationInstance = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
+		listeArticles = lastNonConfigurationInstance;
 		if(listeArticles == null)
 		{
 			// les articles n'ont pas pu être restaurés, on les télécharge
@@ -162,14 +162,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	{
 		Boolean echec = updateEnCours; 
 		
-		if(echec)
+		if(!echec)
 		{
-			Log.w("log_tag", "Attention : les articles suivants sont déjà en train d'être chargés.");
-		}
-		else
-		{
-			Log.v("log_tag", "Ajout des articles "+prochainArticleATelecharger
-					+" à "+(prochainArticleATelecharger+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
 
 			String url = baseUrl + "?start="+prochainArticleATelecharger+"&limit="+ARTICLES_A_CHARGER;
@@ -209,7 +203,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 				adapter.notifyDataSetChanged();
 				
 			} catch (Exception e) {
-				Log.e("omni", e.toString());
+				e.printStackTrace();
 			}
 	
 			// Fin de l'opération
@@ -239,7 +233,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 						prochainArticleATelecharger++;
 					}
 				}catch(JSONException e) {
-					Log.e("omni", e.toString());
+					e.printStackTrace();
 				}
 				
 				// met à jour l'UI sur le thread dédié

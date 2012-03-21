@@ -53,8 +53,6 @@ public class WidgetActivity extends AppWidgetProvider {
 		// Si c'est le premier lancement, on lance le service directement
 		if (service == null)
 		{
-			Log.v("omni_widget", "Mise à jour du widget");
-
 			context.startService(intent);
 			service = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		}

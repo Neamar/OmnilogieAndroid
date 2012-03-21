@@ -20,7 +20,6 @@ import java.util.Map;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -128,7 +127,6 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 				public CacheResponse get(URI uri, String s, Map<String, List<String>> headers) throws IOException {
 					final File file = new File(cacheDir, escape(uri.getPath()));
 					if (file.length()>500) {
-						Log.v("omni_cache","Loading image from cache: "+ file.getName());
 						return new CacheResponse() {
 							@Override
 							public Map<String, List<String>> getHeaders() throws IOException {
@@ -141,8 +139,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 							}
 						};
 					} else {
-						Boolean deleted = file.getCanonicalFile().delete();
-						Log.v("omni_cache", "Deleting cached file "+file.getName()+"...\t Success: "+deleted);
+						file.getCanonicalFile().delete();
 						return null;
 					}
 				}
