@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -89,16 +90,37 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 				e.printStackTrace();
 			}
 			
-			//Remplacer les placeholders par le texte de l'article
-			html = html.replace("{{banniere}}", article.banniere);
-			html = html.replace("{{titre}}", article.titre);
-			html = html.replace("{{accroche}}", article.accroche);
-			html = html.replace("{{omnilogisme}}", article.omnilogisme);
-			html = html.replace("{{auteur}}", article.auteur);
-			html = html.replace("{{dateParution}}", article.dateParution);
-			
-			//Afficher le contenu de l'article
 			WebView webView = ((WebView) findViewById(R.id.article));
+			
+			
+			//Remplacer les placeholders de contenu
+			html = html
+				.replace("{{banniere}}", article.banniere)
+				.replace("{{titre}}", article.titre)
+				.replace("{{accroche}}", article.accroche)
+				.replace("{{omnilogisme}}", article.omnilogisme)
+				.replace("{{auteur}}", article.auteur)
+				.replace("{{dateParution}}", article.dateParution);
+			
+			//Remplacer les placeholders de style
+			int largeurBanniere = Math.min(690, webView.getWidth());
+			int hauteurBanniere = Math.min(95, largeurBanniere * 95 / 690);
+			if(largeurBanniere != 0)
+			{
+				html = html
+					.replace("{{largeur_banniere}}", Integer.toString(largeurBanniere))
+					.replace("{{hauteur_banniere}}", Integer.toString(hauteurBanniere));
+			}
+			else
+			{
+				//Nous n'avons pas encore accès à la taille (c'est le cas lors d'une restauration)
+				//Dans ce cas, faire au mieux, de toute façon le placeholder ne servirait à rien.
+				html = html.replace("width:{{largeur_banniere}}px; height:{{hauteur_banniere}}px;", "max-width:100%");
+			}
+			
+			/*
+			 * Afficher le contenu de l'article
+			 */
 			
 			//Sur une seule colonne, pour éviter au maximum de devoir scroller horizontalement
 			//Dans certains cas toutefois, on ne peut rien y faire et le scroll horizontal apparaît
