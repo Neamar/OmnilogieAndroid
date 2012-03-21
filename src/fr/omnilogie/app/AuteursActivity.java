@@ -96,7 +96,6 @@ public class AuteursActivity extends SpecialActivity implements CallbackObject {
 						
 						idFromAuteur.put(data.getString("A"), data.getInt("ID"));
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

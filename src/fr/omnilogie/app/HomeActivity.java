@@ -122,7 +122,6 @@ public class HomeActivity extends DefaultActivity {
 			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			return pInfo.versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
