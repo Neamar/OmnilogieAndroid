@@ -76,9 +76,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
 		listView.addFooterView(loadingFooter);
 		
-		// récupère la liste des article si elle a été conservée par une précédente instance
-		ArrayList<ArticleObject> lastNonConfigurationInstance = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
-		listeArticles = lastNonConfigurationInstance;
+		// récupère la liste des article si elle a été conservée par une précédente instance 
+		listeArticles = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
 		if(listeArticles == null)
 		{
 			// les articles n'ont pas pu être restaurés, on les télécharge
