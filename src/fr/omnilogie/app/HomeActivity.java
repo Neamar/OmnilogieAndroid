@@ -20,9 +20,6 @@ public class HomeActivity extends DefaultActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
-		TextView disclaimer = (TextView) findViewById(R.id.disclaimer);
-		disclaimer.append(" – " + getVersionName());
 		/*
 		 * BOUTON : Article du jour 
 		 */
