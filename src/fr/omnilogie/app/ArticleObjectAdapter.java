@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class ArticleObjectAdapter extends BaseAdapter {
 	 * Adapte une liste d'ArticleObject dans un ListView
 	 * @param context
 	 * @param articleList
-     	*/
+	*/
 	public ArticleObjectAdapter(Context context, List<ArticleObject> articleList ) {
 		this.context = context;
 		this.articleList = articleList;
@@ -56,7 +55,7 @@ public class ArticleObjectAdapter extends BaseAdapter {
 			LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = vi.inflate(R.layout.item_liste_article, null);
 		} catch (Exception e) {
-			Log.e("omni", e.toString());
+			e.printStackTrace();
 		}
 		
 		ArticleObject article = articleList.get(position);

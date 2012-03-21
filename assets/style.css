@@ -2,7 +2,7 @@
  * Style pour la bannière : ne doit pas déborder
  */
 .banniere_holder { text-align:center; }
-.banniere_holder img { max-width:100%;}
+.banniere_holder img { background:url("file:///android_asset/banniere.png"); background-size:100%; -webkit-background-size:100%;}
 
 /**
  * Style pour le titre et l'accroche

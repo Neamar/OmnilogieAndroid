@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +20,6 @@ public class HomeActivity extends DefaultActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
-		TextView disclaimer = (TextView) findViewById(R.id.disclaimer);
-		disclaimer.append(" – " + getVersionName());
 		/*
 		 * BOUTON : Article du jour 
 		 */
@@ -126,7 +122,6 @@ public class HomeActivity extends DefaultActivity {
 			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			return pInfo.versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
