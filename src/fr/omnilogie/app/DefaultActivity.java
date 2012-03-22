@@ -70,7 +70,9 @@ public abstract class DefaultActivity extends Activity {
 		//Traitement des menus standards :
 		switch(item.getItemId()) {
 		case R.id.menu_aleatoire:
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random")));
+			Intent i = new Intent(this, ArticleActivity.class);
+			i.putExtra("titre", "random");
+			startActivity(i);
 			break;
 		case R.id.menu_recherche:
 			onSearchRequested();

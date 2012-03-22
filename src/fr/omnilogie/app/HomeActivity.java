@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class HomeActivity extends DefaultActivity {
@@ -27,7 +26,8 @@ public class HomeActivity extends DefaultActivity {
 		buttonArticle.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/last"));
+				Intent i = new Intent(v.getContext(), ArticleActivity.class);
+				i.putExtra("titre", "last");
 				startActivity(i);
 			}
 		});
@@ -63,7 +63,8 @@ public class HomeActivity extends DefaultActivity {
 		buttonAleatoire.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random"));
+				Intent i = new Intent(v.getContext(), ArticleActivity.class);
+				i.putExtra("titre", "random");
 				startActivity(i);
 			}
 		});

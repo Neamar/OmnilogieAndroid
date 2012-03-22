@@ -116,8 +116,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 					ArticleObject article = listeArticles.get(position);
 					if(article != null)
 					{
-						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						Intent i = new Intent(view.getContext(), ArticleActivity.class);
+						i.putExtra("titre", Integer.toString(article.id));
 						startActivity(i);
 					}
 				}

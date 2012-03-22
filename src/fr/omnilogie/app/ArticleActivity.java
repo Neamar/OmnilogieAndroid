@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,12 +46,22 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 		}
 		
 		//Rien en mémoire, il faut charger.
+		String articleToDisplay;
+		
 		//Quel article doit-on afficher ? Ce peut-être une ID spécifique ou l'article du jour.
 		//Il suffit de lire l'URI avec lequel cette activité a été appelée
 		Uri uri = getIntent().getData();
-		String articleToDisplay = uri.toString()
+		if(uri == null)
+		{
+			articleToDisplay = getIntent().getStringExtra("titre");
+		}
+		else
+		{
+			//L'activité a été lancée depuis une URI
+			articleToDisplay = uri.toString()
 				.replace("content://fr.omnilogie.app/article/", "")
 				.replace("http://omnilogie.fr/O/", "");
+		}
 		
 		//Si le nom de l'article finit par un "?", le supprimer car il ferait bugger l'URL.
 		//L'API se chargera de retrouver l'article quand même.
@@ -144,8 +153,8 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 					{
 						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
 						//avec les nouveaux paramètres
-						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
-						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						Intent i = new Intent(view.getContext(), ArticleActivity.class);
+						i.putExtra("titre", url.substring(22));
 						startActivity(i);
 					}
 					else
