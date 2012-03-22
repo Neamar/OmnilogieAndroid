@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -39,7 +38,7 @@ public class HomeActivity extends DefaultActivity {
 		buttonListe.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/liste"));
+				Intent i = new Intent(v.getContext(), ListeActivity.class);
 				startActivity(i);
 			}
 		});
@@ -76,8 +75,8 @@ public class HomeActivity extends DefaultActivity {
 		buttonTop.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Uri uri = Uri.parse("content://fr.omnilogie.app/top");
-				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				Intent i = new Intent(v.getContext(), ListeActivity.class);
+				i.putExtra("top", true);
 				startActivity(i);
 			}
 		});

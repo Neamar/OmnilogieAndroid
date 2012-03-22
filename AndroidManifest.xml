@@ -26,8 +26,7 @@
 
         <!--
         ACTIVITY : Article
-        Accessible par intention implicite content://fr.omnilogie.app/article/last
-        Accessible par intention implicite content://fr.omnilogie.app/article/<ID-numérique>
+        Accessible par intention implicite http://omnilogie.fr/O/...
         -->
         <activity
             android:name=".ArticleActivity"
@@ -39,10 +38,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="fr.omnilogie.app"
-                    android:pathPrefix="/article"
-                    android:scheme="content" />
-                <data
                     android:host="omnilogie.fr"
                     android:pathPrefix="/O/"
                     android:scheme="http" />
@@ -51,8 +46,9 @@
 
         <!--
         ACTIVITY : Liste d'articles
-        Accessible par intention implicite content://fr.omnilogie.app/liste
-        Accessible par intention implicite content://fr.omnilogie.app/auteur/<ID-numérique>
+        Accessible par intention implicite http://omnilogie.fr/Omnilogistes/...
+        Accessible par intention implicite http://omnilogie.fr/Top
+        Accessible par intention implicite http://omnilogie.fr/O/
         -->
         <activity
             android:name=".ListeActivity"
@@ -63,18 +59,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="fr.omnilogie.app"
-                    android:pathPrefix="/auteur"
-                    android:scheme="content" />
-                <data
-                    android:host="fr.omnilogie.app"
-                    android:path="/liste"
-                    android:scheme="content" />
-                <data
-                    android:host="fr.omnilogie.app"
-                    android:path="/top"
-                    android:scheme="content" />
             </intent-filter>
         </activity>
 

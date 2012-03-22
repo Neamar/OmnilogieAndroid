@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,8 +42,8 @@ public class AuteursActivity extends SpecialActivity implements CallbackObject {
 				String nomAuteur = ((TextView) view.findViewById(R.id.item_auteurs_auteur_nomAuteur)).getText().toString();
 				String auteur = Integer.toString(idFromAuteur.get(nomAuteur));
 				
-				Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + auteur);
-				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				Intent i = new Intent(view.getContext(), ListeActivity.class);
+				i.putExtra("auteur", auteur);
 				startActivity(i);
 				}
 			});

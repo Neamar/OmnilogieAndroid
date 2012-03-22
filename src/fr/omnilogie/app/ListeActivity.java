@@ -8,6 +8,7 @@ import org.json.JSONException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -49,18 +50,16 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		setContentView(R.layout.activity_listes);
 		
 		//Quelle liste afficher ?
-		//Choisir en fonction de l'URI.
-		Uri uri = getIntent().getData();
-		if(uri.getPath().startsWith("/auteur/"))
+		if(getIntent().hasExtra("auteur"))
 		{
-			baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+			baseUrl = "http://omnilogie.fr/raw/auteurs/" + getIntent().getStringExtra("auteur") + ".json";
+			Log.e("wtf", baseUrl);
 			setTitle("Articles de l'auteur");
 		}
-		else if(uri.getPath().equals("/top"))
+		else if(getIntent().hasExtra("top"))
 		{
 			baseUrl = "http://omnilogie.fr/raw/top.json";
 			setTitle("Top articles");
-			
 			View topHeader = getLayoutInflater().inflate(R.layout.item_liste_top, null);
 			((ListView) findViewById(R.id.liste)).addHeaderView(topHeader);
 			headerLink = "http://omnilogie.fr/Vote";

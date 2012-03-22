@@ -8,7 +8,6 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
@@ -72,9 +71,9 @@ public class WidgetAlarmService extends Service implements CallbackObject {
 					RemoteViews remoteViews = new RemoteViews(WidgetActivity.context.getPackageName(), R.layout.activity_widget);
 
 					// Configuration de l'action sur l'event clic
-					Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+					Intent intent = new Intent();
 					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
+					intent.putExtra("titre", Integer.toString(article.id));
 					PendingIntent pendingIntent = PendingIntent.getActivity(WidgetActivity.context, 0, intent, 0);
 					remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 

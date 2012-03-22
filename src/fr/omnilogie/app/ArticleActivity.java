@@ -48,19 +48,19 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 		//Rien en mémoire, il faut charger.
 		String articleToDisplay;
 		
-		//Quel article doit-on afficher ? Ce peut-être une ID spécifique ou l'article du jour.
-		//Il suffit de lire l'URI avec lequel cette activité a été appelée
-		Uri uri = getIntent().getData();
-		if(uri == null)
+		//Quel article doit-on afficher ?
+		//La réponse est dans le paramètre titre.
+		if(getIntent().hasExtra("titre"))
 		{
 			articleToDisplay = getIntent().getStringExtra("titre");
+			if(articleToDisplay == null)
+				articleToDisplay = Integer.toString(getIntent().getIntExtra("titre", 1));
 		}
 		else
 		{
-			//L'activité a été lancée depuis une URI
-			articleToDisplay = uri.toString()
-				.replace("content://fr.omnilogie.app/article/", "")
-				.replace("http://omnilogie.fr/O/", "");
+			//Le paramètre titre n'est pas fourni
+			//L'activité a été lancée depuis le site web
+			articleToDisplay = getIntent().getData().toString().replace("http://omnilogie.fr/O/", "");
 		}
 		
 		//Si le nom de l'article finit par un "?", le supprimer car il ferait bugger l'URL.
@@ -269,13 +269,13 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	
 	/**
 	 * Appui sur le menu "autres articles du même auteur".
-	 * Charge l'activité auteur.
+	 * Charge l'activité Liste avec le paramètre auteur.
 	 */
 	protected void onOtherBySameAuthor()
 	{
-		Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
-		Intent i = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(i);
+		Intent i = new Intent(this, ListeActivity.class);
+		i.putExtra("auteur", Integer.toString(article.auteurId));
+		startActivity(i);
 	}
 
 	/**
