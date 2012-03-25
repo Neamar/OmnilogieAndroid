@@ -1,81 +1,50 @@
 package fr.omnilogie.app;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Random;
-import java.util.TimeZone;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
- * Activity en charge de programmer les mises à jour du widget.
- * Ces mises à jour sont réalisées par {@link WidgetAlarmService} via une alarme ou directement.
- *
+ * Classe en charge de mettre à jour le ou les instances du Widget.
  *
  * @author Benoit
  *
  */
-public class WidgetActivity extends AppWidgetProvider {
+public class WidgetActivity extends AppWidgetProvider implements CallbackObject {
 
 	/**
-	 * Sauvegarde du contexte d'appel de l'update du widget pour pouvoir y accéder lorsqu'on aura récupérer les données
+	 * Sauvegarde des infos pour mettre à jour le widget quand les données auront été récupérées.
 	 */
-	public static Context context;
+	private Context context;
+	private int appWidgetIds[];	
+	private AppWidgetManager appWidgetManager;
 
-	/**
-	 * Sauvegarde des ID des instances du widget pour pouvoir y accéder lorsqu'on aura récupérer les données
-	 */
-	public static int appWidgetIds[];
-
-	/**
-	 * Référence vers le service de mise à jour du widget
-	 */
-	private PendingIntent service = null;
 
 	@Override
 	// Routine de mise à jour du widget, appelée suivant l'attribut updatePeriodMillis du Widget Provider.
 	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )	{
 
 		// Sauvegarde les paramètres de mise à jour
-		WidgetActivity.context = context;
-		WidgetActivity.appWidgetIds = appWidgetIds;
+		this.context = context;
+		this.appWidgetIds = appWidgetIds;
+		this.appWidgetManager = appWidgetManager;
 
-		final Intent intent = new Intent(context, WidgetAlarmService.class);
+		Log.v("omni_widget", "Récupération des données pour le widget...");
 
-		// Si c'est le premier lancement, on lance le service directement
-		if (service == null)
-		{
-			context.startService(intent);
-			service = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		}
-
-		// On crée une alarme se déclenchant à 00:0X:XX heure de Paris le lendemain
-		//Le random offset permet d'éviter de DDOS le serveur en faisant tous la requête à minuit pile !
-		TimeZone franceTimeZone = TimeZone.getTimeZone("GMT+1");
-		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		final Calendar nextUpdateTime = new GregorianCalendar();
-		nextUpdateTime.set(Calendar.HOUR_OF_DAY, 23 ); // Paris 00:00 > GMT 23:00
-		// Ajout du décalage dû à l'heure d'été, si applicable en France
-		if(franceTimeZone.inDaylightTime(new Date()))
-			nextUpdateTime.add(Calendar.HOUR_OF_DAY, franceTimeZone.getDSTSavings()); // Paris été : GMT+2
-		nextUpdateTime.set(Calendar.MINUTE, 1 + new Random().nextInt(5));
-		nextUpdateTime.set(Calendar.SECOND, 1 + new Random().nextInt(59));
-		nextUpdateTime.set(Calendar.MILLISECOND, 0);
-		// on passe au jour suivant si nécessaire
-		if(nextUpdateTime.before(new GregorianCalendar()))
-			nextUpdateTime.add(Calendar.DAY_OF_YEAR, 1);
-
-		Log.v("omni_widget", "Prochaine mise à jour du widget le "+ nextUpdateTime.getTime().toString());
-
-		alarmManager.set(AlarmManager.RTC, nextUpdateTime.getTimeInMillis(), service);
+		// Récupération asynchrone des données sur le dernier article paru.
+		// La méthode callback est appelée quand la récupération est terminée.
+		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+		JSONRetriever jsonRetriever = new JSONRetriever();
+		jsonRetriever.getJSONArrayfromURL(url, this);
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
@@ -92,14 +61,54 @@ public class WidgetActivity extends AppWidgetProvider {
 		super.onEnabled(context);
 	}
 
-	@Override
-	public void onDisabled(Context context)
-	{
-		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	/**
+	 * Récupère les données du JSON, les insère sur le widget et assigne l'action sur le clic.
+	 *
+	 * @param objet contenant les informations sur l'article dans un {@link JSONArray} possédant un unique élément.
+	 */
+	public void callback(Object objet) {
 
-		alarmManager.cancel(service);
+		if(objet != null && context != null && appWidgetIds != null & appWidgetIds.length > 0 && appWidgetManager != null)
+		{
+			JSONArray jsonArray = (JSONArray) objet;
 
-        super.onDisabled(context);
+			if(jsonArray != null)
+			{
+				Log.v("omni_widget", "Données pour le widget récupérées et insérées");
+
+				try{
+					// Récupère l'article du JSON
+					ArticleObject article = new ArticleObject();
+					article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
+
+					// Récupère une référence vers la vue du widget
+					RemoteViews remoteViews = new RemoteViews(this.context.getPackageName(), R.layout.activity_widget);
+
+					// Configuration de l'action sur l'event clic
+					Intent intent = new Intent();
+					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
+					intent.putExtra("titre", Integer.toString(article.id));
+					PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, 0);
+					remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
+
+					// Affichage des informations de l'article sur le widget
+					remoteViews.setTextViewText(R.id.widget_title, Html.fromHtml(article.titre));
+					remoteViews.setTextViewText(R.id.widget_subtitle, Html.fromHtml(article.accroche));
+
+					// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
+					final int N = this.appWidgetIds.length;
+					for (int i=0; i<N; i++) {
+						int appWidgetId = this.appWidgetIds[i];
+						this.appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+					}
+
+				}catch(JSONException e) {
+					Log.e("omni_widget", "Erreur à la mise à jour du widget "+e.toString());
+				}
+
+			}
+		}
 	}
+
 
 }

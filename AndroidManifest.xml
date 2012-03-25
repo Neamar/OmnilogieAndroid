@@ -92,8 +92,6 @@
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <service android:name=".WidgetAlarmService" />
-
          <provider android:name="fr.omnilogie.app.OmnilogieProvider"
             android:authorities="fr.omnilogie.app"/>
         
