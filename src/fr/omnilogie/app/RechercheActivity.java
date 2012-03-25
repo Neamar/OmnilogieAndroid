@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -78,8 +77,8 @@ public class RechercheActivity extends SpecialActivity implements CallbackObject
 		listView = (ListView) findViewById(R.id.rechercher_liste);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + urls.get(position));
-				Intent i = new Intent(Intent.ACTION_VIEW, uri);
+				Intent i = new Intent(view.getContext(), ArticleActivity.class);
+				i.putExtra("titre", urls.get(position));
 				startActivity(i);
 				}
 			});

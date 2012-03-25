@@ -43,24 +43,23 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
 	/** Called when the activity is first created. */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listes);
 		
 		//Quelle liste afficher ?
-		//Choisir en fonction de l'URI.
-		Uri uri = getIntent().getData();
-		if(uri.getPath().startsWith("/auteur/"))
+		if(getIntent().hasExtra("auteur"))
 		{
-			baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+			baseUrl = "http://omnilogie.fr/raw/auteurs/" + getIntent().getStringExtra("auteur") + ".json";
+			Log.e("wtf", baseUrl);
 			setTitle("Articles de l'auteur");
 		}
-		else if(uri.getPath().equals("/top"))
+		else if(getIntent().hasExtra("top"))
 		{
 			baseUrl = "http://omnilogie.fr/raw/top.json";
 			setTitle("Top articles");
-			
 			View topHeader = getLayoutInflater().inflate(R.layout.item_liste_top, null);
 			((ListView) findViewById(R.id.liste)).addHeaderView(topHeader);
 			headerLink = "http://omnilogie.fr/Vote";
@@ -76,9 +75,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
 		listView.addFooterView(loadingFooter);
 		
-		// récupère la liste des article si elle a été conservée par une précédente instance
+		// récupère la liste des article si elle a été conservée par une précédente instance 
 		listeArticles = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
-		Log.v("omni_orientation", "Liste des articles restaurée : " + (listeArticles != null));
 		if(listeArticles == null)
 		{
 			// les articles n'ont pas pu être restaurés, on les télécharge
@@ -117,8 +115,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 					ArticleObject article = listeArticles.get(position);
 					if(article != null)
 					{
-						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						Intent i = new Intent(view.getContext(), ArticleActivity.class);
+						i.putExtra("titre", Integer.toString(article.id));
 						startActivity(i);
 					}
 				}
@@ -162,14 +160,8 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	{
 		Boolean echec = updateEnCours; 
 		
-		if(echec)
+		if(!echec)
 		{
-			Log.w("log_tag", "Attention : les articles suivants sont déjà en train d'être chargés.");
-		}
-		else
-		{
-			Log.v("log_tag", "Ajout des articles "+prochainArticleATelecharger
-					+" à "+(prochainArticleATelecharger+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
 
 			String url = baseUrl + "?start="+prochainArticleATelecharger+"&limit="+ARTICLES_A_CHARGER;
@@ -209,7 +201,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 				adapter.notifyDataSetChanged();
 				
 			} catch (Exception e) {
-				Log.e("omni", e.toString());
+				e.printStackTrace();
 			}
 	
 			// Fin de l'opération
@@ -239,7 +231,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 						prochainArticleATelecharger++;
 					}
 				}catch(JSONException e) {
-					Log.e("omni", e.toString());
+					e.printStackTrace();
 				}
 				
 				// met à jour l'UI sur le thread dédié

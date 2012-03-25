@@ -26,7 +26,7 @@ public class ArticleObject implements Serializable
 	/**
 	 * Identifiant unique de l'article.
 	 */
-	int id;
+	int id = -1;
 	
 	String titre;
 	String accroche = "";

@@ -3,4 +3,4 @@
     android:initialLayout="@layout/activity_widget"
     android:minHeight="72dp"
     android:minWidth="294dp"
-    android:updatePeriodMillis="86400000" /> <!-- 24 heures en millisecondes -->
+    android:updatePeriodMillis="21600000" /> <!-- 6 heures en millisecondes -->

@@ -3,6 +3,7 @@
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -10,8 +11,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import android.util.Log;
 
 /**
  * Classe permettant de récupérer des éléments JSON de manière asynchrone.
@@ -43,6 +42,7 @@ public class JSONRetriever {
 		this.callbackObject = callbackObject;
 		
 		Thread thread = new Thread(null, downloadJSONObject);
+		thread.setPriority(Thread.NORM_PRIORITY-1);
 		thread.start();
 	}
 
@@ -59,6 +59,7 @@ public class JSONRetriever {
 		this.callbackObject = callbackObject;
 		
 		Thread thread = new Thread(null, downloadJSONArray);
+		thread.setPriority(Thread.NORM_PRIORITY-1);
 		thread.start();
 	}
 	
@@ -83,7 +84,7 @@ public class JSONRetriever {
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
 		} catch(Exception e) {
-			Log.e("omni", e.toString());
+			e.printStackTrace();
 		}
 		
 		//convert response to string
@@ -97,7 +98,7 @@ public class JSONRetriever {
 			is.close();
 			result=sb.toString();
 		}catch(Exception e){
-			Log.e("omni", e.toString());
+			e.printStackTrace();
 		}
 		
 		return result;
@@ -120,7 +121,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jArray = new JSONArray(result);
 				}catch(Exception e){
-					Log.e("omni", e.toString());
+					e.printStackTrace();
 				}
 				
 				callbackObject.callback(jArray);
@@ -144,7 +145,7 @@ public class JSONRetriever {
 					if(result != null && result.length() > 0)
 						jObject = new JSONObject(result);
 				}catch(Exception e){
-					Log.e("omni", e.toString());
+					e.printStackTrace();
 				}
 				
 				callbackObject.callback(jObject);

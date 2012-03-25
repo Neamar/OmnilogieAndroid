@@ -20,7 +20,6 @@ import java.util.Map;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -100,6 +99,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 	
 	/**
 	 * Initialize cache routine, in order to be used by {@link URLConnection}
+	 * @see Cache routine http://docs.oracle.com/javase/1.5.0/docs/guide/net/images/cache.gif
 	 * 
 	 * @return success
 	 */
@@ -126,8 +126,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 				@Override
 				public CacheResponse get(URI uri, String s, Map<String, List<String>> headers) throws IOException {
 					final File file = new File(cacheDir, escape(uri.getPath()));
-					if (file.exists()) {
-						Log.v("omni_cache","Loading image from cache: "+ file.getName());
+					if (file.length()>500) {
 						return new CacheResponse() {
 							@Override
 							public Map<String, List<String>> getHeaders() throws IOException {
@@ -140,6 +139,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 							}
 						};
 					} else {
+						file.getCanonicalFile().delete();
 						return null;
 					}
 				}

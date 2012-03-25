@@ -6,7 +6,6 @@
     <string name="widget_name">Omnilogisme du jour</string>
 
     <!-- Chaînes pour l'activité home -->
-    <string name="home_disclaimer">Version ß</string>
     <string name="home_bulle"></string>
     <string name="home_bulle_accueil">Article du jour</string>
     <string name="home_bulle_liste">Liste des articles</string>
@@ -38,8 +37,8 @@
 
     <!-- Chaînes spéciales (longues) -->
     <string name="home_credits"><b>Développeurs :</b> \n
-  Neamar &lt;neamar@neamar.fr>\n
-  Hartok &lt;contact@hartok.fr>\n
+  Neamar	&lt;neamar@neamar.fr&gt;\n
+  Hartok	&lt;contact@hartok.fr&gt;\n
 \n<b>Fork us on Github !</b> \n
 <a href="https://github.com/Neamar/OmnilogieAndroid/">https://github.com/Neamar/OmnilogieAndroid/</a></string>
 
