@@ -81,7 +81,7 @@
         </activity>
 
         <receiver
-            android:name=".WidgetActivity"
+            android:name=".WidgetProvider"
             android:label="@string/widget_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
