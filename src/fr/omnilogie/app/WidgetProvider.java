@@ -88,7 +88,7 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 					Intent intent = new Intent();
 					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 					intent.putExtra("titre", Integer.toString(article.id));
-					PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT); 
+					PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT); 
 					remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 
 					// Affichage des informations de l'article sur le widget
