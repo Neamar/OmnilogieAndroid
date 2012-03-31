@@ -4,11 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -38,13 +40,7 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 		this.appWidgetIds = appWidgetIds;
 		this.appWidgetManager = appWidgetManager;
 
-		Log.v("omni_widget", "Récupération des données pour le widget...");
-
-		// Récupération asynchrone des données sur le dernier article paru.
-		// La méthode callback est appelée quand la récupération est terminée.
-		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
-		JSONRetriever jsonRetriever = new JSONRetriever();
-		jsonRetriever.getJSONArrayfromURL(url, this);
+		updateWidgetContent();
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
@@ -52,13 +48,18 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	@Override
 	// Routine d'initialisation du widget, appelée lors de la création d'une instance du widget.
 	public void onEnabled(Context context) {
-
-		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
-		remoteViews.setTextViewText(R.id.widget_title, "Chargement...");
-
 		Log.v("omni_widget", "Chargement du widget");
-
+		
 		super.onEnabled(context);
+	}
+	
+	protected void updateWidgetContent()
+	{
+		// Récupération asynchrone des données sur le dernier article paru.
+		// La méthode callback est appelée quand la récupération est terminée.
+		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
+		JSONRetriever jsonRetriever = new JSONRetriever();
+		jsonRetriever.getJSONArrayfromURL(url, this);
 	}
 
 	/**
@@ -81,26 +82,19 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 					ArticleObject article = new ArticleObject();
 					article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
 
-					// Récupère une référence vers la vue du widget
-					RemoteViews remoteViews = new RemoteViews(this.context.getPackageName(), R.layout.activity_widget);
-
+					RemoteViews views = getRemoteViews();
 					// Configuration de l'action sur l'event clic
 					Intent intent = new Intent();
 					intent.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 					intent.putExtra("titre", Integer.toString(article.id));
 					PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT); 
-					remoteViews.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
+					views.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 
 					// Affichage des informations de l'article sur le widget
-					remoteViews.setTextViewText(R.id.widget_title, Html.fromHtml(article.titre));
-					remoteViews.setTextViewText(R.id.widget_subtitle, Html.fromHtml(article.accroche));
+					views.setTextViewText(R.id.widget_title, Html.fromHtml(article.titre));
+					views.setTextViewText(R.id.widget_subtitle, Html.fromHtml(article.accroche));
 
-					// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
-					final int N = this.appWidgetIds.length;
-					for (int i=0; i<N; i++) {
-						int appWidgetId = this.appWidgetIds[i];
-						this.appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-					}
+					updateAllWidgets(views);
 
 				}catch(JSONException e) {
 					Log.e("omni_widget", "Erreur à la mise à jour du widget "+e.toString());
@@ -109,6 +103,42 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 			}
 		}
 	}
+	
+
+	private void updateAllWidgets(RemoteViews views) 
+	{
+		// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
+		for (int i=0; i<this.appWidgetIds.length; i++) {
+			int appWidgetId = this.appWidgetIds[i];
+			this.appWidgetManager.updateAppWidget(appWidgetId, views);
+		}
+	}
+	
+	private RemoteViews getRemoteViews()
+	{
+		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
+		
+		// Mise à jour au clic sur le bouton
+		Intent intent = new Intent(context, UpdateService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+		views.setOnClickPendingIntent(R.id.buttonRefresh, pendingIntent);
+		
+		return views;
+	}
 
 
+	public static class UpdateService extends Service {
+		@Override
+		public void onStart(Intent intent, int startId) {
+			//process your click here
+			Log.e("wtf", "Clic.");
+		}
+
+		@Override
+		public IBinder onBind(Intent arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
 }
+
