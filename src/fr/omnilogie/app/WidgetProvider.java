@@ -12,8 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -38,21 +36,23 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )
 	{
 		//Restauration des paramètres si update forcée
-		if(context == null) context = this.context;
-		if(appWidgetManager == null) appWidgetManager = this.appWidgetManager;
-		if(appWidgetIds == null) appWidgetIds = this.appWidgetIds;
+		if(context == null) context = WidgetProvider.context;
+		if(appWidgetManager == null) appWidgetManager = WidgetProvider.appWidgetManager;
+		if(appWidgetIds == null) appWidgetIds = WidgetProvider.appWidgetIds;
 		
 		// Sauvegarde les paramètres de mise à jour
-		this.widget = this;
-		this.context = context;
-		this.appWidgetIds = appWidgetIds;
-		this.appWidgetManager = appWidgetManager;
+		WidgetProvider.widget = this;
+		WidgetProvider.context = context;
+		WidgetProvider.appWidgetIds = appWidgetIds;
+		WidgetProvider.appWidgetManager = appWidgetManager;
 
 		// Récupération asynchrone des données sur le dernier article paru.
 		// La méthode callback est appelée quand la récupération est terminée.
 		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
 		JSONRetriever jsonRetriever = new JSONRetriever();
 		jsonRetriever.getJSONArrayfromURL(url, this);
+		
+		setViewsContent("Chargement en cours", "", -1);
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
@@ -73,11 +73,15 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 				ArticleObject article = new ArticleObject();
 				article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
 
-				setViewsContent(Html.fromHtml(article.titre), Html.fromHtml(article.accroche), article.id);
+				setViewsContent(article.titre, article.accroche, article.id);
 
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}
+		}
+		else
+		{
+			setViewsContent("Échec du chargement", "Touchez pour réessayer.", -1);
 		}
 	}
 	
@@ -87,14 +91,13 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	 * @param accroche accroche à afficher
 	 * @param id l'identifiant de l'article à ouvrir. Si cet identifiant n'est pas disponible, passer -1
 	 */
-	public void setViewsContent(Spanned titre, Spanned accroche, int id)
+	public void setViewsContent(String titre, String accroche, int id)
 	{
-		Log.e("widget", "Mise à jour des vues");
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
 		
 		// Affichage des informations de l'article sur le widget
-		views.setTextViewText(R.id.widget_title, titre);
-		views.setTextViewText(R.id.widget_subtitle, accroche);
+		views.setTextViewText(R.id.widget_title, Html.fromHtml(titre));
+		views.setTextViewText(R.id.widget_subtitle, Html.fromHtml(accroche));
 		
 		// Mise à jour au clic sur le bouton
 		Intent intentUpdate = new Intent(context, UpdateService.class);
@@ -113,14 +116,14 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 			Intent intentDisplay = new Intent();
 			intentDisplay.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 			intentDisplay.putExtra("titre", id);
-			PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
+			PendingIntent pendingIntent = PendingIntent.getActivity(WidgetProvider.context, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
 			views.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 		}
 		
 		// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
-		for (int i=0; i<this.appWidgetIds.length; i++) {
-			int appWidgetId = this.appWidgetIds[i];
-			this.appWidgetManager.updateAppWidget(appWidgetId, views);
+		for (int i=0; i<WidgetProvider.appWidgetIds.length; i++) {
+			int appWidgetId = WidgetProvider.appWidgetIds[i];
+			WidgetProvider.appWidgetManager.updateAppWidget(appWidgetId, views);
 		}
 	}
 	

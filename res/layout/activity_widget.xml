@@ -6,7 +6,7 @@
     android:layout_height="110dp"
     android:focusable="true" >
 
-    <ImageButton
+    <ImageView
         android:id="@+id/buttonRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
