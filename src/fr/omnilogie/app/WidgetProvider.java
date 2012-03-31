@@ -27,19 +27,23 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	/**
 	 * Sauvegarde des infos pour mettre à jour le widget quand les données auront été récupérées.
 	 */
-	private Context context;
-	private int appWidgetIds[];	
-	private AppWidgetManager appWidgetManager;
+	private static Context context;
+	private static int appWidgetIds[];	
+	private static AppWidgetManager appWidgetManager;
+	private static WidgetProvider widget = null;
 
 
 	@Override
 	// Routine de mise à jour du widget, appelée suivant l'attribut updatePeriodMillis du Widget Provider.
-	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )	{
+	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )
+	{
+		//Restauration des paramètres si update forcée
 		if(context == null) context = this.context;
 		if(appWidgetManager == null) appWidgetManager = this.appWidgetManager;
 		if(appWidgetIds == null) appWidgetIds = this.appWidgetIds;
 		
 		// Sauvegarde les paramètres de mise à jour
+		this.widget = this;
 		this.context = context;
 		this.appWidgetIds = appWidgetIds;
 		this.appWidgetManager = appWidgetManager;
@@ -69,66 +73,61 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 				ArticleObject article = new ArticleObject();
 				article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
 
-				Intent i = new Intent(context, UpdateService.class);
-				i.putExtra("titre", article.titre);
-				i.putExtra("accroche", article.accroche);
-				i.putExtra("id", article.id);
-				context.startService(i);
+				setViewsContent(Html.fromHtml(article.titre), Html.fromHtml(article.accroche), article.id);
 
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
+	
+	/**
+	 * Met à jour le widget
+	 * @param titre titre à afficher
+	 * @param accroche accroche à afficher
+	 * @param id l'identifiant de l'article à ouvrir. Si cet identifiant n'est pas disponible, passer -1
+	 */
+	public void setViewsContent(Spanned titre, Spanned accroche, int id)
+	{
+		Log.e("widget", "Mise à jour des vues");
+		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
+		
+		// Affichage des informations de l'article sur le widget
+		views.setTextViewText(R.id.widget_title, titre);
+		views.setTextViewText(R.id.widget_subtitle, accroche);
+		
+		// Mise à jour au clic sur le bouton
+		Intent intentUpdate = new Intent(context, UpdateService.class);
+		PendingIntent pendingIntentUpdate = PendingIntent.getService(context, 0, intentUpdate, 0);
+		
+		//L'identifiant n'est pas encore disponible
+		if(id == -1)
+		{
+			views.setOnClickPendingIntent(R.id.layout_widget, pendingIntentUpdate);
+		}
+		else
+		{
+			views.setOnClickPendingIntent(R.id.buttonRefresh, pendingIntentUpdate);
+			
+			//Affichage de l'activité
+			Intent intentDisplay = new Intent();
+			intentDisplay.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
+			intentDisplay.putExtra("titre", id);
+			PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
+			views.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
+		}
+		
+		// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
+		for (int i=0; i<this.appWidgetIds.length; i++) {
+			int appWidgetId = this.appWidgetIds[i];
+			this.appWidgetManager.updateAppWidget(appWidgetId, views);
+		}
+	}
+	
 	public static class UpdateService extends Service {
 		@Override
 		public void onStart(Intent intent, int startId) {
-			Spanned titre;
-			Spanned accroche;
-			
-			if(intent.hasExtra("titre"))
-				titre = Html.fromHtml(intent.getStringExtra("titre"));
-			else
-				titre = Html.fromHtml("Erreur de chargement");
-			
-			if(intent.hasExtra("accroche"))
-				accroche = Html.fromHtml(intent.getStringExtra("accroche"));
-			else
-				accroche = Html.fromHtml("Vérifiez votre connexion.");
-			
-			int id = intent.getIntExtra("id", -1);
-					
-			RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.activity_widget);
-			
-			// Affichage des informations de l'article sur le widget
-			views.setTextViewText(R.id.widget_title, titre);
-			views.setTextViewText(R.id.widget_subtitle, accroche);
-			
-			// Mise à jour au clic sur le bouton
-			Intent intentUpdate = new Intent(this, UpdateService.class);
-			PendingIntent pendingIntentUpdate = PendingIntent.getService(this, 0, intentUpdate, 0);
-			
-			//L'identifiant n'est pas encore disponible
-			if(id == -1)
-			{
-				views.setOnClickPendingIntent(R.id.layout_widget, pendingIntentUpdate);
-			}
-			else
-			{
-				views.setOnClickPendingIntent(R.id.buttonRefresh, pendingIntentUpdate);
-				
-				//Affichage de l'activité
-				Intent intentDisplay = new Intent();
-				intentDisplay.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
-				intentDisplay.putExtra("titre", id);
-				PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
-				views.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
-			}
-			
-			ComponentName thisWidget = new ComponentName(this, WidgetProvider.class);
-			AppWidgetManager manager = AppWidgetManager.getInstance(this);
-			manager.updateAppWidget(thisWidget, views);
+			WidgetProvider.widget.onUpdate(null, null, null);
 		}
 
 		@Override
@@ -136,6 +135,7 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 			// TODO Auto-generated method stub
 			return null;
 		}
+		
 	}
 }
 
