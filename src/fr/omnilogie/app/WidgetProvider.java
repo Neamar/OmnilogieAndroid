@@ -22,30 +22,14 @@ import android.widget.RemoteViews;
  */
 public class WidgetProvider extends AppWidgetProvider implements CallbackObject {
 
-	/**
-	 * Sauvegarde des infos pour mettre à jour le widget quand les données auront été récupérées.
-	 */
-	private static Context context;
-	private static int appWidgetIds[];	
-	private static AppWidgetManager appWidgetManager;
-	private static WidgetProvider widget = null;
-
-
+	protected Context context;
+	protected AppWidgetManager appWidgetManager;
+	
 	@Override
 	// Routine de mise à jour du widget, appelée suivant l'attribut updatePeriodMillis du Widget Provider.
 	public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds )
 	{
-		//Restauration des paramètres si update forcée
-		if(context == null) context = WidgetProvider.context;
-		if(appWidgetManager == null) appWidgetManager = WidgetProvider.appWidgetManager;
-		if(appWidgetIds == null) appWidgetIds = WidgetProvider.appWidgetIds;
-		
-		// Sauvegarde les paramètres de mise à jour
-		WidgetProvider.widget = this;
-		WidgetProvider.context = context;
-		WidgetProvider.appWidgetIds = appWidgetIds;
-		WidgetProvider.appWidgetManager = appWidgetManager;
-
+		this.context = context;
 		// Récupération asynchrone des données sur le dernier article paru.
 		// La méthode callback est appelée quand la récupération est terminée.
 		String url = "http://omnilogie.fr/raw/articles.json?start=0&limit=1";
@@ -64,14 +48,14 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	 */
 	public void callback(Object objet)
 	{
-		if(objet != null && context != null && appWidgetIds != null && appWidgetIds.length > 0 && appWidgetManager != null)
+		if(objet != null)
 		{
 			JSONArray jsonArray = (JSONArray) objet;
 
 			try{
 				// Récupère l'article du JSON
 				ArticleObject article = new ArticleObject();
-				article.remplirDepuisJSON( jsonArray.getJSONObject(0) );
+				article.remplirDepuisJSON(jsonArray.getJSONObject(0));
 
 				setViewsContent(article.titre, article.accroche, article.id);
 
@@ -93,7 +77,7 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	 */
 	public void setViewsContent(String titre, String accroche, int id)
 	{
-		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
+		RemoteViews views = new RemoteViews("fr.omnilogie.app", R.layout.activity_widget);
 		
 		// Affichage des informations de l'article sur le widget
 		views.setTextViewText(R.id.widget_title, Html.fromHtml(titre));
@@ -116,26 +100,29 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 			Intent intentDisplay = new Intent();
 			intentDisplay.setComponent(new ComponentName("fr.omnilogie.app","fr.omnilogie.app.ArticleActivity"));
 			intentDisplay.putExtra("titre", id);
-			PendingIntent pendingIntent = PendingIntent.getActivity(WidgetProvider.context, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentDisplay, PendingIntent.FLAG_CANCEL_CURRENT); 
 			views.setOnClickPendingIntent(R.id.layout_widget, pendingIntent);
 		}
 		
 		// Appel à l'AppWidgetManager pour mettre à jour les différentes instances du widget
-		for (int i=0; i<WidgetProvider.appWidgetIds.length; i++) {
-			int appWidgetId = WidgetProvider.appWidgetIds[i];
-			WidgetProvider.appWidgetManager.updateAppWidget(appWidgetId, views);
+		int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context,WidgetProvider.class));
+		for (int i=0; i < appWidgetIds.length; i++) {
+			int appWidgetId = appWidgetIds[i];
+			AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
 		}
 	}
 	
 	public static class UpdateService extends Service {
 		@Override
 		public void onStart(Intent intent, int startId) {
-			WidgetProvider.widget.onUpdate(null, null, null);
+			WidgetProvider wp = new WidgetProvider();
+			wp.onUpdate(this, null, null);
+			
+			super.onStart(intent, startId);
 		}
 
 		@Override
 		public IBinder onBind(Intent arg0) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
