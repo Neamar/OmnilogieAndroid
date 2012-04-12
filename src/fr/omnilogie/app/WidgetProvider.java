@@ -23,7 +23,6 @@ import android.widget.RemoteViews;
 public class WidgetProvider extends AppWidgetProvider implements CallbackObject {
 
 	protected Context context;
-	protected AppWidgetManager appWidgetManager;
 	
 	@Override
 	// Routine de mise à jour du widget, appelée suivant l'attribut updatePeriodMillis du Widget Provider.
@@ -77,7 +76,7 @@ public class WidgetProvider extends AppWidgetProvider implements CallbackObject 
 	 */
 	public void setViewsContent(String titre, String accroche, int id)
 	{
-		RemoteViews views = new RemoteViews("fr.omnilogie.app", R.layout.activity_widget);
+		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_widget);
 		
 		// Affichage des informations de l'article sur le widget
 		views.setTextViewText(R.id.widget_title, Html.fromHtml(titre));
