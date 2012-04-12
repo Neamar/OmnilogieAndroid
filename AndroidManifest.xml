@@ -67,7 +67,7 @@
             android:name=".AuteursActivity"
             android:label="Affichage de la liste des omnilogistes" />
 
-        <!-- ACTIVITY : Liste d'auteurs -->
+        <!-- ACTIVITY : Recherche dans les articles -->
         <activity
             android:name=".RechercheActivity"
             android:label="Recherche dans les omnilogismes" >
@@ -81,7 +81,7 @@
         </activity>
 
         <receiver
-            android:name=".WidgetActivity"
+            android:name=".WidgetProvider"
             android:label="@string/widget_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -91,6 +91,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
         </receiver>
+        <service android:name="fr.omnilogie.app.WidgetProvider$UpdateService" />
+        
 
          <provider android:name="fr.omnilogie.app.OmnilogieProvider"
             android:authorities="fr.omnilogie.app"/>
