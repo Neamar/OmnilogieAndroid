@@ -26,7 +26,7 @@ public class ArticleObject implements Serializable
 	/**
 	 * Identifiant unique de l'article.
 	 */
-	int id;
+	int id = -1;
 	
 	String titre;
 	String accroche = "";
@@ -96,7 +96,7 @@ public class ArticleObject implements Serializable
 					//Attention, si la source n'a pas été téléchargée depuis le serveur, son titre est
 					//vide.
 					//Dans ce cas, on reprend directement l'URL.
-					if(sources.getJSONObject(i).isNull("Titre"))
+					if(sources.getJSONObject(i).isNull("Titre") || sources.getJSONObject(i).getString("Titre").trim().equals(""))
 						sourcesTitre.add(sources.getJSONObject(i).getString("URL"));
 					else
 						sourcesTitre.add(sources.getJSONObject(i).getString("Titre"));

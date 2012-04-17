@@ -36,20 +36,41 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			//il suffit de récupérer l'article du Bundle fourni.
 			article = (ArticleObject) savedInstanceState.getSerializable("article");
 			
-			runOnUiThread(remplirUIAvecDatas);
+			//Le simple fait qu'un article soit présent ne signifie pas forcément qu'il
+			//a été chargé : vérifier qu'il n'est pas vide.
+			if(article.id != -1)
+			{
+				runOnUiThread(remplirUIAvecDatas);
+				return;
+			}
+		}
+		
+		//Rien en mémoire, il faut charger.
+		String articleToDisplay;
+		
+		//Quel article doit-on afficher ?
+		//La réponse est dans le paramètre titre.
+		if(getIntent().hasExtra("titre"))
+		{
+			articleToDisplay = getIntent().getStringExtra("titre");
+			if(articleToDisplay == null)
+				articleToDisplay = Integer.toString(getIntent().getIntExtra("titre", 1));
 		}
 		else
 		{
-			//Rien en mémoire, il faut charger.
-			//Quel article doit-on afficher ? Ce peut-être une ID spécifique ou l'article du jour.
-			//Il suffit de lire l'URI avec lequel cette activité a été appelée
-			Uri uri = getIntent().getData();
-			String articleToDisplay = uri.getLastPathSegment();
-			//Télécharge le contenu de l'article de manière asynchrone.
-			//La méthode callback est appelée après la récupération.
-			JSONRetriever jsonRetriever = new JSONRetriever();
-			jsonRetriever.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
+			//Le paramètre titre n'est pas fourni
+			//L'activité a été lancée depuis le site web
+			articleToDisplay = getIntent().getData().toString().replace("http://omnilogie.fr/O/", "");
 		}
+		
+		//Si le nom de l'article finit par un "?", le supprimer car il ferait bugger l'URL.
+		//L'API se chargera de retrouver l'article quand même.
+		if(articleToDisplay.lastIndexOf('?') == articleToDisplay.length() - 1)
+			articleToDisplay = articleToDisplay.substring(0, articleToDisplay.length() - 1);
+		//Télécharge le contenu de l'article de manière asynchrone.
+		//La méthode callback est appelée après la récupération.
+		JSONRetriever jsonRetriever = new JSONRetriever();
+		jsonRetriever.getJSONfromURL("http://omnilogie.fr/raw/articles/" + articleToDisplay + ".json", this);
 		
 		isLoading(true);
 	}
@@ -82,16 +103,37 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 				e.printStackTrace();
 			}
 			
-			//Remplacer les placeholders par le texte de l'article
-			html = html.replace("{{banniere}}", article.banniere);
-			html = html.replace("{{titre}}", article.titre);
-			html = html.replace("{{accroche}}", article.accroche);
-			html = html.replace("{{omnilogisme}}", article.omnilogisme);
-			html = html.replace("{{auteur}}", article.auteur);
-			html = html.replace("{{dateParution}}", article.dateParution);
-			
-			//Afficher le contenu de l'article
 			WebView webView = ((WebView) findViewById(R.id.article));
+			
+			
+			//Remplacer les placeholders de contenu
+			html = html
+				.replace("{{banniere}}", article.banniere)
+				.replace("{{titre}}", article.titre)
+				.replace("{{accroche}}", article.accroche)
+				.replace("{{omnilogisme}}", article.omnilogisme)
+				.replace("{{auteur}}", article.auteur)
+				.replace("{{dateParution}}", article.dateParution);
+			
+			//Remplacer les placeholders de style
+			int largeurBanniere = Math.min(690, webView.getWidth());
+			int hauteurBanniere = Math.min(95, largeurBanniere * 95 / 690);
+			if(largeurBanniere != 0)
+			{
+				html = html
+					.replace("{{largeur_banniere}}", Integer.toString(largeurBanniere))
+					.replace("{{hauteur_banniere}}", Integer.toString(hauteurBanniere));
+			}
+			else
+			{
+				//Nous n'avons pas encore accès à la taille (c'est le cas lors d'une restauration)
+				//Dans ce cas, faire au mieux, de toute façon le placeholder ne servirait à rien.
+				html = html.replace("width:{{largeur_banniere}}px; height:{{hauteur_banniere}}px;", "max-width:100%");
+			}
+			
+			/*
+			 * Afficher le contenu de l'article
+			 */
 			
 			//Sur une seule colonne, pour éviter au maximum de devoir scroller horizontalement
 			//Dans certains cas toutefois, on ne peut rien y faire et le scroll horizontal apparaît
@@ -104,22 +146,25 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			WebViewClient webClient = new WebViewClient()
 			{
 				@Override
-				public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+				public boolean shouldOverrideUrlLoading(WebView view, String url)
 				{
+					
 					if (url.startsWith("http://omnilogie.fr/O/"))
 					{
 						//Il s'agit d'un lien vers un autre article : ouvrir directement cette activité
 						//avec les nouveaux paramètres
-						Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + url.substring(22));
+						Intent i = new Intent(view.getContext(), ArticleActivity.class);
+						i.putExtra("titre", url.substring(22));
+						startActivity(i);
+					}
+					else
+					{
+						Uri uri = Uri.parse(url);
 						Intent i = new Intent(Intent.ACTION_VIEW, uri);
 						startActivity(i);
-						
-						return true;
 					}
 					
-					//Par défaut, ne pas overrider et proposer à l'utilisateur de suivre le lien avec
-					//son navigateur préféré
-					return false;
+					return true;
 				}
 			};
 			webView.setWebViewClient(webClient);
@@ -224,13 +269,13 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 	
 	/**
 	 * Appui sur le menu "autres articles du même auteur".
-	 * Charge l'activité auteur.
+	 * Charge l'activité Liste avec le paramètre auteur.
 	 */
 	protected void onOtherBySameAuthor()
 	{
-		Uri uri = Uri.parse("content://fr.omnilogie.app/auteur/" + article.auteurId);
-		Intent i = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(i);
+		Intent i = new Intent(this, ListeActivity.class);
+		i.putExtra("auteur", Integer.toString(article.auteurId));
+		startActivity(i);
 	}
 
 	/**

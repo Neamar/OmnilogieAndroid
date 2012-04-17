@@ -6,14 +6,6 @@
     android:gravity="center"
     android:stretchColumns="0,1" >
 
-    <TextView
-        android:id="@+id/disclaimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="@string/home_disclaimer"
-        android:textColor="#AA0000" />
-
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -60,13 +52,12 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="center" >
-
-        <!-- Rechercher -->
+        
+        <!-- Top -->
 
         <include
             android:layout_width="100dp"
             android:layout_height="100dp"
-            layout="@layout/bulle_recherche" />
+            layout="@layout/bulle_top" />
     </TableRow>
-
 </TableLayout>

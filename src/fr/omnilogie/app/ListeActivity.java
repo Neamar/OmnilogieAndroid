@@ -28,32 +28,41 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	
 	String baseUrl;
 	
-	int dernierArticle = 0; // id du dernier article chargé
+	int prochainArticleATelecharger = 0; // id du dernier article chargé
 	Boolean updateEnCours = false;
 	Boolean updateAvailable = true;
+	String headerLink = null;
 	ArticleObjectAdapter adapter;
 	
 	private View loadingFooter;
 	private ListView listView;
 	
 	// Liste avec les méta-données des articles chargés
-	ArrayList<ArticleObject> listeArticles = new ArrayList<ArticleObject>();
+	ArrayList<ArticleObject> listeArticles = null;
 	// Liste avec les méta-données des articles à ajouter
 	ArrayList<ArticleObject> nouveauxArticles = new ArrayList<ArticleObject>();
 	
 	/** Called when the activity is first created. */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listes);
 		
 		//Quelle liste afficher ?
-		//Choisir en fonction de l'URI.
-		Uri uri = getIntent().getData();
-		if(uri.getPath().startsWith("/auteur/"))
+		if(getIntent().hasExtra("auteur"))
 		{
-			baseUrl = "http://omnilogie.fr/raw/auteurs/" + uri.getLastPathSegment() + ".json";
+			baseUrl = "http://omnilogie.fr/raw/auteurs/" + getIntent().getStringExtra("auteur") + ".json";
+			Log.e("wtf", baseUrl);
 			setTitle("Articles de l'auteur");
+		}
+		else if(getIntent().hasExtra("top"))
+		{
+			baseUrl = "http://omnilogie.fr/raw/top.json";
+			setTitle("Top articles");
+			View topHeader = getLayoutInflater().inflate(R.layout.item_liste_top, null);
+			((ListView) findViewById(R.id.liste)).addHeaderView(topHeader);
+			headerLink = "http://omnilogie.fr/Vote";
 		}
 		else
 		{
@@ -61,30 +70,56 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			setTitle("Derniers articles parus");
 		}
 		
-		tryExpandListView();
-
 		listView = ((ListView) findViewById(R.id.liste));
 		// ajout du footer
 		loadingFooter = getLayoutInflater().inflate(R.layout.item_liste_loading, null);
 		listView.addFooterView(loadingFooter);
 		
+		// récupère la liste des article si elle a été conservée par une précédente instance 
+		listeArticles = (ArrayList<ArticleObject>) getLastNonConfigurationInstance();
+		if(listeArticles == null)
+		{
+			// les articles n'ont pas pu être restaurés, on les télécharge
+			listeArticles = new ArrayList<ArticleObject>();
+			// chargement des articles (autre thread)
+			tryExpandListView();
+		}
+		else
+		{
+			prochainArticleATelecharger = listeArticles.size();
+		}
+		
 		// ajout de l'adapter
 		adapter = new ArticleObjectAdapter(this ,listeArticles);
 		listView.setAdapter(adapter);
 		
-		// chargement des articles (autre thread)
-		tryExpandListView();
 		
 		// initialisation du listener sur un clic
 		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {        		
-			ArticleObject article = listeArticles.get(position);
-			if(article != null)
-			{
-				Uri uri = Uri.parse("content://fr.omnilogie.app/article/" + article.id);
-				Intent i = new Intent(Intent.ACTION_VIEW, uri);
-				startActivity(i);
-			}
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if(headerLink != null)
+				{
+					//Si la liste a un header :
+					if(position == 0)
+					{
+						//Soit on a cliqué dessus, auquel cas on lance l'URI spécifiée
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(headerLink)));
+						return;
+					}
+					else
+						position--; //Soit on décale les offsets pour accéder à l'article correct.
+				}
+				
+				if(position < listeArticles.size())//Vérifier que l'on n'a pas cliqué sur le throbber
+				{
+					ArticleObject article = listeArticles.get(position);
+					if(article != null)
+					{
+						Intent i = new Intent(view.getContext(), ArticleActivity.class);
+						i.putExtra("titre", Integer.toString(article.id));
+						startActivity(i);
+					}
+				}
 			}
 		});
 		
@@ -111,6 +146,12 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		});
 	}
 	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		// on sauvegarde la liste des articles pour la prochaine instance
+		return this.listeArticles.clone();
+	}
+	
 	/**
 	 * Essaye d'afficher plus d'éléments dans la liste (appel d'un autre thread).
 	 * @return échec si true, de nouveaux articles sont certainement déjà en train d'être chargés
@@ -119,17 +160,11 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 	{
 		Boolean echec = updateEnCours; 
 		
-		if(echec)
+		if(!echec)
 		{
-			Log.w("log_tag", "Attention : les articles suivants sont déjà en train d'être chargés.");
-		}
-		else
-		{
-			Log.v("log_tag", "Ajout des articles "+dernierArticle
-					+" à "+(dernierArticle+ARTICLES_A_CHARGER) );
 			updateEnCours = true;
 
-			String url = baseUrl + "?start="+dernierArticle+"&limit="+ARTICLES_A_CHARGER;
+			String url = baseUrl + "?start="+prochainArticleATelecharger+"&limit="+ARTICLES_A_CHARGER;
 			
 			JSONRetriever jsonRetriever = new JSONRetriever();
 			jsonRetriever.getJSONArrayfromURL(url, this);
@@ -149,13 +184,14 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 			
 			try {
 				
-				if(nouveauxArticles.size() == 0)
+				if(nouveauxArticles.size() < ARTICLES_A_CHARGER)
 				{
-					// aucun nouvel article : on désactive le chargement d'articles
+					// plus d'articles à récupérer : on désactive le chargement d'articles
 					listView.removeFooterView(loadingFooter);
 					updateAvailable = false;
 				}
-				else
+				
+				if(nouveauxArticles.size() > 0)
 				{
 					listeArticles.addAll(nouveauxArticles);
 					nouveauxArticles.clear();
@@ -165,7 +201,7 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 				adapter.notifyDataSetChanged();
 				
 			} catch (Exception e) {
-				Log.e("omni", e.toString());
+				e.printStackTrace();
 			}
 	
 			// Fin de l'opération
@@ -192,10 +228,10 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 						nouvelArticle.remplirDepuisJSON( jsonArray.getJSONObject(i) );
 						
 						nouveauxArticles.add(nouvelArticle);
-						dernierArticle++;
+						prochainArticleATelecharger++;
 					}
 				}catch(JSONException e) {
-					Log.e("omni", e.toString());
+					e.printStackTrace();
 				}
 				
 				// met à jour l'UI sur le thread dédié

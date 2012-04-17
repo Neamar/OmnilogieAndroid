@@ -23,23 +23,29 @@ import android.widget.Toast;
  *
  */
 public abstract class DefaultActivity extends Activity {
-	protected ProgressDialog progressDialog;
+	protected ProgressDialog progressDialog = null;
 	protected String toastText;
 	
 	/**
 	 * Affiche ou non un spinner indiquant que l'activité est en train de charger ses données.
 	 * 
-	 * @param isLoading true pour afficher , false une fois le chargement terminé.
+	 * @param isLoading true pour afficher, false une fois le chargement terminé.
 	 */
 	protected void isLoading(boolean isLoading)
 	{
-		if(isLoading)
+		try
 		{
-			progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
-		}
-		else
+			if(isLoading)
+			{
+				progressDialog = ProgressDialog.show(DefaultActivity.this, "", "Chargement...", true);
+			}
+			else if(progressDialog != null)
+			{
+				progressDialog.dismiss();
+			}
+		} catch(Exception e)
 		{
-			progressDialog.dismiss();
+			//Si on fait une rotation alors que l'icone était affichée, une Exception est lancée.
 		}
 	}
 	
@@ -64,28 +70,12 @@ public abstract class DefaultActivity extends Activity {
 		//Traitement des menus standards :
 		switch(item.getItemId()) {
 		case R.id.menu_aleatoire:
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://fr.omnilogie.app/article/random")));
+			Intent i = new Intent(this, ArticleActivity.class);
+			i.putExtra("titre", "random");
+			startActivity(i);
 			break;
-		case R.id.menu_bug:
-			AlertDialog dialogBug = new AlertDialog.Builder(this).create();  
-			dialogBug.setMessage("Vous allez être redirigé vers la page web de contact d'Omnilogie, depuis laquelle vous pourrez faire votre rapport de bug (ou suggestion d'idée). Merci pour votre contribution !");
-			
-			//Rejoindre l'interface de rédaction
-			dialogBug.setButton(DialogInterface.BUTTON_POSITIVE, "Signaler bug ou remarque", new DialogInterface.OnClickListener() {  
-				public void onClick(DialogInterface dialog, int which) {
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://omnilogie.fr/Contact#Application Android"));
-					startActivity(browserIntent);
-				}
-			});
-			
-			//Annuler la soumission
-			dialogBug.setButton(DialogInterface.BUTTON_NEGATIVE, "Annuler", new DialogInterface.OnClickListener() {  
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-
-			dialogBug.show();
+		case R.id.menu_recherche:
+			onSearchRequested();
 			break;
 		case R.id.menu_rediger:
 			//Le lecteur souhaite devenir rédacteur

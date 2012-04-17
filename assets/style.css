@@ -2,7 +2,7 @@
  * Style pour la bannière : ne doit pas déborder
  */
 .banniere_holder { text-align:center; }
-.banniere_holder img { max-width:100%;}
+.banniere_holder img { background:url("file:///android_asset/banniere.png"); background-size:100%; -webkit-background-size:100%;}
 
 /**
  * Style pour le titre et l'accroche
@@ -10,11 +10,17 @@
 hgroup h1 {font-size:130%;}
 hgroup h2 {font-size:100%; padding:0 0 5px 20px; border-left:2px solid #66bbe0}
 hgroup h2:empty {padding:0;}
+
 /**
  * Style pour l'auteur et la date de parution
  */
  p.byline {font-size:75%; text-align:right;}
- 
+
+/**
+ * Style pour les liens "article suivant" et "article précédent" 
+ */
+.read-previous-article, .read-next-article { background-color: #EFFEB9; border: 5px outset #9AC601; margin-right: 15px;}
+.read-previous-article:before, .read-next-article:before {content:""}
 /**
  * Style de base pour le contenu de l'omnilogisme
  */

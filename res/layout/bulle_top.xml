@@ -1,31 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_recherche"
+    android:id="@+id/home_top"
     android:layout_width="100dp"
     android:layout_height="100dp" >
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/home_top_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/home_bulle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/bulle" />
+        android:background="@drawable/bulle_selector" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/home_bulle_recherche"
-        android:src="@drawable/bulle_recherche" />
+        android:contentDescription="@string/home_bulle_top"
+        android:src="@drawable/bulle_top" />
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_vertical|center_horizontal"
-        android:text="@string/home_bulle_recherche"
+        android:text="@string/home_bulle_top"
         android:textColor="#000" />
 
 </RelativeLayout>
