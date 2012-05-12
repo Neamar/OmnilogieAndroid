@@ -5,7 +5,7 @@ Présentation
 ------------
 Ce projet contient le code source de l'application Android pour le site http://omnilogie.fr
 
-Développeurs principaux : Neamar, Hartok
+Développeurs principaux : Neamar, [Hartok](https://github.com/bmaillot)
 
 L'application est maintenant publiée en version stable : [lien Google Play](https://play.google.com/store/apps/details?id=fr.omnilogie.app)
 
