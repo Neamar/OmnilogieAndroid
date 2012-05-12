@@ -7,7 +7,7 @@ Ce projet contient le code source de l'application Android pour le site http://o
 
 Développeurs principaux : Neamar, Hartok
 
-L'application est maintenant publié en version stable : [lien Google Play](https://play.google.com/store/apps/details?id=fr.omnilogie.app)
+L'application est maintenant publiée en version stable : [lien Google Play](https://play.google.com/store/apps/details?id=fr.omnilogie.app)
 
 Suggestions ?
 --------------
