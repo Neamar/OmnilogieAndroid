@@ -5,6 +5,7 @@
     <item
         android:id="@+id/menu_recherche"
         android:icon="@drawable/recherche"
+        android:showAsAction="ifRoom"
         android:title="Rechercher"/>
     <item
         android:id="@+id/menu_rediger"
