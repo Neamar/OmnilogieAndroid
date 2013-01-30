@@ -1,11 +1,14 @@
 package fr.omnilogie.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,8 +28,22 @@ import android.widget.Toast;
  * 
  */
 public abstract class DefaultActivity extends Activity {
+	protected Boolean displayBackOnActionBar = true;
+	
 	protected ProgressDialog progressDialog = null;
 	protected String toastText;
+	
+	@TargetApi(14)
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		// Title in action bar brings back to home
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && displayBackOnActionBar) {
+			getActionBar().setHomeButtonEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
 
 	/**
 	 * Affiche ou non un spinner indiquant que l'activité est en train de
@@ -68,6 +85,11 @@ public abstract class DefaultActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Traitement des menus standards :
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, HomeActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
 		case R.id.menu_aleatoire:
 			Intent i = new Intent(this, ArticleActivity.class);
 			i.putExtra("titre", "random");

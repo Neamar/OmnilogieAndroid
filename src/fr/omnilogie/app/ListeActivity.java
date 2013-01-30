@@ -53,7 +53,6 @@ public class ListeActivity extends DefaultActivity implements CallbackObject {
 		if (getIntent().hasExtra("auteur")) {
 			baseUrl = "http://omnilogie.fr/raw/auteurs/" + getIntent().getStringExtra("auteur")
 					+ ".json";
-			Log.e("wtf", baseUrl);
 			setTitle("Articles de l'auteur");
 		} else if (getIntent().hasExtra("top")) {
 			baseUrl = "http://omnilogie.fr/raw/top.json";

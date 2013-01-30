@@ -16,6 +16,7 @@ import android.widget.TextView;
 public class HomeActivity extends DefaultActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		displayBackOnActionBar = false;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		/*
