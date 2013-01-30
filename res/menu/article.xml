@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">  
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <!-- Composants spécifiques à l'activité Article -->
-    <item android:id="@+id/menu_partager" android:title="Partager" android:icon="@drawable/partager"></item>
-    <item android:id="@+id/menu_autres_auteur" android:title="Autres articles de l'auteur" android:titleCondensed="Articles auteur" android:icon="@drawable/articles_auteur"></item>
-	<!--  D'autres éléments de mnus sont ajoutés dynamiquement si nécessaire (les sources). Cf. ArticleActivity#onCreateOptionsMenu -->
+    <item
+        android:id="@+id/menu_partager"
+        android:icon="@drawable/partager"
+        android:title="Partager">
+    </item>
+    <item
+        android:id="@+id/menu_autres_auteur"
+        android:icon="@drawable/articles_auteur"
+        android:title="Autres articles de l&apos;auteur"
+        android:titleCondensed="Articles auteur">
+    </item>
+    <!-- D'autres éléments de mnus sont ajoutés dynamiquement si nécessaire (les sources). Cf. ArticleActivity#onCreateOptionsMenu -->
+
 </menu>

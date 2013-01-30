@@ -23,12 +23,15 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 /**
- * Download asynchronously images, using a cache on SD card. 
+ * Download asynchronously images, using a cache on SD card.
  * 
  * @author Benoit
  * 
- * @see Load images and data asynchronously on your Android applications http://bench87.tistory.com/56
- * @see Android Image Caching http://pivotallabs.com/users/tyler/blog/articles/1754-android-image-caching
+ * @see Load images and data asynchronously on your Android applications
+ *      http://bench87.tistory.com/56
+ * @see Android Image Caching
+ *      http://pivotallabs.com/users/tyler/blog/articles/1754
+ *      -android-image-caching
  **/
 
 public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
@@ -39,22 +42,22 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 
 	/**
 	 * Download a picture in the background
-	 * @param imageView l'imageView dans lequel l'image devra ensuite être insérée
+	 * 
+	 * @param imageView
+	 *            l'imageView dans lequel l'image devra ensuite être insérée
 	 * @param defaultImage
 	 */
 	public ImageDownloader(ImageView imageView, ArticleObject article) {
 		imageViewReference = new WeakReference<ImageView>(imageView);
 		articleReference = new WeakReference<ArticleObject>(article);
-		
+
 		// cache need to be reinitialized if no SD card mounted
 		String sdState = android.os.Environment.getExternalStorageState();
-		if(!sdState.equals(android.os.Environment.MEDIA_MOUNTED))
-		{
+		if (!sdState.equals(android.os.Environment.MEDIA_MOUNTED)) {
 			isCacheReady = false;
 		}
-		
-		if(!isCacheReady)
-		{
+
+		if (!isCacheReady) {
 			// create cache routine in a SD card directory
 			isCacheReady = prepareCache();
 		}
@@ -86,8 +89,8 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 			if (imageView != null) {
 				imageView.setImageBitmap(result);
 			}
-			
-			// stockage de l'image dans l'article 
+
+			// stockage de l'image dans l'article
 			if (articleReference != null) {
 				ArticleObject article = articleReference.get();
 				if (article != null) {
@@ -96,37 +99,39 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 			}
 		}
 	}
-	
+
 	/**
 	 * Initialize cache routine, in order to be used by {@link URLConnection}
-	 * @see Cache routine http://docs.oracle.com/javase/1.5.0/docs/guide/net/images/cache.gif
+	 * 
+	 * @see Cache routine
+	 *      http://docs.oracle.com/javase/1.5.0/docs/guide/net/images/cache.gif
 	 * 
 	 * @return success
 	 */
-	protected boolean prepareCache()
-	{
+	protected boolean prepareCache() {
 		final File cacheDir;
 		final boolean success;
-		
+
 		// Initialize cache if SD card mounted
 		String sdState = android.os.Environment.getExternalStorageState();
 		if (sdState.equals(android.os.Environment.MEDIA_MOUNTED)) {
 
 			// Prepare a folder on SD card to cache images
-			File sdDir = android.os.Environment.getExternalStorageDirectory();    
-			cacheDir = new File(sdDir,"data/fr.omnilogie.app/cache/bannieres");
-			
-			if(!cacheDir.exists())
+			File sdDir = android.os.Environment.getExternalStorageDirectory();
+			cacheDir = new File(sdDir, "data/fr.omnilogie.app/cache/bannieres");
+
+			if (!cacheDir.exists())
 				cacheDir.mkdirs();
-			
+
 			success = true;
-			
+
 			// Set cache routine
 			ResponseCache.setDefault(new ResponseCache() {
 				@Override
-				public CacheResponse get(URI uri, String s, Map<String, List<String>> headers) throws IOException {
+				public CacheResponse get(URI uri, String s, Map<String, List<String>> headers)
+						throws IOException {
 					final File file = new File(cacheDir, escape(uri.getPath()));
-					if (file.length()>500) {
+					if (file.length() > 500) {
 						return new CacheResponse() {
 							@Override
 							public Map<String, List<String>> getHeaders() throws IOException {
@@ -164,10 +169,9 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 					return url.replace("/", "-").replace(".", "-");
 				}
 			});
-		}
-		else
+		} else
 			success = false;
-		
+
 		return success;
 	}
 }

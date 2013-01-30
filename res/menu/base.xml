@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <!-- Composants génériques qui peuvent être affichés sur toutes les activités -->
-    <item android:id="@+id/menu_recherche"
-      android:title="Rechercher" android:icon="@drawable/recherche"/>
-    <item android:id="@+id/menu_rediger"
-          android:title="Devenir rédacteur" android:titleCondensed="Rédiger" android:icon="@drawable/redacteur"/>
-    <item android:id="@+id/menu_aleatoire"
-          android:title="Un article au hasard" android:titleCondensed="Aléatoire" android:icon="@drawable/aleatoire"/>    
+    <item
+        android:id="@+id/menu_recherche"
+        android:icon="@drawable/recherche"
+        android:title="Rechercher"/>
+    <item
+        android:id="@+id/menu_rediger"
+        android:icon="@drawable/redacteur"
+        android:title="Devenir rédacteur"
+        android:titleCondensed="Rédiger"/>
+    <item
+        android:id="@+id/menu_aleatoire"
+        android:icon="@drawable/aleatoire"
+        android:title="Un article au hasard"
+        android:titleCondensed="Aléatoire"/>
+
 </menu>
