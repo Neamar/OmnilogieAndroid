@@ -5,8 +5,10 @@ import java.io.InputStream;
 
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -175,6 +177,7 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 		}
 	};
 
+	@TargetApi(11)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean r = super.onCreateOptionsMenu(menu);
@@ -192,6 +195,9 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			// l'index du tableau contenant les liens
 			// Pour le groupe, on utilise 0 car aucun autre menu n'est présent.
 			SubMenu sources = menu.addSubMenu(0, -1, 0, "Sources");
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				sources.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			}
 			sources.getItem().setIcon(R.drawable.sources);
 
 			// Ajouter chacun des titres des sources en faisant attention à bien
