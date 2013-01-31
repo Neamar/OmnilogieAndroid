@@ -1,9 +1,11 @@
 package fr.omnilogie.app;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -86,12 +88,16 @@ public class HomeActivity extends DefaultActivity {
 	/**
 	 * Ajouter un bouton pour l'affichage des auteurs de l'application
 	 */
+	@TargetApi(11)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean r = super.onCreateOptionsMenu(menu);
 
 		MenuItem creditsMenu = menu.add("Crédits");
 		creditsMenu.setIcon(R.drawable.credits);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			creditsMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
 
 		return r;
 	}

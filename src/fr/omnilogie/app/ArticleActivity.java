@@ -173,7 +173,9 @@ public class ArticleActivity extends DefaultActivity implements CallbackObject {
 			// soient disponibles.
 			webView.loadDataWithBaseURL("http://omnilogie.fr", html, "text/html", "UTF-8", null);
 			
-			ArticleActivity.this.invalidateOptionsMenu();
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				ArticleActivity.this.invalidateOptionsMenu();
+			}
 		}
 	};
 
