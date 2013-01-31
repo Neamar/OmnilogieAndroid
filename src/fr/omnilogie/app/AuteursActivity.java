@@ -28,7 +28,7 @@ public class AuteursActivity extends SpecialActivity implements CallbackObject {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle("Liste des auteurs sur Omnilogie");
+		setTitle("Liste des auteurs");
 		setContentView(R.layout.activity_auteurs);
 
 		JSONRetriever jsonretriever = new JSONRetriever();
